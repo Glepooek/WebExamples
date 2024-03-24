@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>组件注册</title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<div id="component-demo1">
+
+		</div>
+
+
+
+		<script>
+			/**
+			 *1、组件名
+			 * 在注册组件的时候，需要给它一个名字，如全局注册的时候
+			 * Vue.component('my-component-name', { })
+			 * 该组件名就是 Vue.component 的第一个参数。
+			 * 
+			 * 2、定义组件名
+			 * 有两种方式。
+			 * 一种是使用kebab-case，在使用自定义元素时，也要使用kebab-case；
+			 * 一种是使用PascalCase，在使用自定义元素时，使用kebab-case和PascalCase均可。
+			 * 在DOM中使用时只能使用kebab-case定义组件名。
+			 * 
+			 * 3、全局注册
+			 *  Vue.component('my-component-name', { })
+			 * 可以在任何新创建的Vue根实例的模板中使用，也可以在子组件中使用。
+			 * 
+			 * 4、局部注册
+			 * var ComponentA = {}
+			 * 使用组件：
+			 * var vm = new Vue({
+					el:'component-demo1',
+					data:{
+						
+					},
+					components:{
+						'component-a':ComponentA
+					}
+				})
+			 * 局部注册的组件不能直接在子组件中使用。
+			 * var ComponentB = {
+					components: {
+						'component-a': ComponentA
+					}
+				}
+			 * 
+			 **/
+			 
+			var ComponentA = {}
+			var ComponentB = {
+				components: {
+					'component-a': ComponentA
+				}
+			}
+
+			var vm = new Vue({
+				el: 'component-demo1',
+				data: {
+
+				},
+				components: {
+					'component-a': ComponentA
+				}
+
+			})
+		</script>
+
+	</body>
+</html>

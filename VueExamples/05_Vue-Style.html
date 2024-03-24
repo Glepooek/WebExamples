@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<div id="app" v-bind:style="{color:activeColor, fontSize:fontSize}">
+			<p>{{message}}</p>
+		</div>
+
+		<div id="app2" v-bind:style="styleObj">
+			<p>{{message}}</p>
+		</div>
+
+		<div id="app3" v-bind:style="styleObj">
+			{{ message }}
+		</div>
+
+		<div id="app4" v-bind:style="styleObj()">
+			{{ message }}
+		</div>
+
+		<div id="app5" v-bind:style="[fontStyle, colorStyle]">
+			<p>{{message}}</p>
+		</div>
+
+
+		<script>
+			var vm = new Vue({
+				el: '#app',
+				data: {
+					message: '绑定到属性上',
+					activeColor: 'red',
+					fontSize: '18px'
+				}
+
+			})
+
+			var vm2 = new Vue({
+				el: '#app2',
+				data: {
+					message: '绑定到对象上',
+					styleObj: {
+						color: 'blue',
+						fontSize: '25px'
+					}
+				}
+
+			})
+
+			var app3 = new Vue({
+				el: "#app3",
+				data: {
+					message: "绑定到计算属性"
+				},
+				computed: {
+					styleObj: function() {
+						return {
+							color: 'green',
+							fontSize: '23px'
+						}
+					}
+				}
+			})
+
+			var app4 = new Vue({
+				el: "#app4",
+				data: {
+					message: "绑定到方法上"
+				},
+				methods: {
+					styleObj: function() {
+						return {
+							color: 'green',
+							fontSize: '23px'
+						}
+					}
+				}
+			})
+
+			var vm5 = new Vue({
+				el: '#app5',
+				data: {
+					message: '绑定到数组上',
+					fontStyle: {
+						'font-weight': 600,
+						fontSize: '30px'
+					},
+					colorStyle: {
+						color: 'yellow'
+					}
+				}
+
+			})
+		</script>
+	</body>
+</html>

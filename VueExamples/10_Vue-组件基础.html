@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>组件基础</title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<!--1、基本示例-->
+		<div id="component-demo">
+			<button-counter></button-counter>
+			<button-counter></button-counter>
+			<button-counter></button-counter>
+		</div>
+
+		<!--2、通过prop向子组件传递数据-->
+		<div id="component-demo1">
+			<blog-post title="Hello Vue.js"></blog-post>
+		</div>
+
+		<!--3、动态向prop传递数据-->
+		<div id="component-demo2">
+			<blog-post v-for="post in posts" v-bind:id="post.id" v-bind:title="post.title">
+			</blog-post>
+		</div>
+
+		<!--4、每个组件必须只有一个根元素-->
+		<div id="component-demo3">
+			<blog-post-1 v-for="post in posts" v-bind:id="post.id" v-bind:title="post.title" v-bind:authour='post.authour'
+			 v-bind:publisher='post.publisher'>
+			</blog-post-1>
+		</div>
+
+		<!--5、重构blog-post-1组件，向prop传入对象-->
+		<div id="component-demo4">
+			<p>
+				<h2 style="color: red;">5、向prop传入对象</h2>
+				<blog-post-2 v-for="post in posts" v-bind:key='post.id' v-bind:post="post">
+				</blog-post-2>
+			</p>
+		</div>
+
+
+		<script>
+			<!--组件是可复用的Vue实例，且带有一个名字，可以与new Vue接收相同的选项，除el选项外-->
+			<!--组件data必须是一个函数-->
+			<!--为了能使用组件中的模板，必须先将组件注册到Vue中。注册方式：局部注册和全局注册（Vue.component()）-->
+			Vue.component('button-counter', {
+				data: function() {
+					return {
+						count: 0
+					}
+				},
+				template: `
+						<button v-on:click="count++">
+							you clicked me {{count}} times
+						</button>
+				`
+			})
+
+			// 通过prop向子组件传递数据
+			// 一个组件默认可以有任意数量的prop
+			Vue.component('blog-post', {
+				props: ['title'],
+				template: '<h3>{{title}}</h3>'
+
+			})
+
+			// 每个组件必须只有一个根元素
+			Vue.component('blog-post-1', {
+				props: ['id', 'title', 'authour', 'publisher'],
+				template: `
+					<div>
+						<h3>{{id}}、{{title}}</h3>
+						<p>{{authour}} {{publisher}}</p>
+					</div>
+				`
+			})
+
+			// 向组件中传递对象
+			Vue.component('blog-post-2', {
+				props: ['post'],
+				template: `
+					<div>
+						<h3>{{post.id}}、{{post.title}}</h3>
+						<p>{{post.authour}} {{post.publisher}}</p>
+					</div>
+				`
+			})
+
+			var vm = new Vue({
+				el: '#component-demo',
+				data: {
+
+				}
+			})
+
+			var vm2 = new Vue({
+				el: '#component-demo1',
+				data: {
+
+				}
+			})
+
+			var vm3 = new Vue({
+				el: '#component-demo2',
+				data: {
+					posts: [{
+							id: 1,
+							title: 'Hello Vue.js',
+						},
+						{
+							id: 2,
+							title: 'what is Vue.js'
+						},
+						{
+							id: 3,
+							title: 'why Vue.js is so fun'
+						},
+					]
+				}
+			})
+
+			var vm4 = new Vue({
+				el: '#component-demo3',
+				data: {
+					posts: [{
+							id: 1,
+							title: 'Hello Vue.js',
+							authour: 'anyu',
+							publisher: '复旦大学出版社'
+						},
+						{
+							id: 2,
+							title: 'what is Vue.js',
+							authour: 'anyu',
+							publisher: '清华大学出版社'
+						},
+						{
+							id: 3,
+							title: 'why Vue.js is so fun',
+							authour: 'anyu',
+							publisher: '同济大学出版社'
+						},
+					]
+				}
+			})
+
+			var vm5 = new Vue({
+				el: '#component-demo4',
+				data: {
+					posts: [{
+							id: 1,
+							title: 'Hello Vue.js',
+							authour: 'anyu',
+							publisher: '复旦大学出版社'
+						},
+						{
+							id: 2,
+							title: 'what is Vue.js',
+							authour: 'anyu',
+							publisher: '清华大学出版社'
+						},
+						{
+							id: 3,
+							title: 'why Vue.js is so fun',
+							authour: 'anyu',
+							publisher: '同济大学出版社'
+						},
+					]
+				}
+			})
+		</script>
+	</body>
+</html>

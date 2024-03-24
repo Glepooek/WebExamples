@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>组件基础</title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<!--父组件监听子组件事件-->
+		<!--子组件通过事件向父组件传递值，父组件在监听事件时通过$event取得值-->
+		<div id="blog-posts-enents-1" 
+			v-bind:style="{ fontSize: postFontSize + 'em' }">
+			<blog-post v-for="post in posts" 
+				v-bind:key="post.id" 
+				v-bind:post="post" 
+				v-on:enlarge-text="postFontSize +=$event">
+			</blog-post>
+		</div>
+		
+		<!--监听事件的处理函数为方法-->
+		<div id="blog-posts-enents-2"
+			v-bind:style="{ fontSize: postFontSize + 'em' }">
+			<blog-post v-for="post in posts" 
+				v-bind:key="post.id" 
+				v-bind:post="post" 
+				v-on:enlarge-text="onEnlargeText">
+			</blog-post>
+		</div>
+		
+		<!-- 自定义事件用于创建支持 v-model 的自定义输入组件 -->
+		<div id="blog-posts-enents-3">
+			<br />
+			<custom-input v-model="text" ></custom-input>
+			<p>{{text}}</p>
+		</div>
+		
+		<!--通过插槽分发内容-->
+		<div id="component-demo4">
+			<alert-box>Something bad happened.</alert-box>
+		</div>
+
+		<script>
+			Vue.component('blog-post', {
+				props: ['post'],
+				template: `
+					<div>
+						<h3>{{post.title}}</h3>
+						<button v-on:click="$emit('enlarge-text', 0.1)">
+							Enlarge text
+						</button>
+					</div>				
+				`
+			})
+			
+			Vue.component('custom-input', {
+				props:['value'],
+				template:`
+					<input     
+						v-bind:value="value"
+						v-on:input="$emit('input', $event.target.value)" >
+					</input>
+				`
+			})
+					
+			Vue.component('alert-box', {
+				template:`
+					<div class="demo-alert-box">
+						<strong>Error</strong>
+						<slot></slot>
+					</div>
+				`
+			})
+
+
+			var vm = new Vue({
+				el: '#blog-posts-enents-1',
+				data: {
+					posts: [{
+						title: 'hello vue.js',
+						author: 'anyu',
+					}, {
+						title: 'hello vue.js',
+						author: 'anyu',
+					}],
+					postFontSize: 1
+				},
+			})
+			
+			var vm2 = new Vue({
+				el: '#blog-posts-enents-2',
+				data: {
+					posts: [{
+						title: 'hello vue.js',
+						author: 'anyu',
+					}, {
+						title: 'hello vue.js',
+						author: 'anyu',
+					}],
+					postFontSize: 1
+				},
+				methods:{
+					onEnlargeText: function(changeValue){
+						return this.postFontSize += changeValue
+					}
+				}
+			})
+			
+			var vm3 = new Vue({
+				el:'#blog-posts-enents-3',
+				data:{
+					text:''
+				}
+			})
+		</script>
+
+	</body>
+</html>

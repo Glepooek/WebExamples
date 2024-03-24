@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>插值</title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<!--插值-->
+		<div id="app">
+			{{message}},{{message2}}
+		</div>
+
+		<div id="app2">
+			<!--双大括号内的数据，被解析为文本-->
+			<!--插值语法不能用在HTML属性上-->
+			<p>Using mustaches{{rawHTML}}</p>
+			<!--v-html可以将HTML代码解析为真正的HTML代码-->
+			<p>Using v-html directive:<span v-html="rawHTML"></span></p>
+			<!--v-bind指令可用在属性上-->
+			<button v-bind:disabled="isButtonDisabled">是否可用</button>
+		</div>
+
+		<div id="app3">
+			<p>{{number + 1}}</p>
+			<p>{{ok ? 'YES' : 'NO'}}</p>
+			<p>{{message.split('').reverse().join('')}}</p>
+		</div>
+
+		<script>
+			// var app = new Vue({
+			// 	el: '#app',
+			// 	data: {
+			// 		message: "Hello World!",
+			// 		message2: "Hello Vue!"
+			// 	}
+			// })
+
+			var data = {
+				message: "Hello World!",
+				message2: "Hello Vue!"
+			}
+			var vm = new Vue({
+				el: '#app',
+				data: data
+			})
+
+			vm.$data.message = 'Hello'
+			vm.$data.message2 = ' Vue'
+
+			// data.message ='继续'
+			// data.message2 = '努力'
+
+			var app2 = new Vue({
+				el: '#app2',
+				data: {
+					rawHTML: '<span style="color:red">this should be red!</span>',
+					isButtonDisabled: false
+				}
+			})
+
+			var app3 = new Vue({
+				el: '#app3',
+				data: {
+					number: 10,
+					ok: true,
+					message: 'Hello Vue.js'
+				}
+			})
+		</script>
+	</body>
+</html>
