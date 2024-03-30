@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <meta>
+    </meta>
+    <title></title>
+    <script>
+        function displayDate() {
+            document.getElementById("demo").innerHTML = Date();
+        }
+
+        function changeImage() {
+            var element = document.getElementById("myImage");
+            // 检索 src 属性的值有没有包含 bulboff 这个字符串
+            if (element.src.match("bulboff")) {
+                element.src = "../Images/pic_bulbon.gif";
+            }
+            else {
+                element.src = "../Images/pic_bulboff.gif";
+            }
+        }
+
+        function changeColor() {
+            var x = document.getElementById("demo");
+            x.style.fontSize = "25px";
+            x.style.color = "red";
+        }
+    </script>
+</head>
+
+<body>
+    <h1>我的第一个 JavaScript 程序</h1>
+    <p id="demo" style="color: black;">这是一个段落</p>
+
+    <button type="button" onclick="displayDate()">显示日期</button>
+    <button type="button" onclick="alert('Hello World!')">弹窗</button>
+    <button type="button" onclick="changeColor()">改变样式</button>
+
+    <p> 点击灯泡就可以打开或关闭这盏灯 </p>
+    <img id="myImage" src="../Images/pic_bulboff.gif" onclick="changeImage()" style="width:100px;height:180px" />
+
+</body>
+
+</html>
