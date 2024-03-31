@@ -178,7 +178,7 @@ Markdown 图片语法格式如下：
 - 接着一个普通括号，里面放上图片的网址，最后还可以用引号包住并加上选择性的 'title' 属性的文字。
 
 使用实例：
-![美女](Images/girl.png "来自加利福尼亚")
+![美女](images/girl.png "来自加利福尼亚")
 
 1. 可以像网址那样对图片网址使用变量，如:
 ```
@@ -189,7 +189,7 @@ Markdown 图片语法格式如下：
 ```
 
 2. Markdown还没有办法指定图片的高度与宽度，如果需要的话，可以使用普通的<img>标签。
-<img src="Images/girl.png" width="80%">
+<img src="images/girl.png" width="80%">
 
 ---
 ### Markdown表格

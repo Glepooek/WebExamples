@@ -4,28 +4,7 @@
     <meta>
     </meta>
     <title></title>
-    <script>
-        function displayDate() {
-            document.getElementById("demo").innerHTML = Date();
-        }
-
-        function changeImage() {
-            var element = document.getElementById("myImage");
-            // 检索 src 属性的值有没有包含 bulboff 这个字符串
-            if (element.src.match("bulboff")) {
-                element.src = "../Images/pic_bulbon.gif";
-            }
-            else {
-                element.src = "../Images/pic_bulboff.gif";
-            }
-        }
-
-        function changeColor() {
-            var x = document.getElementById("demo");
-            x.style.fontSize = "25px";
-            x.style.color = "red";
-        }
-    </script>
+    <script src="../js/js简介.js"></script>
 </head>
 
 <body>
@@ -37,7 +16,7 @@
     <button type="button" onclick="changeColor()">改变样式</button>
 
     <p> 点击灯泡就可以打开或关闭这盏灯 </p>
-    <img id="myImage" src="../Images/pic_bulboff.gif" onclick="changeImage()" style="width:100px;height:180px" />
+    <img id="myImage" src="../images/pic_bulboff.gif" onclick="changeImage()" style="width:100px;height:180px" />
 
 </body>
 
