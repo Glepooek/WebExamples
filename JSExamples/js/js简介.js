@@ -13,6 +13,9 @@ function changeImage() {
     }
 }
 
+/**
+ * 改变样式属性
+ */
 function changeColor() {
     var x = document.getElementById("demo");
     x.style.fontSize = "25px";
