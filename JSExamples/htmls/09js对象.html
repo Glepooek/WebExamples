@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <meta>
+    </meta>
+    <title></title>
+    <script>
+        var obj = {
+            firstName: "an",
+            lastName: "liu",
+            age: 20,
+            fullName: function () {
+                return this.firstName + " " + this.lastName;
+            }
+        }
+
+        // 遍历对象
+        for (key in obj) {
+            console.log(key);
+        }
+
+        // 访问对象属性的两种方式
+        console.log(obj.firstName);
+        console.log(obj["firstName"]);
+
+        // 调用对象方法
+        //console.log(obj.fullName());
+        console.log(obj.fullName);
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
