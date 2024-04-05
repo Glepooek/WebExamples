@@ -5,6 +5,9 @@
     </meta>
     <title></title>
     <script>
+        // 启用严格模式，变量必须先定义再使用，避免出错
+        "use strict";
+
         var obj = {
             firstName: "an",
             lastName: "liu",
@@ -15,7 +18,7 @@
         }
 
         // 遍历对象
-        for (key in obj) {
+        for (var key in obj) {
             console.log(key);
         }
 

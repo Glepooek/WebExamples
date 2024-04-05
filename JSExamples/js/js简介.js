@@ -1,3 +1,6 @@
+// 启用严格模式，变量必须先定义再使用，避免出错
+"use strict";
+
 function displayDate() {
     document.getElementById("demo").innerHTML = Date();
 }
