@@ -17,6 +17,9 @@
             }
         }
 
+        // 使用console.time && console.timeEnd 来记录代码的执行耗时：
+        console.time("for in");
+
         // 遍历对象
         for (var key in obj) {
             console.log(key);
@@ -28,6 +31,8 @@
 
         // 调用对象方法
         console.log(obj.fullName());
+
+        console.timeEnd("for in");
     </script>
 </head>
 
