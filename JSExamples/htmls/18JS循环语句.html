@@ -35,6 +35,32 @@
             default:
                 break;
         }
+
+        var array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        let i = 0;
+        // 这个地方array[i]为什么能返回boolean值？
+        // 因为array[i]返回的是一个数字，数字可以转为boolean值，0转为false，其他转为true
+        // undefined或null作为判断条件相当于false
+        //  console.log(array[10]);返回undefined
+        while (array[i]) {
+            console.log(array[i]);
+            i++;
+        }
+
+        const cars = ["BMW", "Volvo", "Saab", "Ford"];
+        // 标签语句
+        list:
+        {
+            document.write(cars[0] + "<br>");
+            document.write(cars[1] + "<br>");
+            document.write(cars[2] + "<br>");
+            // break语句只能跳出封闭语句的标签。
+            break list;
+            document.write(cars[3] + "<br>");
+            document.write(cars[4] + "<br>");
+            document.write(cars[5] + "<br>");
+        }
+
     </script>
 </head>
 
