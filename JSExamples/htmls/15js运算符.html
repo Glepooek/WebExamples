@@ -13,11 +13,27 @@
         console.log(x);// 2.5
         console.log(typeof (x));// number
 
+        function changeText() {
+            var text = '{ "sites" : [' +
+                '{ "name":"Runoob" , "url":"www.runoob.com" },' +
+                '{ "name":"Google" , "url":"www.google.com" },' +
+                '{ "name":"Taobao" , "url":"www.taobao.com" } ]}';
+
+            // 将字符串转换为 JavaScript 对象:
+            var obj = JSON.parse(text);
+
+            // 使用新的JavaScript对象：
+            document.getElementById("demo").innerHTML = obj.sites[1].name + " " + obj.sites[1].url;
+
+            console.log(JSON.stringify(obj));
+        }
     </script>
 </head>
 
 <body>
+    <p id="demo"></p>
 
+    <button type="button" onclick="changeText()">改变文本</button>
 </body>
 
 </html>
