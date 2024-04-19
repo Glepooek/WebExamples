@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <meta>
+    </meta>
+    <title></title>
+    <script>
+        // 启用严格模式，变量必须先定义再使用，避免出错
+        "use strict";
+        function print(delay, msg) {
+            return new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    console.log(msg);
+                    resolve("成功！");
+                }, delay);
+            });
+        }
+
+       async function printAaync() {
+            var msg = await print(1000, "first");
+            console.log(msg);
+            msg = await print(4000, "second");
+            console.log(msg);
+            msg = await print(3000, "third");
+            console.log(msg);
+        }
+
+        // print(1000, "first").then(function (msg) {
+        //     console.log(msg);
+        //     return print(4000, "second");
+        // }).then(function (msg) {
+        //     console.log(msg);
+        //     return print(3000, "third");
+        // });
+
+        // print(1000, "first");
+        // print(4000, "second");
+        // print(3000, "third");
+
+        printAaync();
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
