@@ -1,0 +1,55 @@
+<html>
+
+<head>
+    <meta>
+    </meta>
+    <title></title>
+    <script>
+        // 启用严格模式，变量必须先定义再使用，避免出错
+        "use strict";
+
+        {
+            var carName = "Volvo";
+            let carName2 = "Volvo";
+        }
+
+        console.log(carName);
+        //console.log(carName2);// undefined
+
+        const car = {
+            name: "Volvo new",
+            color: "red"
+        }
+
+        // 冻结不允许属性修改
+        //Object.freeze(car);
+        car.name = "BMW";
+        console.log(car.name);
+
+        function getWindow() {
+            return this;
+        }
+
+        console.log(getWindow()); // undefined
+
+        var person1 = {
+            fullName: function () {
+                return this.firstName + " " + this.lastName;
+            }
+        }
+        var person2 = {
+            firstName: "John",
+            lastName: "Doe",
+        }
+        console.log(person1.fullName.call(person2));// 返回 "John Doe"
+        console.log(person1.fullName.apply(person2));// 返回 "John Doe"
+    </script>
+</head>
+
+<body>
+    <button onclick="this.style.display='none'">
+        点我后我就消失了
+    </button>
+</body>
+
+</html>
