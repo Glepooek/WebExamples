@@ -7,6 +7,13 @@
     <script>
         // 启用严格模式，变量必须先定义再使用，避免出错
         "use strict";
+
+        /*
+         * Promise对象
+         * 1.Promise对象是一个构造函数，用来生成Promise实例
+         * 2.Promise对象有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）
+         * 3.Promise对象实例具有then方法，该方法接收两个参数，分别是Promise对象的状态为fulfilled时执行的函数，以及Promise对象的状态为rejected时执行的函数
+         */
         function print(delay, msg) {
             return new Promise(function (resolve, reject) {
                 setTimeout(function () {
@@ -16,7 +23,7 @@
             });
         }
 
-       async function printAaync() {
+        async function printAaync() {
             var msg = await print(1000, "first");
             console.log(msg);
             msg = await print(4000, "second");
@@ -37,7 +44,22 @@
         // print(4000, "second");
         // print(3000, "third");
 
-        printAaync();
+        //printAaync();
+
+        async function funcAsync() {
+            try {
+                await new Promise((resolve, reject) => {
+                    reject("error");
+                });
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        //funcAsync(); // error
+
+        var test = void 0;
+        console.log(test);
     </script>
 </head>
 
