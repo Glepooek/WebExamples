@@ -1,0 +1,59 @@
+<html>
+
+<head>
+    <!--
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js">
+        引入的是全局构建版本，Vue会暴露全局变量Vue。
+        但是无法使用单文件组件 (SFC) 语法。
+    -->
+    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+
+    <!--导入映射表-->
+    <script type="importmap">
+    {
+        "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+            "vue-router": "https://unpkg.com/vue-router@4/dist/vue-router.esm-browser.js",
+            "axios": "https://cdn.jsdelivr.net/npm/axios@1.5.0/dist/axios.min.js"
+        }
+    }
+</script>
+</head>
+
+<body>
+    <div id="app">
+        <button @click="count++">
+            Count is: {{ count }}
+        </button>
+        <div>{{msg}}</div>
+    </div>
+
+    <script type="module">
+        // 对象解构赋值
+        // const { createApp } = Vue
+
+        //import { createApp } from 'vue'
+
+        // const app = createApp({
+        //     data() {
+        //         return {
+        //             count: 0,
+        //             msg: "你好"
+        //         }
+        //     }
+        // })
+        
+        // app.mount('#app')
+
+
+        import { createApp } from 'vue'
+        import first_component from '/js/first_component.js'
+
+        createApp(first_component)
+            .mount('#app')
+
+    </script>
+
+</body>
+
+</html>
