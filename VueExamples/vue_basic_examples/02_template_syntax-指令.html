@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>指令</title>
+	<!--vue2-->
+	<!-- <script src="../vuejs/vuejs2.6/vue.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<!--vue3-->
+	<!-- <script src="../vuejs/vuejs3.5/vue.global.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<!--导入映射表-->
+	<script type="importmap">
+    {
+        "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+            "vue-router": "https://unpkg.com/vue-router@4/dist/vue-router.esm-browser.js",
+            "axios": "https://cdn.jsdelivr.net/npm/axios@1.5.0/dist/axios.min.js"
+        }
+    }
+	</script>
+</head>
+
+<body>
+	<!--绑定到元素属性-->
+	<div id="app2">
+		<span v-bind:title="message">
+			鼠标悬停几秒钟查看此处动态绑定的提示信息！
+		</span>
+	</div>
+
+	<div id="app3">
+		<!--条件：控制元素的创建和删除-->
+		<p v-if="isCreated">动态创建和删除</p>
+		<!--条件：控制元素的显隐-->
+		<p v-show="isShow">动态显示和隐藏</p>
+	</div>
+
+	<!--循环-->
+	<div id="app4">
+		<ol>
+			<li v-for="todo in todos">
+				{{todo.text}}
+			</li>
+		</ol>
+
+	</div>
+
+	<!--事件监听器-->
+	<div id="app5">
+		<p>{{message}}</p>
+		<button v-on:click="requestMessage">翻转消息</button>
+	</div>
+
+	<!--表单输入和应用状态之间的双向绑定-->
+	<div id="app6">
+		<p>{{message}}</p>
+		<input v-model="message" />
+	</div>
+
+	<!--自定义组件-->
+	<div id="app7">
+		<ol>
+			<todo-item v-for="item in geouplist" v-bind:todo="item" v-bind:key="item.id"></todo-item>
+		</ol>
+	</div>
+
+	<div id='app8'>
+		<!-- <a v-bind:href="url" title="超链接">...</a> -->
+		<!--v-bind缩写为:-->
+		<a :href="url" title="超链接">...</a>
+		<p>
+			{{message}}
+			<!-- <button v-on:click="reverseMessage1">翻转信息</button> -->
+			<!--v-on缩写为@-->
+			<button @click="reverseMessage">翻转信息</button>
+		</p>
+	</div>
+
+	<script type="module">
+		import { createApp } from 'vue'
+
+		var app2 = createApp({
+			el: '#app2',
+			data() {
+				return {
+					message: '页面加载于' + new Date().toLocaleString()
+				}
+			}
+		}).mount('#app2')
+
+		var app3 = createApp({
+			el: "#app3",
+			data() {
+				return {
+					isShow: true,
+					isCreated: false
+				}
+			}
+		}).mount('#app3')
+
+		var apps4 = createApp({
+			el: "#app4",
+			data() {
+				return {
+					todos: [{
+						text: '好好学习,天天向上1'
+					},
+					{
+						text: '好好学习,天天向上2'
+					},
+					{
+						text: '好好学习,天天向上3'
+					}
+					]
+				}
+			}
+		}).mount('#app4')
+
+		var app5 = createApp({
+			el: '#app5',
+			data() {
+				return {
+					message: 'Hello Vue.js'
+				}
+			},
+			methods: {
+				requestMessage: function () {
+					this.message = this.message.split('').reverse().join('')
+				}
+			}
+		}).mount('#app5')
+
+		var app6 = createApp({
+			el: '#app6',
+			data() {
+				return {
+					message: 'Hello Vue!'
+				}
+			}
+		}).mount('#app6')
+
+		var app7 = createApp({
+			el: '#app7',
+			data() {
+				return {
+					geouplist: [{
+						id: 0,
+						text: 'hello'
+					},
+					{
+						id: 1,
+						text: 'hello'
+					},
+					{
+						id: 2,
+						text: 'hello'
+					}
+					]
+				}
+			},
+			components: {
+				'todo-item': {
+					props: ['todo'],
+					template: '<li>{{ todo.text }}</li>'
+				}
+			}
+		}).mount('#app7')
+
+		var app8 = createApp({
+			el: '#app8',
+			data() {
+				return {
+					message: 'Hello Vue.js',
+					url: '/01-StartingVue/01_Vue-插值.html'
+				}
+			},
+			methods: {
+				reverseMessage: function () {
+					this.message = this.message.split('').reverse().join('')
+				}
+			}
+		}).mount('#app8')
+	</script>
+</body>
+
+</html>

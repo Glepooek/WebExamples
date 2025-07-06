@@ -2,7 +2,6 @@
 
 <head>
     <!--
-        <script src="https://unpkg.com/vue@3/dist/vue.global.js">
         引入的是全局构建版本，Vue会暴露全局变量Vue。
         但是无法使用单文件组件 (SFC) 语法。
     -->
@@ -17,7 +16,7 @@
             "axios": "https://cdn.jsdelivr.net/npm/axios@1.5.0/dist/axios.min.js"
         }
     }
-</script>
+    </script>
 </head>
 
 <body>
@@ -30,27 +29,28 @@
 
     <script type="module">
         // 对象解构赋值
-        // const { createApp } = Vue
-
-        //import { createApp } from 'vue'
-
-        // const app = createApp({
-        //     data() {
-        //         return {
-        //             count: 0,
-        //             msg: "你好"
-        //         }
-        //     }
-        // })
-        
-        // app.mount('#app')
-
-
         import { createApp } from 'vue'
-        import first_component from '/js/first_component.js'
 
-        createApp(first_component)
-            .mount('#app')
+        // createApp是一个创建应用实例的方法。传入的参数是根组件。
+        // 在一个页面中可以创建多个应用实例。
+        const app = createApp({
+            // 下面是根组件选项
+
+            data() {
+                return {
+                    count: 0,
+                    msg: ''
+                }
+            }
+        })
+
+        app.config.errorHandler = () => {
+            // 处理错误
+        }
+
+        // 应用实例必须在调用mount方法后才会渲染出来。
+        // 该方法接收一个“容器”参数，可以是一个实际的 DOM 元素或是一个 CSS 选择器字符串。
+        app.mount('#app')
 
     </script>
 
