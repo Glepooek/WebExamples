@@ -27,7 +27,9 @@
 			margin: 20px;
 		}
 
-		#app, #app2, #app3 {
+		#app,
+		#app2,
+		#app3 {
 			margin-bottom: 20px;
 		}
 
@@ -52,9 +54,15 @@
 		<p>{{message}},{{message2}}</p>
 		<button @click="increment"> the count value: {{count}}</button>
 		<button @click="getNews"> getNews </button>
+		<button @click="getAds"> getAds </button>
 		<ol v-show="isShowNews">
 			<li v-for="newInfo in news">
 				<a :href="newInfo.url">{{newInfo.name}}</a>
+			</li>
+		</ol>
+		<ol>
+			<li v-for="ad in ads">
+				<img :src="ad.imgUrls" :title="ad.name" style="height: 280px;width: 100%;" />
 			</li>
 		</ol>
 	</div>
@@ -92,7 +100,8 @@
 					message: "Hello World!",
 					message2: "Hello Vue!",
 					count: 0,
-					news:[],
+					news: [],
+					ads: [],
 					isShowNews: false
 				}
 			},
@@ -100,39 +109,63 @@
 				increment: debounce(function () {
 					this.count++
 				}, 500),
-			   getNews() {
-				   axiosInstance.get('gateway/getNewsList?op_path=gateway%2FgetNewsList&needScope=true&page=1&pageSize=4')
-					   .then(response => {
-						   // response.data 可能已经是对象，无需再 JSON.parse
-						   let result = response.data;
-						   // 若是字符串则解析
-						   if (typeof result === 'string') {
-							   try {
-								   result = JSON.parse(result);
-							   } catch (e) {
-								   console.error('JSON parse error:', e);
-								   return;
-							   }
-						   }
-						   // 解析 content 节点
-						   // 假设结构为 { data: { content: [...] } }
-						   //let content = null;
-						   if (result && result.data && result.data.content) {
-							   this.news = result.data.content;
-							   if (this.news.length === 0) {
-								   console.warn('No news items found in content');
-								   return;
-							   }
-							   this.isShowNews = true; // 显示新闻列表
-							   console.log('content 节点:', this.news);
-						   } else {
-							   console.warn('未找到 content 节点', result);
-						   }
-					   })
-					   .catch(error => {
-						   console.error("Error fetching news:", error)
-					   })
-			   }
+				getNews() {
+					axiosInstance.get('gateway/getNewsList?op_path=gateway%2FgetNewsList&needScope=true&page=1&pageSize=4')
+						.then(response => {
+							// response.data 可能已经是对象，无需再 JSON.parse
+							let result = response.data;
+							// 若是字符串则解析
+							if (typeof result === 'string') {
+								try {
+									result = JSON.parse(result);
+								} catch (e) {
+									console.error('JSON parse error:', e);
+									return;
+								}
+							}
+							// 解析 content 节点
+							// 假设结构为 { data: { content: [...] } }
+							//let content = null;
+							if (result && result.data && result.data.content) {
+								this.news = result.data.content;
+								if (this.news.length === 0) {
+									console.warn('No news items found in content');
+									return;
+								}
+								this.isShowNews = true; // 显示新闻列表
+								console.log('content 节点:', this.news);
+							} else {
+								console.warn('未找到 content 节点', result);
+							}
+						})
+						.catch(error => {
+							console.error("Error fetching news:", error)
+						})
+				},
+				getAds() {
+					axios.post("https://voice.fltrp.com/api/ab/open/load", {
+						op_path: "ab/open/load",
+						fromWY: true,
+						appKey: "digit_teach_platform",
+						positionCodes: ["410201"]
+					})
+						.then(response => {
+							let result = response.data;
+							if (result && result.data) {
+								this.ads = result.data["410201"].advertisements;
+								if (this.ads.length === 0) {
+									console.warn('No ads found in content');
+									return;
+								}
+								console.log('content 节点:', this.ads);
+							} else {
+								console.warn('未找到 content 节点', result);
+							}
+						})
+						.catch(error => {
+							console.error("Error fetching ads:", error)
+						})
+				}
 			}
 		})
 
