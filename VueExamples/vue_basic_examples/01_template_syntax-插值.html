@@ -10,25 +10,53 @@
 	<!--vue3-->
 	<!-- <script src="../vuejs/vuejs3.5/vue.global.js" type="text/javascript" charset="utf-8"></script> -->
 
+	<script src="https://unpkg.com/axios@1.10.0/dist/axios.min.js" type="text/javascript" charset="utf-8"></script>
+
 	<!--导入映射表-->
 	<script type="importmap">
-    {
-         "imports": {
-            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
-            "vue-router": "https://unpkg.com/vue-router@4/dist/vue-router.esm-browser.js",
-            "axios": "https://unpkg.com/axios/dist/axios.min.js",
-            "lodash": "https://unpkg.com/lodash-es@4.17.21/lodash.js"
-        }
-    }
+	{
+		 "imports": {
+			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+			"lodash": "https://unpkg.com/lodash-es@4.17.21/lodash.js"
+		}
+	}
 	</script>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 20px;
+		}
+
+		#app, #app2, #app3 {
+			margin-bottom: 20px;
+		}
+
+		button {
+			margin-right: 10px;
+		}
+
+		ol {
+			list-style-type: none;
+			padding: 0;
+		}
+
+		li {
+			margin: 5px 0;
+		}
+	</style>
 </head>
 
 <body>
 	<!--插值-->
 	<div id="app">
 		<p>{{message}},{{message2}}</p>
-		<!-- <button @click="increment"> the count value: {{count}}</button> -->
-		<button v-on:click="increment"> the count value: {{count}}</button>
+		<button @click="increment"> the count value: {{count}}</button>
+		<button @click="getNews"> getNews </button>
+		<ol v-show="isShowNews">
+			<li v-for="newInfo in news">
+				<a :href="newInfo.url">{{newInfo.name}}</a>
+			</li>
+		</ol>
 	</div>
 
 	<div id="app2">
@@ -52,19 +80,59 @@
 		// const { createApp } = Vue
 		import { createApp } from 'vue'
 		import { debounce } from 'lodash'
+		const axiosInstance = axios.create({
+			baseURL: 'https://www.unischool.cn/api/',
+			timeout: 1000,
+			headers: { 'scope': 'com.fltrp.szjc.pc.web' }
+		});
 
 		const app = createApp({
 			data() {
 				return {
 					message: "Hello World!",
 					message2: "Hello Vue!",
-					count: 0
+					count: 0,
+					news:[],
+					isShowNews: false
 				}
 			},
 			methods: {
 				increment: debounce(function () {
 					this.count++
-				}, 500)
+				}, 500),
+			   getNews() {
+				   axiosInstance.get('gateway/getNewsList?op_path=gateway%2FgetNewsList&needScope=true&page=1&pageSize=4')
+					   .then(response => {
+						   // response.data 可能已经是对象，无需再 JSON.parse
+						   let result = response.data;
+						   // 若是字符串则解析
+						   if (typeof result === 'string') {
+							   try {
+								   result = JSON.parse(result);
+							   } catch (e) {
+								   console.error('JSON parse error:', e);
+								   return;
+							   }
+						   }
+						   // 解析 content 节点
+						   // 假设结构为 { data: { content: [...] } }
+						   //let content = null;
+						   if (result && result.data && result.data.content) {
+							   this.news = result.data.content;
+							   if (this.news.length === 0) {
+								   console.warn('No news items found in content');
+								   return;
+							   }
+							   this.isShowNews = true; // 显示新闻列表
+							   console.log('content 节点:', this.news);
+						   } else {
+							   console.warn('未找到 content 节点', result);
+						   }
+					   })
+					   .catch(error => {
+						   console.error("Error fetching news:", error)
+					   })
+			   }
 			}
 		})
 
