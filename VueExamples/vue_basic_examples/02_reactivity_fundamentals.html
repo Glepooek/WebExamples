@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Vue 3响应式基础</title>
+    <!--vue2-->
+    <!-- <script src="../vuejs/vuejs2.6/vue.js" type="text/javascript" charset="utf-8"></script> -->
+
+    <!--vue3-->
+    <!-- <script src="../vuejs/vuejs3.5/vue.global.js" type="text/javascript" charset="utf-8"></script> -->
+
+    <!--导入映射表-->
+    <script type="importmap">
+    {
+        "imports": {
+            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+            "vue-router": "https://unpkg.com/vue-router@4/dist/vue-router.esm-browser.js",
+            "axios": "https://unpkg.com/axios/dist/axios.min.js",
+            "lodash": "https://unpkg.com/lodash-es@4.17.21/lodash.js"
+        }
+    }
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>响应式原理</h1>
+        <p>点击按钮修改数据：</p>
+        <button @click="updateMessage">修改消息</button>
+        <p>消息：{{ message }}</p>
+    </div>
+
+    <script type="module">
+        import { createApp } from 'vue';
+
+        const app = createApp({
+            data() {
+                return {
+                    message: 'Hello, Vue 3!'
+                }
+            },
+            methods: {
+                updateMessage: function () {
+                    // 修改响应式数据
+                    this.message = '消息已更新！';
+                }
+            },
+            mounted() {
+                // 在组件挂载后执行
+                console.log('组件已挂载，当前消息:', this.message);
+            }
+        });
+
+        app.mount('#app');
+
+    </script>
+</body>
