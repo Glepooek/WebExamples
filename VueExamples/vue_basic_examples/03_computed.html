@@ -31,7 +31,6 @@
 		<!--方法--->
 		<!-- <p>{{reverseMessageMethod()}}</p> -->
 		<button type="button" @click="reverseMessageMethod">change message</button>
-		<p>{{now}}</p>
 	</div>
 
 	<!--计算属性的setter-->
@@ -132,14 +131,25 @@
 						return
 					}
 					this.answer = 'Thinking....'
-					var vm = this
+					/**
+					 * .then(function(response) { ... }) 会改变 this 的指向，
+					 * 是因为普通函数（function 关键字声明的函数）在 JavaScript 中的 this 指向，取决于它的调用方式。
+					 * 在 .then(function(response) { ... }) 这种回调中，函数是作为回调被调用的，不属于任何对象，
+					 * 因此 this 默认指向 undefined（严格模式下）或 window（非严格模式下），而不是你期望的 Vue 实例。
+					 * 如果你想让 this 保持为外部作用域（如 Vue 实例），应使用箭头函数：
+					 * 箭头函数不会创建自己的 this，它会捕获外部作用域的 this，所以能正确访问 Vue 实例的数据和方法。
+					 * **/
 					axios.get('https://yesno.wtf/api')
 						.then(response => {
-							vm.answer = response.data.answer
-							vm.answerImage = response.data.image
+							if(response === null || response.data === null) {
+								this.answer = 'Error! Could not get the data.'
+								return
+							}
+							this.answer = response.data.answer
+							this.answerImage = response.data.image
 						})
-						.catch(function (error) {
-							vm.answer = 'Error! Could not reach the API. ' + error
+						.catch(error => {
+							this.answer = 'Error! Could not reach the API. ' + error
 						})
 				}
 			}
