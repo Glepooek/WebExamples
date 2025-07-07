@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>计算属性和监听器</title>
+	<!--vue2-->
+	<!-- <script src="../vuejs/vuejs2.6/vue.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<!--vue3-->
+	<!-- <script src="../vuejs/vuejs3.5/vue.global.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<script src="https://unpkg.com/axios@1.10.0/dist/axios.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<!--导入映射表-->
+	<script type="importmap">
+	{
+		 "imports": {
+			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+			"lodash": "https://unpkg.com/lodash-es@4.17.21/lodash.js"
+		}
+	}
+	</script>
+</head>
+
+<body>
+	<div id="app4">
+		<p title="插值">{{message}}</p>
+		<!--插值中如果有复杂的计算表达式，建议写成计算属性-->
+		<p title="计算属性">{{reverseMessage}}</p>
+		<!--方法--->
+		<!-- <p>{{reverseMessageMethod()}}</p> -->
+		<button type="button" @click="reverseMessageMethod">change message</button>
+		<p>{{now}}</p>
+	</div>
+
+	<!--计算属性的setter-->
+	<div id="app5">
+		<p>{{firstName}}</p>
+		<p>{{lastName}}</p>
+		<p>{{fullName}}</p>
+	</div>
+
+	<!--监听器-->
+	<div id="app6">
+		<p>ask a yes/no question:
+			<input v-model="question" />
+		</p>
+		<p>
+			{{answer}}
+		</p>
+	</div>
+
+
+	<script type="module">
+		import { createApp } from 'vue'
+		import { debounce } from 'lodash'
+
+		var app4 = createApp({
+			el: '#app4',
+			data() {
+				return {
+					message: 'Hello Vue.js'
+				}
+			},
+			methods: {
+				reverseMessageMethod() {
+					//return this.message.split('').reverse().join('')
+					this.message = "changed"
+					return this.message
+				}
+			},
+			// 计算属性是基于它们的响应式依赖进行缓存的。
+			// 只在相关响应式依赖发生改变时它们才会重新求值。
+			computed: {
+				reverseMessage() {
+					return this.message.split('').reverse().join('')
+				}
+			}
+		}).mount("#app4")
+
+		var app5 = createApp({
+			el: '#app5',
+			data() {
+				return {
+					firstName: 'an',
+					lastName: 'yu'
+				}
+			},
+			computed: {
+				fullName: {
+					// getter
+					get: function () {
+						return this.firstName + ' ' + this.lastName
+					},
+					// setter
+					set: function (newValue) {
+						if (newValue.length > 0) {
+							[this.firstName, this.lastName] = newValue.split(' ') 
+						}
+					}
+				}
+			}
+		}).mount("#app5")
+
+		app5.fullName = 'lff 123'
+
+		var app6 = createApp({
+			el: '#app6',
+			data() {
+				return {
+					question: '',
+					answer: 'I can not give you an answer until you ask a question!'
+				}
+			},
+			watch: {
+				question: function (newQuestion, oldQuestion) {
+					this.answer = 'Waiting for you to stop typing...'
+					this.debouncedGetAnswer()
+				}
+			},
+			// created: function () {
+			// 	// this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+			// },
+			// methods: {
+			// 	getAnswer: function () {
+			// 		// 	if (this.question.indexOf('?') === -1) {
+			// 		// 		this.answer = 'Question usually contains an question mark. ;-)'
+			// 		// 		return
+			// 		// 	}
+			// 		// 	this.answer = 'Thinking....'
+			// 		// 	var vm = this
+			// 		// 	axios.get('https://yesno.wtf/api')
+			// 		// 		.then(function(response) {
+			// 		// 			vm.answer = _.capitalize(response.data.answer)
+			// 		// 		})
+			// 		// 		.catch(function(error) {
+			// 		// 			vm.answer = 'Error! Could not reach the API. ' + error
+			// 		// 		})
+			// 	}
+			// }
+		}).mount("#app6")
+	</script>
+</body>
+
+</html>
