@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>类绑定</title>
+	<!--vue2-->
+	<!-- <script src="../vuejs/vuejs2.6/vue.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<!--vue3-->
+	<!-- <script src="../vuejs/vuejs3.5/vue.global.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<script src="https://unpkg.com/axios@1.10.0/dist/axios.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<!--导入映射表-->
+	<script type="importmap">
+	{
+		 "imports": {
+			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+			"lodash": "https://unpkg.com/lodash-es@4.17.21/lodash.js"
+		}
+	}
+	</script>
+
+	<style type="text/css">
+		h1.intro {
+			color: blue;
+		}
+
+		p.static {
+			color: green;
+		}
+
+		p.active {
+			font-weight: 600;
+		}
+
+		p.text-danger {
+			text-decoration: line-through;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<h1 class="intro">Header 1</h1>
+		<p>A paragraph.</p>
+
+		<!--绑定到属性：三目运算-->
+		<!-- <p class="static" v-bind:class="isActive ? 'active' :'text-danger' ">
+				Note that this is an important paragraph.
+			</p> -->
+
+		<!--绑定到对象，内联定义-->
+		<!-- <p class="static" v-bind:class="{active:isActive, 'text-danger':hasError}">
+				Note that this is an important paragraph.
+			</p> -->
+
+		<!--绑定到对象-->
+		<!-- <p class="static" v-bind:class="classObj">
+				Note that this is an important paragraph.
+			</p> -->
+
+		<!--绑定到计算属性-->
+		<p class="static" v-bind:class="classObj">
+			Note that this is an important paragraph.
+		</p>
+	</div>
+	<div id="app2">
+		<p class="static" v-bind:class="['active','text-danger']">
+			Note that this is an important paragraph.
+		</p>
+		<p class="static" v-bind:class="[isActive, hasError]">
+			Note that this is an important paragraph.
+		</p>
+		</p>
+	</div>
+
+	<script type="module">
+		// var app = new Vue({
+		// 	el: '#app',
+		// 	data: {
+		// 		isActive: false,
+		// 		hasError: true
+		// 	}
+		// })
+
+		// var app = new Vue({
+		// 	el: '#app',
+		// 	data: {
+		// 		classObj:{
+		// 			active: true,
+		// 			'text-danger': true
+		// 		}
+		// 	}
+		// })
+
+		import { createApp } from 'vue'
+
+		createApp({
+			el: '#app',
+			data() {
+				return {
+					isActive: true,
+					error: null
+				}
+			},
+			computed: {
+				classObj: function () {
+					return {
+						active: this.isActive && !this.error,
+						'text-danger': this.error && this.error.type === 'fatal'
+					}
+				}
+			}
+		}).mount("#app")
+
+		createApp({
+			el: '#app2',
+			data() {
+				return {
+					isActive: 'active',
+					hasError: 'text-danger'
+				}
+			}
+		}).mount("#app2")
+	</script>
+</body>
+
+</html>
