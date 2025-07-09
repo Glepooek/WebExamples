@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>组件基础</title>
+	<!--vue2-->
+	<!-- <script src="../vuejs/vuejs2.6/vue.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<!--vue3-->
+	<!-- <script src="../vuejs/vuejs3.5/vue.global.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<script src="https://unpkg.com/axios@1.10.0/dist/axios.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<!--导入映射表-->
+	<script type="importmap">
+	{
+		 "imports": {
+			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+			"lodash": "https://unpkg.com/lodash-es@4.17.21/lodash.js"
+		}
+	}
+	</script>
+</head>
+
+<body>
+	<!--父组件监听子组件事件-->
+	<!--子组件通过事件向父组件传递值，父组件在监听事件时通过$event取得值-->
+	<div id="blog-posts-enents-1" v-bind:style="{ fontSize: postFontSize + 'em' }">
+		<blog-post v-for="post in posts" v-bind:key="post.id" v-bind:post="post"
+			v-on:enlarge-text="postFontSize +=$event">
+		</blog-post>
+	</div>
+
+	<hr color="green" size="2px" />
+
+	<!--监听事件的处理函数为方法-->
+	<div id="blog-posts-enents-2" v-bind:style="{ fontSize: postFontSize + 'em' }">
+		<blog-post v-for="post in posts" v-bind:key="post.id" v-bind:post="post" v-on:enlarge-text="onEnlargeText">
+		</blog-post>
+	</div>
+
+	<hr color="green" size="2px" />
+
+	<!-- 自定义事件用于创建支持 v-model 的自定义输入组件 -->
+	<div id="blog-posts-enents-3">
+		<br />
+		<custom-input v-model="text"></custom-input>
+		<p>{{text}}</p>
+	</div>
+
+	<hr color="green" size="2px" />
+
+	<!--通过插槽分发内容-->
+	<div id="component-demo4">
+		<alert-box>Something bad happened.</alert-box>
+	</div>
+
+	<script type="module">
+		import { createApp } from 'vue'
+
+		// Vue.component('blog-post', {
+		// 	props: ['post'],
+		// 	template: `
+		// 			<div>
+		// 				<h3>{{post.title}}</h3>
+		// 				<button v-on:click="$emit('enlarge-text', 0.1)">
+		// 					Enlarge text
+		// 				</button>
+		// 			</div>				
+		// 		`
+		// })
+
+		// Vue.component('custom-input', {
+		// 	props: ['value'],
+		// 	template: `
+		// 			<input     
+		// 				v-bind:value="value"
+		// 				v-on:input="$emit('input', $event.target.value)" >
+		// 			</input>
+		// 		`
+		// })
+
+		// Vue.component('alert-box', {
+		// 	template: `
+		// 			<div class="demo-alert-box">
+		// 				<strong>Error</strong>
+		// 				<slot></slot>
+		// 			</div>
+		// 		`
+		// })
+
+
+		var vm = createApp({
+			el: '#blog-posts-enents-1',
+			data() {
+				return {
+					posts: [{
+						title: 'hello vue.js',
+						author: 'anyu',
+					}, {
+						title: 'hello vue.js',
+						author: 'anyu',
+					}],
+					postFontSize: 1
+				}
+			},
+		})
+
+		vm.component('blog-post', {
+			props: ['post'],
+			template: `
+					<div>
+						<h3>{{post.title}}</h3>
+						<button v-on:click="$emit('enlarge-text', 0.1)">
+							Enlarge text
+						</button>
+					</div>				
+				`
+		})
+		vm.mount('#blog-posts-enents-1')
+
+		var vm2 = createApp({
+			el: '#blog-posts-enents-2',
+			data() {
+				return {
+					posts: [{
+						title: 'hello vue.js',
+						author: 'anyu',
+					}, {
+						title: 'hello vue.js',
+						author: 'anyu',
+					}],
+					postFontSize: 1
+				}
+			},
+			methods: {
+				onEnlargeText: function (changeValue) {
+					return this.postFontSize += changeValue
+				}
+			}
+		})
+		vm2.component('blog-post', {
+			props: ['post'],
+			template: `
+					<div>
+						<h3>{{post.title}}</h3>
+						<button v-on:click="$emit('enlarge-text', 0.1)">
+							Enlarge text
+						</button>
+					</div>				
+				`
+		})
+		vm2.mount('#blog-posts-enents-2')
+
+		var vm3 = createApp({
+			el: '#blog-posts-enents-3',
+			data() {
+				return {
+					text: ''
+				}
+			}
+		})
+		vm3.component('custom-input', {
+			props: ['value'],
+			template: `
+					<input     
+						v-bind:value="value"
+						v-on:input="$emit('input', $event.target.value)" >
+					</input>
+				`
+		})
+		vm3.mount('#blog-posts-enents-3')
+
+		var vm4 = createApp({})
+		vm4.component('alert-box', {
+			template: `
+					<div class="demo-alert-box">
+						<strong>Error</strong>
+						<slot></slot>
+					</div>
+				`
+		})
+		vm4.mount('#component-demo4')
+	</script>
+
+</body>
+
+</html>

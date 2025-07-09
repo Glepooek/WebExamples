@@ -1,175 +1,159 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>组件基础</title>
-		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
-	</head>
-	<body>
-		<!--1、基本示例-->
-		<div id="component-demo">
-			<button-counter></button-counter>
-			<button-counter></button-counter>
-			<button-counter></button-counter>
-		</div>
 
-		<!--2、通过prop向子组件传递数据-->
-		<div id="component-demo1">
-			<blog-post title="Hello Vue.js"></blog-post>
-		</div>
+<head>
+	<meta charset="utf-8" />
+	<title>组件基础</title>
+	<!--vue2-->
+	<!-- <script src="../vuejs/vuejs2.6/vue.js" type="text/javascript" charset="utf-8"></script> -->
 
-		<!--3、动态向prop传递数据-->
-		<div id="component-demo2">
-			<blog-post v-for="post in posts" v-bind:id="post.id" v-bind:title="post.title">
-			</blog-post>
-		</div>
+	<!--vue3-->
+	<!-- <script src="../vuejs/vuejs3.5/vue.global.js" type="text/javascript" charset="utf-8"></script> -->
 
-		<!--4、每个组件必须只有一个根元素-->
-		<div id="component-demo3">
-			<blog-post-1 v-for="post in posts" v-bind:id="post.id" v-bind:title="post.title" v-bind:authour='post.authour'
-			 v-bind:publisher='post.publisher'>
-			</blog-post-1>
-		</div>
+	<script src="https://unpkg.com/axios@1.10.0/dist/axios.min.js" type="text/javascript" charset="utf-8"></script>
 
-		<!--5、重构blog-post-1组件，向prop传入对象-->
-		<div id="component-demo4">
-			<p>
-				<h2 style="color: red;">5、向prop传入对象</h2>
-				<blog-post-2 v-for="post in posts" v-bind:key='post.id' v-bind:post="post">
-				</blog-post-2>
-			</p>
-		</div>
+	<!--导入映射表-->
+	<script type="importmap">
+	{
+		 "imports": {
+			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+			"lodash": "https://unpkg.com/lodash-es@4.17.21/lodash.js"
+		}
+	}
+	</script>
+</head>
 
+<body>
+	<!--1、基本示例-->
+	<div id="component-demo">
+		<button-counter></button-counter>
+		<button-counter></button-counter>
+		<button-counter></button-counter>
+	</div>
 
-		<script>
-			// 组件是可复用的Vue实例，且带有一个名字，可以与new Vue接收相同的选项，除el选项外
-			// 组件data必须是一个函数
-			// 为了能使用组件中的模板，必须先将组件注册到Vue中。注册方式：局部注册和全局注册（Vue.component()）
-			Vue.component('button-counter', {
-				data: function() {
-					return {
-						count: 0
-					}
-				},
-				template: `
-						<button v-on:click="count++">
-							you clicked me {{count}} times
-						</button>
-				`
-			})
+	<hr color="green" size="2px" />
 
-			// 通过prop向子组件传递数据
-			// 一个组件默认可以有任意数量的prop
-			Vue.component('blog-post', {
-				props: ['title'],
-				template: '<h3>{{title}}</h3>'
+	<!--2、通过prop向子组件传递数据-->
+	<div id="component-demo1">
+		<blog-post title="Hello Vue.js"></blog-post>
+	</div>
 
-			})
+	<hr color="green" size="2px" />
 
-			// 每个组件必须只有一个根元素
-			Vue.component('blog-post-1', {
-				props: ['id', 'title', 'authour', 'publisher'],
-				template: `
-					<div>
-						<h3>{{id}}、{{title}}</h3>
-						<p>{{authour}} {{publisher}}</p>
-					</div>
-				`
-			})
+	<!--3、动态向prop传递数据-->
+	<div id="component-demo2">
+		<blog-post v-for="post in posts" v-bind:id="post.id" v-bind:title="post.title">
+		</blog-post>
+	</div>
 
-			// 向组件中传递对象
-			Vue.component('blog-post-2', {
-				props: ['post'],
-				template: `
-					<div>
-						<h3>{{post.id}}、{{post.title}}</h3>
-						<p>{{post.authour}} {{post.publisher}}</p>
-					</div>
-				`
-			})
+	<hr color="green" size="2px" />
 
-			var vm = new Vue({
-				el: '#component-demo',
-				data: {
+	<!--4、每个组件必须只有一个根元素-->
+	<div id="component-demo3">
+		<blog-post-1 v-for="post in posts" v-bind:id="post.id" v-bind:title="post.title" v-bind:authour='post.authour'
+			v-bind:publisher='post.publisher'>
+		</blog-post-1>
+	</div>
 
+	<hr color="green" size="2px" />
+
+	<!--5、重构blog-post-1组件，向prop传入对象-->
+	<div id="component-demo4">
+		<p>
+		<h2 style="color: red;">5、向prop传入对象</h2>
+		<blog-post-2 v-for="post in posts" v-bind:key='post.id' v-bind:post="post">
+		</blog-post-2>
+		</p>
+	</div>
+
+	<script type="module">
+		import { createApp } from 'vue'
+
+		const vm = createApp({})
+		vm.component('button-counter', {
+			data() {
+				return {
+					count: 0
 				}
-			})
+			},
+			template: `
+				<button v-on:click="count++">
+					you clicked me {{count}} times
+				</button>`
+		})
+		vm.mount("#component-demo")
 
-			var vm2 = new Vue({
-				el: '#component-demo1',
-				data: {
+		const vm2 = createApp({})
+		vm2.component('blog-post', {
+			props: ['title'],
+			template: '<h3>{{title}}</h3>'
+		})
+		vm2.mount("#component-demo1")
 
-				}
-			})
-
-			var vm3 = new Vue({
-				el: '#component-demo2',
-				data: {
-					posts: [{
-							id: 1,
-							title: 'Hello Vue.js',
-						},
-						{
-							id: 2,
-							title: 'what is Vue.js'
-						},
-						{
-							id: 3,
-							title: 'why Vue.js is so fun'
-						},
+		const vm3 = createApp({
+			data() {
+				return {
+					posts: [
+						{ id: 1, title: 'Hello Vue.js' },
+						{ id: 2, title: 'what is Vue.js' },
+						{ id: 3, title: 'why Vue.js is so fun' }
 					]
 				}
-			})
+			}
+		})
+		// 通过prop向子组件传递数据
+		// 一个组件默认可以有任意数量的prop
+		vm3.component('blog-post', {
+			props: ['title'],
+			template: '<h3>{{title}}</h3>'
+		})
+		vm3.mount("#component-demo2")
 
-			var vm4 = new Vue({
-				el: '#component-demo3',
-				data: {
-					posts: [{
-							id: 1,
-							title: 'Hello Vue.js',
-							authour: 'anyu',
-							publisher: '复旦大学出版社'
-						},
-						{
-							id: 2,
-							title: 'what is Vue.js',
-							authour: 'anyu',
-							publisher: '清华大学出版社'
-						},
-						{
-							id: 3,
-							title: 'why Vue.js is so fun',
-							authour: 'anyu',
-							publisher: '同济大学出版社'
-						},
+
+		const vm4 = createApp({
+			data() {
+				return {
+					posts: [
+						{ id: 1, title: 'Hello Vue.js', authour: 'anyu', publisher: '复旦大学出版社' },
+						{ id: 2, title: 'what is Vue.js', authour: 'anyu', publisher: '清华大学出版社' },
+						{ id: 3, title: 'why Vue.js is so fun', authour: 'anyu', publisher: '同济大学出版社' }
 					]
 				}
-			})
+			}
+		})
+		// 每个组件必须只有一个根元素
+		vm4.component('blog-post-1', {
+			props: ['id', 'title', 'authour', 'publisher'],
+			template: `
+				<div>
+					<h3>{{id}}、{{title}}</h3>
+					<p>{{authour}} {{publisher}}</p>
+				</div>`
+		})
+		vm4.mount("#component-demo3")
 
-			var vm5 = new Vue({
-				el: '#component-demo4',
-				data: {
-					posts: [{
-							id: 1,
-							title: 'Hello Vue.js',
-							authour: 'anyu',
-							publisher: '复旦大学出版社'
-						},
-						{
-							id: 2,
-							title: 'what is Vue.js',
-							authour: 'anyu',
-							publisher: '清华大学出版社'
-						},
-						{
-							id: 3,
-							title: 'why Vue.js is so fun',
-							authour: 'anyu',
-							publisher: '同济大学出版社'
-						},
+		const vm5 = createApp({
+			data() {
+				return {
+					posts: [
+						{ id: 1, title: 'Hello Vue.js', authour: 'anyu', publisher: '复旦大学出版社' },
+						{ id: 2, title: 'what is Vue.js', authour: 'anyu', publisher: '清华大学出版社' },
+						{ id: 3, title: 'why Vue.js is so fun', authour: 'anyu', publisher: '同济大学出版社' }
 					]
 				}
-			})
-		</script>
-	</body>
+			}
+		})
+		// 向组件中传递对象
+		vm5.component('blog-post-2', {
+			props: ['post'],
+			template: `
+				<div>
+					<h3>{{post.id}}、{{post.title}}</h3>
+					<p>{{post.authour}} {{post.publisher}}</p>
+				</div>`
+		})
+		vm5.mount("#component-demo4")
+	</script>
+</body>
+
 </html>
