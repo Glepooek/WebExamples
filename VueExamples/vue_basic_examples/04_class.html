@@ -24,7 +24,7 @@
 
 	<style type="text/css">
 		h1.intro {
-			color: blue;
+			color: rgb(0, 255, 55);
 		}
 
 		p.static {
@@ -46,55 +46,37 @@
 		<h1 class="intro">Header 1</h1>
 		<p>A paragraph.</p>
 
-		<!--绑定到属性：三目运算-->
-		<!-- <p class="static" v-bind:class="isActive ? 'active' :'text-danger' ">
-				Note that this is an important paragraph.
-			</p> -->
-
-		<!--绑定到对象，内联定义-->
-		<!-- <p class="static" v-bind:class="{active:isActive, 'text-danger':hasError}">
-				Note that this is an important paragraph.
-			</p> -->
+		<!--绑定到对象，内联字面量-->
+		<p class="static" v-bind:class="{active:isActive, 'text-danger':hasError}">
+			<span>内联字面量</span> Note that this is an important paragraph.
+		</p>
 
 		<!--绑定到对象-->
 		<!-- <p class="static" v-bind:class="classObj">
-				Note that this is an important paragraph.
-			</p> -->
+			<span>绑定到对象</span> Note that this is an important paragraph.
+		</p> -->
 
 		<!--绑定到计算属性-->
-		<p class="static" v-bind:class="classObj">
-			Note that this is an important paragraph.
+		<p class="static" v-bind:class="computedClassObj">
+			<span>绑定到计算属性</span> Note that this is an important paragraph.
+		</p>
+
+		<!--绑定到属性：三目运算-->
+		<p class="static" v-bind:class="isActive ? 'active' :'text-danger' ">
+			<span>绑定到属性：三目运算</span> Note that this is an important paragraph.
 		</p>
 	</div>
 	<div id="app2">
+		<span>绑定到数组</span>
 		<p class="static" v-bind:class="['active','text-danger']">
 			Note that this is an important paragraph.
 		</p>
 		<p class="static" v-bind:class="[isActive, hasError]">
 			Note that this is an important paragraph.
 		</p>
-		</p>
 	</div>
 
 	<script type="module">
-		// var app = new Vue({
-		// 	el: '#app',
-		// 	data: {
-		// 		isActive: false,
-		// 		hasError: true
-		// 	}
-		// })
-
-		// var app = new Vue({
-		// 	el: '#app',
-		// 	data: {
-		// 		classObj:{
-		// 			active: true,
-		// 			'text-danger': true
-		// 		}
-		// 	}
-		// })
-
 		import { createApp } from 'vue'
 
 		createApp({
@@ -102,11 +84,14 @@
 			data() {
 				return {
 					isActive: true,
-					error: null
+					hasError: true,
+					error: {
+						type: "fatal"
+					}
 				}
 			},
 			computed: {
-				classObj: function () {
+				computedClassObj: function () {
 					return {
 						active: this.isActive && !this.error,
 						'text-danger': this.error && this.error.type === 'fatal'

@@ -24,26 +24,25 @@
 </head>
 
 <body>
-	<div id="app" :style="{color:activeColor, fontSize:fontSize}">
-		<p>{{message}}</p>
+	<div id="app">
+		<p :style="{color:activeColor, fontSize:fontSize}">{{message}}</p>
 	</div>
 
-	<div id="app2" v-bind:style="styleObj">
-		<p>{{message}}</p>
+	<div id="app2">
+		<p :style="styleObj">{{message}}</p>
 	</div>
 
-	<div id="app3" v-bind:style="styleObj">
-		{{ message }}
+	<div id="app3">
+		<p :style="styleObj"> {{ message }}</p>
 	</div>
 
-	<div id="app4" v-bind:style="styleObj()">
-		{{ message }}
+	<div id="app4">
+		<p :style="styleObj()"> {{ message }}</p>
 	</div>
 
-	<div id="app5" v-bind:style="[fontStyle, colorStyle]">
-		<p>{{message}}</p>
+	<div id="app5">
+		<p :style="[fontStyle, colorStyle]">{{message}}</p>
 	</div>
-
 
 	<script type="module">
 		import { createApp } from 'vue'
@@ -52,9 +51,9 @@
 			el: '#app',
 			data() {
 				return {
-					message:'绑定到属性上',
-					activeColor:'red',
-					fontSize:'18px'
+					message: '绑定到对象，内联字面量',
+					activeColor: 'red',
+					fontSize: '18px'
 				}
 			}
 		}).mount("#app")
@@ -80,7 +79,7 @@
 				}
 			},
 			computed: {
-				styleObj: function () {
+				styleObj() {
 					return {
 						color: 'green',
 						fontSize: '23px'
