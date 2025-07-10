@@ -1,16 +1,17 @@
 超文本标记语言（英语：HyperText Markup Language，简称：HTML）是一种用于创建网页的标准标记语言。可以使用HTML来建立自己的Web站点，HTML运行在浏览器上，由浏览器来解析。
 
-```js
+```html
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8"></meta>
-<title>菜鸟教程(runoob.com)</title>
-</head>
-<body>
-    <h1>我的第一个标题</h1>
-    <p>我的第一个段落。</p>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <title>菜鸟教程(runoob.com)</title>
+    </head>
+
+    <body>
+        <h1>我的第一个标题</h1>
+        <p>我的第一个段落。</p>
+    </body>
 </html>
 ```
 
