@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>列表渲染</title>
+	<!--vue2-->
+	<!-- <script src="../vuejs/vuejs2.6/vue.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<!--vue3-->
+	<!-- <script src="../vuejs/vuejs3.5/vue.global.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<script src="https://unpkg.com/axios@1.10.0/dist/axios.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<!--导入映射表-->
+	<script type="importmap">
+	{
+		 "imports": {
+			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+			"lodash": "https://unpkg.com/lodash-es@4.17.21/lodash.js"
+		}
+	}
+	</script>
+</head>
+
+<body>
+	<div id="app">
+		<ul>
+			<li v-for="item in items">
+				{{item.text}}
+			</li>
+		</ul>
+	</div>
+
+	<div id="app2">
+		<ul>
+			<li v-for="(item, index) in items">
+				{{parentMessage}}-{{index}}-{{item.text}}
+			</li>
+		</ul>
+	</div>
+
+	<!--在v-for中使用对象-->
+	<div id="app3">
+		<ul>
+			<li v-for="(value,name,index) in bookInfo">
+				{{index}}.{{name}}:{{value}}
+			</li>
+		</ul>
+	</div>
+
+	<!--通过计算属性显示过滤后的结果-->
+	<div id="app4">
+		<ul>
+			<li v-for="number in evenNumbers">
+				{{number}}
+			</li>
+		</ul>
+	</div>
+
+	<!--通过JS方法显示过滤后的结果-->
+	<div id="app5">
+		<ul>
+			<li v-for="number in even(numbers)">
+				{{number}}
+			</li>
+		</ul>
+
+		<!--v-for中也接受值范围-->
+		<span v-for="n in 10">{{ n }} </span>
+
+		<ul>
+			<!--利用带有 v-for 的 <template> 来循环渲染一段包含多个元素的内容-->
+			<template v-for="number in even(numbers)">
+				<li>{{number}}</li>
+			</template>
+		</ul>
+	</div>
+
+	<!--vue2: v-for和v-if在同一元素上使用时，v-for的优先级高于v-if-->
+	<!--vue3: v-for和v-if在同一元素上使用时，v-if的优先级高于v-for-->
+   <div id="app6">
+	   <ul>
+		   <template v-for="todo in todos">
+			   <li v-if="!todo.isComplete">
+				   {{todo.message}}
+			   </li>
+		   </template>
+	   </ul>
+   </div>
+
+	<script type="module">
+		import { createApp } from 'vue'
+
+		var vm = createApp({
+			data() {
+				return {
+					items: [{
+						text: 'v-for指令基于数组来渲染一组列表；'
+					},
+					{
+						text: 'v-for指令基于数组来渲染一组列表；'
+					},
+					{
+						text: 'v-for指令基于数组来渲染一组列表；'
+					}]
+				}
+			}
+		}).mount('#app')
+
+		var vm2 = createApp({
+			data() {
+				return {
+					parentMessage: 'parent',
+					items: [{
+						text: '在 v-for 块中，可以访问所有父作用域的属性。v-for 还支持一个可选的第二个参数，即当前项的索引；'
+					},
+					{
+						text: 'v-for指令基于数组来渲染一组列表；'
+					},
+					{
+						text: 'v-for指令基于数组来渲染一组列表；'
+					}]
+				}
+			}
+		}).mount('#app2')
+
+		// filter不改变原数组，返回一个新数组
+		vm2.items = vm2.items.filter(function (item) {
+			return item.text.match('v-for指令基于数组来渲染一组列表；')
+		});
+
+		// 根据索引更改值	
+		//Vue.set(vm2.items, 1, {text: '123'})
+		// 从指定索引出开始删除元素
+		//vm2.items = vm2.items.splice(1,2)
+
+		var vm3 = createApp({
+			data() {
+				return {
+					bookInfo: {
+						bookName: '曾国藩家书',
+						author: '唐浩明',
+						publishedAt: '2016-10-24'
+					}
+				}
+			}
+		}).mount('#app3')
+
+		// 向对象中增加属性
+		//vm3.$set(vm3.bookInfo, 'punlisher', '清华大学出版社')
+		// 向对象中增加多个属性，应将多个属性放大一个新对象中
+		vm3.bookInfo = Object.assign({}, vm3.bookInfo, {
+			publisher: '清华大学出版社',
+			publishedTime: '2020-03-31'
+		})
+
+
+		var vm4 = createApp({
+			data() {
+				return {
+					numbers: [1, 2, 3, 4, 5, 6]
+				}
+			},
+			computed: {
+				evenNumbers: function () {
+					return this.numbers.filter(function (number) {
+						return number % 2 === 0
+					})
+				}
+			}
+		}).mount('#app4')
+
+		var vm5 = createApp({
+			data() {
+				return {
+					numbers: [1, 2, 3, 4, 5, 6]
+				}
+			},
+			methods: {
+				even: function (numbers) {
+					return numbers.filter(function (number) {
+						return number % 2 === 0
+					})
+				}
+			}
+		}).mount('#app5')
+
+		var vm6 = createApp({
+			data() {
+				return {
+					todos: [
+						{ message: 1, isComplete: false },
+						{ message: 6, isComplete: true },
+						{ message: 10, isComplete: false },
+						{ message: 19, isComplete: true },
+						{ message: 1100, isComplete: true },
+					]
+				}
+			}
+		}).mount('#app6')
+	</script>
+</body>
+
+</html>
