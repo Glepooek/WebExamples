@@ -26,16 +26,22 @@
 <body>
 	<div id="app">
 		<ul>
-			<li v-for="item in items">
+			<li v-for="item of items">
 				{{item.text}}
 			</li>
 		</ul>
 	</div>
 
 	<div id="app2">
-		<ul>
+		<!-- <ul>
 			<li v-for="(item, index) in items">
 				{{parentMessage}}-{{index}}-{{item.text}}
+			</li>
+		</ul> -->
+		<ul>
+			<!--解构-->
+			<li v-for="({text}, index) in items">
+				{{parentMessage}}-{{index}}-{{text}}
 			</li>
 		</ul>
 	</div>
@@ -43,7 +49,7 @@
 	<!--在v-for中使用对象-->
 	<div id="app3">
 		<ul>
-			<li v-for="(value,name,index) in bookInfo">
+			<li v-for="(value,name,index) in bookInfo" :key="value">
 				{{index}}.{{name}}:{{value}}
 			</li>
 		</ul>
@@ -79,15 +85,15 @@
 
 	<!--vue2: v-for和v-if在同一元素上使用时，v-for的优先级高于v-if-->
 	<!--vue3: v-for和v-if在同一元素上使用时，v-if的优先级高于v-for-->
-   <div id="app6">
-	   <ul>
-		   <template v-for="todo in todos">
-			   <li v-if="!todo.isComplete">
-				   {{todo.message}}
-			   </li>
-		   </template>
-	   </ul>
-   </div>
+	<div id="app6">
+		<ul>
+			<template v-for="todo in todos">
+				<li v-if="!todo.isComplete">
+					{{todo.message}}
+				</li>
+			</template>
+		</ul>
+	</div>
 
 	<script type="module">
 		import { createApp } from 'vue'
@@ -163,10 +169,8 @@
 				}
 			},
 			computed: {
-				evenNumbers: function () {
-					return this.numbers.filter(function (number) {
-						return number % 2 === 0
-					})
+				evenNumbers() {
+					return this.numbers.filter(number => number % 2 === 0)
 				}
 			}
 		}).mount('#app4')
@@ -178,10 +182,8 @@
 				}
 			},
 			methods: {
-				even: function (numbers) {
-					return numbers.filter(function (number) {
-						return number % 2 === 0
-					})
+				even(numbers) {
+					return numbers.filter(number => number % 2 === 0)
 				}
 			}
 		}).mount('#app5')
