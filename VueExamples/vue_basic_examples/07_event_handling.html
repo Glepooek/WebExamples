@@ -1,91 +1,105 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>事件处理</title>
-		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
-	</head>
 
-	<body>
-		<!--v-on指令监听DOM事件-->
-		<div id="example-1">
-			<button v-on:click="counter += 1">Add 1</button>
-			<p>the button above has been clicked {{counter}} times</p>
-		</div>
+<head>
+	<meta charset="utf-8">
+	<title>事件处理</title>
+	<!--vue2-->
+	<!-- <script src="../vuejs/vuejs2.6/vue.js" type="text/javascript" charset="utf-8"></script> -->
 
-		<!--v-on指令中接收JS方法名称-->
-		<div id="example-2">
-			<button @click="greet">Greet</button>
-		</div>
+	<!--vue3-->
+	<!-- <script src="../vuejs/vuejs3.5/vue.global.js" type="text/javascript" charset="utf-8"></script> -->
 
-		<!--v-on指令中接收JS方法-->
-		<div id="example-3">
-			<p>
-				<button @click="say('Hi')">Say Hi</button>
-				<button @click="say('What')">Say What</button>
-			</p>
-		</div>
-		
-		<!--向v-on指令中接收的JS方法中传递事件-->
-		<div id="example-4">
-			<p>
-				<button @click="warn('Form cannot be submitted yet.', $event)">Warn</button>
-			</p>
-		</div>
+	<script src="https://unpkg.com/axios@1.10.0/dist/axios.min.js" type="text/javascript" charset="utf-8"></script>
 
+	<!--导入映射表-->
+	<script type="importmap">
+	{
+		 "imports": {
+			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+			"lodash": "https://unpkg.com/lodash-es@4.17.21/lodash.js"
+		}
+	}
+	</script>
+</head>
 
-		<script>
-			var vm = new Vue({
-				el: '#example-1',
-				data: {
+<body>
+	<!--v-on指令监听DOM事件-->
+	<div id="example-1">
+		<button @click="counter += 1">Add 1</button>
+		<p>the button above has been clicked {{counter}} times</p>
+	</div>
+
+	<!--v-on指令中接收JS方法名称-->
+	<div id="example-2">
+		<button @click="greet">Greet</button>
+	</div>
+
+	<!--v-on指令中接收JS方法-->
+	<div id="example-3">
+		<p>
+			<button @click="say('Hi')">Say Hi</button>
+			<button @click="say('What')">Say What</button>
+		</p>
+	</div>
+
+	<!--向v-on指令中接收的JS方法中传递事件-->
+	<div id="example-4">
+		<p>
+			<!-- <button @click="warn('Form cannot be submitted yet.', $event)">Submit</button> -->
+			<button @click="(event)=> warn('Form cannot be submitted yet.', event)">Submit</button>
+		</p>
+	</div>
+
+	<script type="module">
+		import { createApp } from 'vue'
+
+		createApp({
+			data() {
+				return {
 					counter: 0
 				}
+			}
+		}).mount("#example-1")
 
-			})
-
-			var vm2 = new Vue({
-				el: '#example-2',
-				data: {
+		createApp({
+			data() {
+				return {
 					name: 'Vue.js'
-				},
-				methods: {
-					greet: function(event) {
-						alert('Hello' + this.name)
-						if (event) {
-							alert(event.target.tagName)
-						}
+				}
+			},
+			methods: {
+				greet(event) {
+					alert(`Hello ${this.name}!`)
+					if (event) {
+						alert(event.target.tagName)
 					}
 				}
-			})
+			}
+		}).mount("#example-2")
 
-			var vm3 = new Vue({
-				el: '#example-3',
-				data: {
-
-				},
-				methods: {
-					say: function(message) {
-						alert(message)
-					}
+		createApp({
+			methods: {
+				say(message) {
+					alert(message)
 				}
-			})
-			
-			var vm3 = new Vue({
-				el: '#example-4',
-				data: {
-			
-				},
-				methods: {
-					warn: function(message, event) {
-						if(event){
-							alert(event.target.tagName)
-							event.preventDefault()
-						}
-						alert(message)
-					}
-				}
-			})
-		</script>
+			}
+		}).mount("#example-3")
 
-	</body>
+		createApp({
+			methods: {
+				warn(message, event) {
+					if (event) {
+						//alert(event.target.tagName)
+						// 用于阻止事件的默认行为
+						event.preventDefault()
+					}
+					alert(message)
+				}
+			}
+		}).mount("#example-4")
+	</script>
+
+</body>
+
 </html>
