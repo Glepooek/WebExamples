@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>表单输入绑定</title>
+	<!--vue2-->
+	<!-- <script src="../vuejs/vuejs2.6/vue.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<!--vue3-->
+	<!-- <script src="../vuejs/vuejs3.5/vue.global.js" type="text/javascript" charset="utf-8"></script> -->
+
+	<script src="https://unpkg.com/axios@1.10.0/dist/axios.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<!--导入映射表-->
+	<script type="importmap">
+	{
+		 "imports": {
+			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+			"lodash": "https://unpkg.com/lodash-es@4.17.21/lodash.js"
+		}
+	}
+	</script>
+</head>
+
+<!-- v-model 在内部为不同的输入元素使用不同的属性并抛出不同的事件：
+	text 和 textarea 元素使用 value 属性和 input 事件；
+	checkbox 和 radio 使用 checked 属性和 change 事件；
+	select 字段将 value 作为 prop 并将 change 作为事件。 -->
+
+<body>
+	<div id="app">
+		<input v-model="message" placeholder="Edit me" />
+		<P>
+			Message is : {{message}}
+		</P>
+	</div>
+
+	<!--多行文本-->
+	<div id="app2">
+		<textarea v-model="message" placeholder="Add multiple lines"></textarea>
+		<br />
+		<span>Multiling message is :</span>
+		<p style="white-space: pre-line;">{{message}}</p>
+	</div>
+
+	<!--单个复选框，绑定到bool值-->
+	<div id="app3">
+		<p>
+			<input type="checkbox" v-model="checked" />
+			<label for="checkbox">{{checked}}</label>
+		</p>
+	</div>
+
+	<!--多个复选框，绑定到数组-->
+	<div id="app4">
+		<p>
+			<input type="checkbox" id='Jack' value="Jack Ma" v-model="checkedNames" />
+			<label for="Jack">Jack</label>
+			<br />
+			<input type="checkbox" id='Jone' value="Jone Liu" v-model="checkedNames" />
+			<label for="Jone">Jone</label>
+			<br />
+			<input type="checkbox" id='Mike' value="Mike Hua" v-model="checkedNames" />
+			<label for="Mike">Mike</label>
+			<br />
+			<span>checked Names : {{checkedNames}}</span>
+		</p>
+	</div>
+
+	<!--绑定到单选框-->
+	<div id="app5">
+		<p>
+			<input type="radio" id='one' value="One" v-model="picked" />
+			<label for="one">one</label>
+			<br />
+			<input type="radio" id='two' value="Two" v-model="picked" />
+			<label for="two">two</label>
+			<br />
+			<input type="radio" id='three' value="Three" v-model="picked" />
+			<label for="three">three</label>
+			<br />
+			<span>picked : {{picked}}</span>
+		</p>
+	</div>
+
+	<!--绑定的到选择框（单选）-->
+	<div id="app6">
+		<p>
+			<select v-model="selected">
+				<option disabled value="">请选择</option>
+				<option>A</option>
+				<option>B</option>
+				<option>C</option>
+			</select>
+			<br />
+			<span>selected : {{selected}}</span>
+		</p>
+	</div>
+
+	<!--绑定的到选择框（多选）-->
+	<div id="app7">
+		<p>
+			<select v-model="selected" multiple style="width: 60px;">
+				<option>A</option>
+				<option>B</option>
+				<option>C</option>
+			</select>
+			<br />
+			<span>selected : {{selected}}</span>
+		</p>
+	</div>
+
+	<!--v-for渲染动态选项-->
+	<div id="app8">
+		<p>
+			<select v-model="selected">
+				<option v-for="option in options" v-bind:value="option.value">
+					{{option.text}}
+				</option>
+			</select>
+			<br />
+			<span>selected : {{selected}}</span>
+		</p>
+	</div>
+
+	<script type="module">
+		import { createApp } from 'vue'
+
+		var vm = createApp({
+			data() {
+				return {
+					message: ''
+				}
+			}
+		}).mount("#app")
+
+		var vm2 = createApp({
+			data() {
+				return {
+					message: ''
+				}
+			}
+		}).mount("#app2")
+
+		var vm3 = createApp({
+			data() {
+				return {
+					checked: true
+				}
+			}
+		}).mount("#app3")
+
+		var vm4 = createApp({
+			data() {
+				return {
+					checkedNames: []
+				}
+			}
+		}).mount("#app4")
+
+		var vm5 = createApp({
+			data() {
+				return {
+					picked: ''
+				}
+			}
+		}).mount("#app5")
+
+		var vm6 = createApp({
+			data() {
+				return {
+					selected: ''
+				}
+			}
+		}).mount("#app6")
+
+		var vm7 = createApp({
+			data() {
+				return {
+					selected: []
+				}
+			}
+		}).mount("#app7")
+
+		var vm8 = createApp({
+			data() {
+				return {
+					selected: 'A',
+					options: [
+						{ text: 'One', value: 'A' },
+						{ text: 'Two', value: 'B' },
+						{ text: 'Three', value: 'C' }
+					]
+				}
+			}
+		}).mount("#app8")
+
+	</script>
+
+</body>
+
+</html>
