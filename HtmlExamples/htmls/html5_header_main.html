@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今日新闻 - 新闻资讯网</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #003366;
+            color: #fff;
+            /*top\right\bottom\eft*/
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav {
+            background: #00509e;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        main {
+            display: flex;
+            max-width: 1200px;
+            /*top\right\bottom\eft*/
+            margin: 30px auto;
+            gap: 30px;
+        }
+
+        /* display: flex;
+            让当前元素（容器）变为弹性容器，其子元素（项目）会自动成为弹性项目。
+            弹性盒模型可以方便地实现子元素的水平或垂直排列、自动分配空间、对齐、换行等复杂布局。
+            常用于响应式布局和多列/多行自适应场景。 
+        */
+
+        article {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            flex: 2;
+        }
+
+        /* 
+            flex 是弹性盒模型（Flexbox）中用来设置“弹性项目”在弹性容器中如何分配空间的属性。
+
+            作用：
+            控制子元素（弹性项目）的伸缩比例和占据空间的方式。
+            可以让某些元素变宽、变窄，自动填充剩余空间，实现自适应布局。
+            
+            常用写法和参数：
+            flex: 1;  // 元素平分剩余空间
+            flex: 2;  // 当前元素占2份空间，其他flex:1的元素各占1份
+            flex: none; // 不伸缩，保持原始大小
+            flex: 0 1 auto; // 等价于默认值 
+        */
+
+        article h2 {
+            color: #003366;
+        }
+
+        aside {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        aside h3 {
+            color: #00509e;
+        }
+
+        footer {
+            background: #003366;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 定义文档或区块的头部区域 -->
+    <header>
+        <h1>今日新闻</h1>
+        <p>为您带来最新、最权威的新闻资讯</p>
+    </header>
+
+    <!-- 定义导航链接区域 -->
+    <nav>
+        <a href="#">首页</a>
+        <a href="#">国内</a>
+        <a href="#">国际</a>
+        <a href="#">财经</a>
+        <a href="#">科技</a>
+        <a href="#">娱乐</a>
+        <a href="#">体育</a>
+        <a href="#">健康</a>
+    </nav>
+
+    <main>
+        <!-- 定义独立的内容区块，如文章、博客、新闻等。 -->
+        <article>
+            <h2>人工智能推动科技创新</h2>
+            <p><strong>2025年7月15日</strong> | 记者：李明</p>
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+                alt="AI News" style="width:100%;border-radius:6px;margin-bottom:15px;">
+            <p>随着人工智能技术的不断发展，越来越多的企业和机构开始将AI应用于实际生产和生活中。专家表示，AI不仅提升了生产效率，还为医疗、教育、交通等领域带来了革命性的变革。</p>
+            <p>在本次科技创新大会上，多家初创公司展示了基于AI的最新产品，包括智能语音助手、自动驾驶汽车、智能医疗诊断系统等。业内人士认为，未来AI将在更多行业实现落地应用，助力社会高质量发展。</p>
+            <h3>相关数据</h3>
+            <ul>
+                <li>2025年全球AI市场规模预计将突破5000亿美元</li>
+                <li>中国AI专利申请量连续三年全球第一</li>
+                <li>AI人才需求年增长率达30%</li>
+            </ul>
+        </article>
+
+        <!--定义侧边栏内容，通常为补充信息，如广告、相关链接等。-->
+        <aside>
+            <h3>最新快讯</h3>
+            <ul>
+                <li><a href="#">2025年高考成绩今日公布</a></li>
+                <li><a href="#">台风“海燕”即将登陆东南沿海</a></li>
+                <li><a href="#">新冠疫苗加强针接种率提升</a></li>
+                <li><a href="#">国际油价小幅回升</a></li>
+            </ul>
+            <h3>热门专题</h3>
+            <ul>
+                <li><a href="#">AI与未来社会</a></li>
+                <li><a href="#">绿色能源革命</a></li>
+                <li><a href="#">2025巴黎奥运会</a></li>
+            </ul>
+        </aside>
+    </main>
+
+    <!--定义文档或区块的底部区域，通常包含版权、联系方式等。-->
+    <footer>
+        <p>版权所有 &copy; 2025 新闻资讯网 | 联系我们：news@example.com</p>
+    </footer>
+</body>
+
+</html>
