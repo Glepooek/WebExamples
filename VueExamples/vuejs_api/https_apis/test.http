@@ -1,0 +1,20 @@
+GET https://www.unischool.cn/api/gateway/getNewsList?op_path=gateway%2FgetNewsList&needScope=true&page=1&pageSize=4
+scope: com.fltrp.szjc.pc.web
+# Content-Type: application/json;charset=UTF-8
+# Content-Encoding: gzip
+
+###
+
+GET https://www.unischool.cn/api/gateway/dashboard?op_path=gateway%2Fdashboard&needToken=tru
+
+###
+
+POST  https://www.unischool.cn/api/gateway/getStdFunctionBySeriesId
+Content-Type: application/json;charset=UTF-8
+
+{
+    "op_path":"gateway/getStdFunctionBySeriesId",
+    "sourceFrom":true,
+    "series_id":"STD_JOIN_IN",
+    "needSourceFrom":true
+}
