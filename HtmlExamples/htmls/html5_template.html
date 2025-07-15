@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>HTML5 模板</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <button style="width: 100px;height: 30px;color: blue;" onclick="showContent()">点击我</button>
+
+        <template>
+            <h2>logo</h2>
+            <img src="https://static.jyshare.com/images/runoob-logo.png">
+        </template>
+
+        <script>
+            function showContent() {
+                // const template = document.querySelector('template');
+                // const clone = document.importNode(template.content, true);
+                // document.body.appendChild(clone);
+
+                const template = document.getElementsByTagName('template')[0];
+                const clone = template.content.cloneNode(true);
+                document.body.appendChild(clone);
+            }
+        </script>
+
+    </body>
+</html>
