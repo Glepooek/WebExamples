@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        button {
+            margin: 10px;
+            width: 100px;
+            height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <button id="btn1" onclick="fetchData()">Fetch Data</button>
+        <button id="btn2" onclick="abortFetch()">Abort Fetch</button>
+    </div>
+
+    <script>
+        let controller = new AbortController();
+        let signal = controller.signal;
+
+        signal.addEventListener("abort", (s, e) => {
+            console.log("aborted");
+        });
+
+        function fetchData() {
+            if (signal.aborted) {
+                console.log("Fetch already aborted, resetting controller.");
+                controller = new AbortController(); // Reset the controller if it was aborted
+                signal = controller.signal; // Update the signal reference
+                signal.addEventListener("abort", (s, e) => {
+                    console.log("aborted");
+                });
+            }
+
+            fetch("https://www.unischool.cn/api/gateway/getNewsList?op_path=gateway%2FgetNewsList&needScope=true&page=1&pageSize=4", {
+                signal, 
+                method: 'GET',
+                headers:
+                {
+                    'Content-Type': 'application/json',
+                    'scope': 'com.fltrp.szjc.pc.web'
+                }
+            })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => {
+                    if (error.name === 'AbortError') {
+                        console.log('Fetch aborted');
+                    } else {
+                        console.error('Fetch error:', error);
+                    }
+                });
+        }
+
+        function abortFetch() {
+            controller.abort();
+        }
+
+        // fetch("https://jsonplaceholder.typicode.com/posts", { signal })
+        //     .then(response => {
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
+        //         clearTimeout(timerId); // Clear the timer if fetch is successful
+        //         response.json()
+        //     })
+        //     .then(data => console.log(data))
+        //     .catch(error => {
+        //         if (error.name === 'AbortError') {
+        //             console.log('Fetch aborted');
+        //         } else {
+        //             console.error('Fetch error:', error);
+        //         }
+        //     });
+
+        // Abort the fetch request after 1 second
+        // const timerId = setTimeout(() => {
+        //     controller.abort();
+        // }, 10000);
+    </script>
+</body>
+
+</html>
