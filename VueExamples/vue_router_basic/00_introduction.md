@@ -1,3 +1,5 @@
+## 介绍
+
 Vue Router是Vue.js的官方路由。它与Vue.js核心深度集成，让用Vue.js构建单页应用变得轻而易举。功能包括：
 
 * 嵌套路由映射
@@ -10,3 +12,7 @@ Vue Router是Vue.js的官方路由。它与Vue.js核心深度集成，让用Vue.
 * HTML5 history模式或hash模式
 * 可定制的滚动行为
 * URL的正确编码
+
+## 下载或CDN
+* https://unpkg.com/vue-router@4
+* https://unpkg.com/vue-router@4.0.15/dist/vue-router.global.js

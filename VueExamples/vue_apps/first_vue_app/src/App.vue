@@ -9,6 +9,9 @@ import HelloWorld from './components/HelloWorld.vue'
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
+      <p style="color: red;">
+        <strong>Current route path: </strong>{{ $route.fullPath }}
+      </p>
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
