@@ -32,7 +32,7 @@
             </div>
           </div>
 
-          <button class="login-btn" @click="handleLogin">登录</button>
+          <button class="login-btn" :disabled="!canLogin" @click="handleLogin">登录</button>
 
           <div class="agreement">
             <input type="checkbox" id="agreement" v-model="loginInfo.agreementAccepted">
@@ -47,12 +47,13 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const loginInfo = reactive({
   username: '',
   password: '',
+  // canLogin: false,
   rememberMe: false,
   showPassword: false,
   agreementAccepted: false,
@@ -81,6 +82,18 @@ const switchLoginMethod = () => {
   loginInfo.isSmsLogin = !loginInfo.isSmsLogin;
   alert('已切换到验证码登录模式（功能尚未实现）');
 }
+
+// // 监听用户名、密码不为空时，更新 canLogin 状态
+// watch([() => loginInfo.username, () => loginInfo.password],
+//   ([newUsername, newPassword]) => {
+//     loginInfo.canLogin = newUsername && newPassword;
+//   }
+// );
+
+const canLogin = computed(() => {
+  return loginInfo.username && loginInfo.password;
+});
+
 </script>
 
 <style scoped>
@@ -221,6 +234,11 @@ const switchLoginMethod = () => {
   background: #7c3aed;
   transform: translateY(-3px);
   box-shadow: 0 7px 15px rgba(139, 92, 246, 0.4);
+}
+
+.login-btn:disabled {
+  background: #7263FF;
+  opacity: 0.5;
 }
 
 .login-btn:active {
