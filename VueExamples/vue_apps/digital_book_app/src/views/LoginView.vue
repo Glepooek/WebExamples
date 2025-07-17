@@ -16,7 +16,10 @@
           </div>
 
           <div class="form-group">
-            <input :type="loginInfo.showPassword ? 'text' : 'password'" v-model="loginInfo.password" placeholder="请输入密码">
+            <!-- <el-input type="password" placeholder="请输入密码" v-model="loginInfo.password"
+              show-password /> -->
+            <input :type="loginInfo.showPassword ? 'text' : 'password'" v-model="loginInfo.password"
+              placeholder="请输入密码">
           </div>
 
           <div class="form-options">
@@ -33,7 +36,8 @@
 
           <div class="agreement">
             <input type="checkbox" id="agreement" v-model="loginInfo.agreementAccepted">
-            <label for="agreement">阅读并同意 <a href="#">《用户服务协议》</a> 和 <a href="#">《隐私保护政策》</a></label>
+            <label for="agreement">阅读并同意 <a href="https://www.unischool.cn/student-pc/user">《用户服务协议》</a> 和 <a
+                href="https://www.unischool.cn/student-pc/privacy">《隐私保护政策》</a></label>
           </div>
         </div>
 
@@ -43,35 +47,40 @@
 </template>
 
 <script setup>
-  import { ref, reactive } from 'vue'
-  const loginInfo = reactive({
-    username: '',
-    password: '',
-    rememberMe: false,
-    showPassword: false,
-    agreementAccepted: false,
-    isSmsLogin: false
-  })
+import { ref, reactive } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-  const handleLogin = () => {
-    if (!this.username || !this.password) {
-      alert('请输入账号和密码');
-      return;
-    }
+const loginInfo = reactive({
+  username: '',
+  password: '',
+  rememberMe: false,
+  showPassword: false,
+  agreementAccepted: false,
+  isSmsLogin: false
+})
 
-    if (!this.agreementAccepted) {
-      alert('请阅读并同意服务协议和隐私政策');
-      return;
-    }
+const router = useRouter()
 
-    // 模拟登录成功
-    alert(`登录成功！\n账号：${this.username}\n记住密码：${this.rememberMe ? '是' : '否'}`);
+const handleLogin = () => {
+  if (!loginInfo.username || !loginInfo.password) {
+    alert('账号或密码错误，请检查后输入');
+    return;
   }
 
-  const switchLoginMethod = ()=> {
-    this.isSmsLogin = !this.isSmsLogin;
-    alert('已切换到验证码登录模式（功能尚未实现）');
+  if (!loginInfo.agreementAccepted) {
+    alert('请阅读并同意服务协议和隐私政策');
+    return;
   }
+
+  // 模拟登录成功
+  alert(`登录成功！\n账号：${loginInfo.username}\n记住密码：${loginInfo.rememberMe ? '是' : '否'}`);
+  router.push('/home');
+}
+
+const switchLoginMethod = () => {
+  loginInfo.isSmsLogin = !loginInfo.isSmsLogin;
+  alert('已切换到验证码登录模式（功能尚未实现）');
+}
 </script>
 
 <style scoped>
@@ -91,7 +100,7 @@
 }
 
 .login-inner-container {
-  width: 80%;
+  width: 85%;
   height: 80%;
   background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.95) 51%, rgba(255, 255, 255, 0.8) 100%);
   border-radius: 20px;
