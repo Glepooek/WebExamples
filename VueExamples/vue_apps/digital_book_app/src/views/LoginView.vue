@@ -16,8 +16,7 @@
           </div>
 
           <div class="form-group">
-            <!-- <el-input type="password" placeholder="请输入密码" v-model="loginInfo.password"
-              show-password /> -->
+            <!-- <el-input type="password" placeholder="请输入密码" v-model="loginInfo.password" show-password /> -->
             <input :type="loginInfo.showPassword ? 'text' : 'password'" v-model="loginInfo.password"
               placeholder="请输入密码">
           </div>
@@ -49,6 +48,7 @@
 <script setup>
 import { ref, reactive, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { getSsoId } from '../apis/loginApi'
 
 const loginInfo = reactive({
   username: '',
@@ -74,7 +74,22 @@ const handleLogin = () => {
   }
 
   // 模拟登录成功
-  alert(`登录成功！\n账号：${loginInfo.username}\n记住密码：${loginInfo.rememberMe ? '是' : '否'}`);
+  //alert(`登录成功！\n账号：${loginInfo.username}\n记住密码：${loginInfo.rememberMe ? '是' : '否'}`);
+
+const sso = getSsoId(loginInfo.username, loginInfo.password);
+
+
+
+
+
+
+
+
+
+
+
+
+
   router.push('/home');
 }
 
@@ -192,6 +207,20 @@ const canLogin = computed(() => {
   box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
 }
 
+/* .password-icon {
+    width: 16px;
+    height: 16px;
+    background: url(data:image/png;base64,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) no-repeat 50%;
+    background-size: 100%;
+}
+
+.password-icon-active {
+    width: 16px;
+    height: 16px;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAvRJREFUWEfVl0tIVGEUx39npnxQSWKPRWKR9I6giKKXbVtE1iKjciGp00KMdKasjTptypyxKCLyES0s0RY9aNG20MKIgoiyRInQRS8MK5ypZk7MDBOpc+/cEWxqlnPPOd/v+3//891zhST/JMnr838CdHSovfse2XxnTljBFN6v38pAQYEEElXUsgKXHDq1N8BuFfaqkgdkjFlsWIT7orQtsnP9YKP8sAJjCcBVooVBOIUyz0pRhEEbHPM0S2u8eFOA42Wa5ffTirItXqGYz4W7qakUnrwgn4zyDQGcDl1KkDuq5CqokJhhozki9GFju7dRemJBxAQILa4B7gOzJ7Tz8UkfxE5eLIhxAM4ynY+fTlWyzRZPS4dZkR7g43vwjZijijAwxcamukZ5+2fkKICaGk37MkgXyhqjcjMzYdc+WLYK7PZIVCAAL5/BjWvwecgERHgyYx6b3G7xRaNGAVQWayNQalRi5WrYewBCu1eFD+8ikbPngkhEhbbL8PypqRpNDS3iGAfgKtH8oHLTyHCZWXDEDalp8Pgh3G6Hb18jZaZNhx17YO0G8PugvgaGYvg+Wtsm7PQ0y61QbliBmnLN+DLCC7M+d1TAkhXQ3QkdV2LvsKAI1m+GnufQdNb0KAZnpLPcfV6GwwDOEvWo4jRKmZ4BtV4IBqC6wthwoaM5cQZsdqh1wtdhYwgRvN5mcYUBKou1D1hoFL5wMZQdhYG3cOaEudsrqiE7By6chv7XprH9DS2Saw1gEZRVJQhQB/29FgFcxVofBNffPAIbeDwtcsSyCUsPw9KV8KgT2g1MuKcI1k3EhGEflOoOgtwya0OXG9LitKHPB544bYiN/IYmuf27DaPSJ/UiCkGcK9fUNyM8mMyreEE6Gw+dF3/Mqzj0Z5VDc34G6UrKyyhKNRmv4ykpbDl9UV6N7bR/cyCJUiZ1JPtTKmep7lelLpGhVIQqb5NcNb+4E5jzkjqWj91FUj5M4kk50eeWPkwmWtxKXtIBfgFxxmAw+9hzbAAAAABJRU5ErkJggg==) no-repeat 50%;
+    background-size: 100%;
+} */
+
 .form-options {
   display: flex;
   justify-content: space-between;
@@ -239,6 +268,7 @@ const canLogin = computed(() => {
 .login-btn:disabled {
   background: #7263FF;
   opacity: 0.5;
+  cursor:not-allowed;
 }
 
 .login-btn:active {
