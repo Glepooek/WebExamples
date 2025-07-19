@@ -8,21 +8,38 @@
 
         <!-- 右侧区域 -->
         <div class="login-right">
-          <h2 class="login-title">账号密码登录</h2>
-          <p class="login-tip">未注册的手机号验证后将自动注册</p>
 
-          <div class="form-group">
-            <input type="text" v-model="loginInfo.username" placeholder="请输入账号/手机号">
+          <!-- 账号密码登录 -->
+          <div v-show="!loginInfo.isSmsLogin">
+            <h2 class="login-title">账号密码登录</h2>
+            <p class="login-tip">未注册的手机号验证后将自动注册</p>
+
+            <div class="form-group">
+              <input type="text" v-model="loginInfo.username" placeholder="请输入账号/手机号">
+            </div>
+
+            <div class="form-group">
+              <input :type="loginInfo.showPassword ? 'text' : 'password'" v-model="loginInfo.password"
+                placeholder="请输入密码">
+            </div>
           </div>
 
-          <div class="form-group">
-            <!-- <el-input type="password" placeholder="请输入密码" v-model="loginInfo.password" show-password /> -->
-            <input :type="loginInfo.showPassword ? 'text' : 'password'" v-model="loginInfo.password"
-              placeholder="请输入密码">
+          <!-- 手机验证码登录 -->
+          <div v-show="loginInfo.isSmsLogin">
+            <h2 class="login-title">手机验证码登录</h2>
+            <p class="login-tip">未注册的手机号验证后将自动注册</p>
+
+            <div class="form-group">
+              <input type="text" v-model="loginInfo.phoneNumber" placeholder="请输入手机号">
+            </div>
+
+            <div class="form-group">
+              <input v-model="loginInfo.captcha" placeholder="请输入验证码">
+            </div>
           </div>
 
           <div class="form-options">
-            <div class="remember-me">
+            <div class="remember-me" v-show="!loginInfo.isSmsLogin">
               <input type="checkbox" id="remember-me" v-model="loginInfo.rememberMe">
               <label for="remember-me">记住密码</label>
             </div>
@@ -53,7 +70,8 @@ import { getSsoId } from '../apis/loginApi'
 const loginInfo = reactive({
   username: '',
   password: '',
-  // canLogin: false,
+  phoneNumber: '',
+  captcha: '',
   rememberMe: false,
   showPassword: false,
   agreementAccepted: false,
@@ -63,9 +81,17 @@ const loginInfo = reactive({
 const router = useRouter()
 
 const handleLogin = () => {
-  if (!loginInfo.username || !loginInfo.password) {
-    alert('账号或密码错误，请检查后输入');
-    return;
+  if (loginInfo.isSmsLogin) {
+    if (!loginInfo.phoneNumber || !loginInfo.captcha) {
+      alert('请填写手机号和验证码');
+      return;
+    }
+  }
+  else {
+    if (!loginInfo.username || !loginInfo.password) {
+      alert('账号或密码错误，请检查后输入');
+      return;
+    }
   }
 
   if (!loginInfo.agreementAccepted) {
@@ -76,7 +102,7 @@ const handleLogin = () => {
   // 模拟登录成功
   //alert(`登录成功！\n账号：${loginInfo.username}\n记住密码：${loginInfo.rememberMe ? '是' : '否'}`);
 
-const sso = getSsoId(loginInfo.username, loginInfo.password);
+  const sso = getSsoId(loginInfo.username, loginInfo.password);
 
 
 
@@ -95,7 +121,6 @@ const sso = getSsoId(loginInfo.username, loginInfo.password);
 
 const switchLoginMethod = () => {
   loginInfo.isSmsLogin = !loginInfo.isSmsLogin;
-  alert('已切换到验证码登录模式（功能尚未实现）');
 }
 
 // // 监听用户名、密码不为空时，更新 canLogin 状态
@@ -106,7 +131,7 @@ const switchLoginMethod = () => {
 // );
 
 const canLogin = computed(() => {
-  return loginInfo.username && loginInfo.password;
+  return loginInfo.username && loginInfo.password && loginInfo.agreementAccepted;
 });
 
 </script>
@@ -177,7 +202,19 @@ const canLogin = computed(() => {
   font-size: 28px;
   color: #202342;
   font-weight: bold;
-  margin-bottom: 10px;
+  position: relative;
+}
+
+.login-title::before {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: -5px;
+  width: 62px;
+  height: 11px;
+  background: linear-gradient(177deg, #685CF5 0%, rgba(114, 99, 255, 0.37) 100%);
+  border-radius: 6px;
+  opacity: 0.31;
 }
 
 .login-tip {
@@ -268,7 +305,7 @@ const canLogin = computed(() => {
 .login-btn:disabled {
   background: #7263FF;
   opacity: 0.5;
-  cursor:not-allowed;
+  cursor: not-allowed;
 }
 
 .login-btn:active {
