@@ -65,7 +65,7 @@
 <script setup>
 import { ref, reactive, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getSsoId } from '../apis/loginApi'
+import { getSsoInfo, getTokenInfo, getUserInfo } from '../apis/loginApi'
 
 const loginInfo = reactive({
   username: '',
@@ -80,7 +80,7 @@ const loginInfo = reactive({
 
 const router = useRouter()
 
-const handleLogin = () => {
+const handleLogin = async () => {
   if (loginInfo.isSmsLogin) {
     if (!loginInfo.phoneNumber || !loginInfo.captcha) {
       alert('请填写手机号和验证码');
@@ -99,22 +99,35 @@ const handleLogin = () => {
     return;
   }
 
-  // 模拟登录成功
-  //alert(`登录成功！\n账号：${loginInfo.username}\n记住密码：${loginInfo.rememberMe ? '是' : '否'}`);
+  const { code: ssoCode, msg: ssoMsg, rs } = await getSsoInfo(loginInfo.username, loginInfo.password);
+  if (ssoCode != 0 || !rs) {
+    console.log(ssoMsg);
+    alert(ssoMsg);
+    return;
+  }
 
-  const sso = getSsoId(loginInfo.username, loginInfo.password);
+  console.log(`openid: ${rs.openid}`);
+  localStorage.setItem("openid", rs.openid);
 
+  const { code: tokenCode, msg: tokenMsg, data: tokenData } = await getTokenInfo(loginInfo.username, loginInfo.password, rs);
+  if (tokenCode != 0 || !tokenData) {
+    console.log(tokenMsg);
+    alert(tokenMsg);
+    return;
+  }
 
+  console.log(`token: ${tokenData.access_token}`);
+  localStorage.setItem("token", tokenData.access_token);
 
+  const { code: userInfoCode, msg: userInfoMsg, data: userInfoData } = await getUserInfo(rs.openid, tokenData.access_token);
+  if (userInfoCode != 0 || !userInfoData) {
+    console.log(userInfoMsg);
+    alert(userInfoMsg);
+    return;
+  }
 
-
-
-
-
-
-
-
-
+   localStorage.setItem("ux_user_id", userInfoData.ux_user_id);
+   localStorage.setItem("optimus_token", userInfoData.optimus_token);
 
   router.push('/home');
 }

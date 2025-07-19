@@ -1,0 +1,14 @@
+POST https://sso.unipus.cn/sso/4.0/sso/login
+Content-Type: application/json;charset=UTF-8
+x-device: 'C8BAFB35-0529-4655-1643-D352A971C1F6'
+x-version: '0.0.1'
+x-app-key: 'K12_CLOUD'
+
+{
+    "username": "17600485295",
+    "password": "",
+    "service": "http://login.nse.unischool.cn"
+}
+
+###
+curl -H "Authorization: 05ecbdae5e2dffdd8d3933f6a8870d0d60b105923b5409cfb99ae368e432f59a" -H "Scope: com.fltrp.szjc.pc" -H "Version: 1.29.0.989" -H "x-device: 9ea781a8-3868-4f81-aec8-a6dbd40da1e2" -H "x-device-name: DESKTOP-084FNL0" -H "os-version: Windows10-64bit (10.0.19045.0)" -H "x-device-brand: Windows10-64bit" -H "x-app-channel: Windows" -H "x-os-version: 10.0.19045.0" -H "x-app-key: K12_CLOUD" -H "x-rt: " -H "x-rt-expire: 0" -H "Content-Type: application/json" -H "Host: k12-teaching.unipus.cn" -H "Expect: 100-continue" --data-binary "{\"url\":\"https://k12-teaching.unipus.cn/api/information/bindteacherinfo/getselfteacherinfo\",\"request_id\":\"sdsds\",\"sso_id\":\"2e42a15cc5b44ed7b8b3acfde568dba2\"}" "https://k12-teaching.unipus.cn/api/information/bindteacherinfo/getselfteacherinfo"
