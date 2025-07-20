@@ -1,0 +1,7 @@
+// 获取教材列表一级菜单
+curl -H "accesstoken: 38910ca99c844d7390a3c9e2633e0a7f" -H "x-device: 9ea781a8-3868-4f81-aec8-a6dbd40da1e2" -H "x-version: 1.29.0.989" -H "x-app-key: K12_CLOUD" -H "x-rt: C48B58C1BFF5E297BF4C95DD08A187593E4650516F621C7DAF26C22923A85E2D86531E4AFFF8C98924E1B0CA7A338FBA" -H "x-rt-expire: 1755602736807" -H "x-timestamp: 1753010742" -H "x-nonce: 57881341-e790-42b3-9d55-0992bbe60f90" -H "x-sign: 1c54387da06334000a3285336fba3ba6cec21b8b6d914400582f1134bccff909" -H "Content-Type: application/json" -H "Host: k12-teaching.unipus.cn" "https://k12-teaching.unipus.cn/api/platform/v1/digital/textbook/tab/new"
+
+###
+
+// 获取教材列表二级菜单
+curl -H "accesstoken: 38910ca99c844d7390a3c9e2633e0a7f" -H "x-device: 9ea781a8-3868-4f81-aec8-a6dbd40da1e2" -H "x-version: 1.29.0.989" -H "x-app-key: K12_CLOUD" -H "x-rt: C48B58C1BFF5E297BF4C95DD08A187593E4650516F621C7DAF26C22923A85E2D86531E4AFFF8C98924E1B0CA7A338FBA" -H "x-rt-expire: 1755602736807" -H "x-timestamp: 1753010742" -H "x-nonce: 351cadbc-7817-445c-bb66-48eba655c812" -H "x-sign: af42543844a5d22ab0092067e8d186de794168a2807a5db40098155a9b41a984" -H "Content-Type: application/json" -H "Host: k12-teaching.unipus.cn" "https://k12-teaching.unipus.cn/api/platform/v1/digital/textbook/list/v2?tabId=13"

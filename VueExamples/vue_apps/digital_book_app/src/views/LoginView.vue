@@ -65,7 +65,7 @@
 <script setup>
 import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { getSSOInfo as getSSOInfo, getTokenInfo, getUserInfo } from '../apis/loginApi'
+import { getSSOInfo as getSSOInfo, getTokenInfo, getUserInfo } from '@/apis/loginApi'
 import { setStorage } from '@/utils/storage'
 
 const loginInfo = reactive({
