@@ -34,7 +34,7 @@ instance.interceptors.response.use(
     response => {
         // Do something with response data
         const res = response.data;
-        if (res.code !== 0 || res.code !== '0') {
+        if (res.code !== 0 && res.code !== '0') {
             console.error("响应拦截器错误", res);
             return Promise.reject(new Error(res.message));
         }

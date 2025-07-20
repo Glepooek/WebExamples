@@ -10,14 +10,14 @@ const router = createRouter({
       component: LoginView,
     },
     {
-      path: '/home',
-      name: 'home',
-      component:  () => import('../views/HomeView.vue'),
+      path: '/digitalBook',
+      name: 'digitalBook',
+      component:  () => import('../views/DigitalBookView.vue'),
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
+      path: '/bookList',
+      name: 'bookList',
+      component: () => import('../views/BookListView.vue'),
     },
   ],
 })

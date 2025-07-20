@@ -118,7 +118,7 @@ const handleLogin = async () => {
   console.log(`optimus_token: ${optimus_token}`);
   setStorage("optimus_token", optimus_token);
 
-  router.push('/home');
+  router.push('/bookList');
 }
 
 const switchLoginMethod = () => {
