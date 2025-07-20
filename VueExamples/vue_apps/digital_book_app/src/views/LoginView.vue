@@ -15,11 +15,11 @@
             <p class="login-tip">未注册的手机号验证后将自动注册</p>
 
             <div class="form-group">
-              <input type="text" v-model="loginInfo.username" placeholder="请输入账号/手机号">
+              <input v-model="loginInfo.username" type="text" placeholder="请输入账号/手机号">
             </div>
 
             <div class="form-group">
-              <input :type="loginInfo.showPassword ? 'text' : 'password'" v-model="loginInfo.password"
+              <input v-model="loginInfo.password" :type="loginInfo.showPassword ? 'text' : 'password'"
                 placeholder="请输入密码">
             </div>
           </div>
@@ -30,7 +30,7 @@
             <p class="login-tip">未注册的手机号验证后将自动注册</p>
 
             <div class="form-group">
-              <input type="text" v-model="loginInfo.phoneNumber" placeholder="请输入手机号">
+              <input v-model="loginInfo.phoneNumber" type="text" placeholder="请输入手机号">
             </div>
 
             <div class="form-group">
@@ -39,8 +39,8 @@
           </div>
 
           <div class="form-options">
-            <div class="remember-me" v-show="!loginInfo.isSmsLogin">
-              <input type="checkbox" id="remember-me" v-model="loginInfo.rememberMe">
+            <div v-show="!loginInfo.isSmsLogin" class="remember-me">
+              <input id="remember-me" v-model="loginInfo.rememberMe" type="checkbox">
               <label for="remember-me">记住密码</label>
             </div>
             <div class="switch-method" @click="switchLoginMethod">
@@ -51,7 +51,7 @@
           <button class="login-btn" :disabled="!canLogin" @click="handleLogin">登录</button>
 
           <div class="agreement">
-            <input type="checkbox" id="agreement" v-model="loginInfo.agreementAccepted">
+            <input id="agreement" v-model="loginInfo.agreementAccepted" type="checkbox">
             <label for="agreement">阅读并同意 <a href="https://www.unischool.cn/student-pc/user">《用户服务协议》</a> 和 <a
                 href="https://www.unischool.cn/student-pc/privacy">《隐私保护政策》</a></label>
           </div>
