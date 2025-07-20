@@ -65,8 +65,8 @@
 <script setup>
 import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { getSsoInfo, getTokenInfo, getUserInfo } from '../apis/loginApi'
-import { setStorage } from '../utils/storage'
+import { getSSOInfo as getSSOInfo, getTokenInfo, getUserInfo } from '../apis/loginApi'
+import { setStorage } from '@/utils/storage'
 
 const loginInfo = reactive({
   username: '',
@@ -100,35 +100,23 @@ const handleLogin = async () => {
     return;
   }
 
-  const { code: ssoCode, msg: ssoMsg, rs } = await getSsoInfo(loginInfo.username, loginInfo.password);
-  if (ssoCode != 0 || !rs) {
-    console.log(ssoMsg);
-    alert(ssoMsg);
-    return;
-  }
+  const { openid, serviceTicket } = await getSSOInfo(loginInfo.username, loginInfo.password);
 
-  console.log(`openid: ${rs.openid}`);
-  setStorage("openid", rs.openid);
+  console.log(`openid: ${openid}`);
+  setStorage("openid", openid);
 
-  const { code: tokenCode, msg: tokenMsg, data: tokenData } = await getTokenInfo(loginInfo.username, loginInfo.password, rs);
-  if (tokenCode != 0 || !tokenData) {
-    console.log(tokenMsg);
-    alert(tokenMsg);
-    return;
-  }
+  const { access_token } = await getTokenInfo(loginInfo.username, loginInfo.password, openid, serviceTicket);
 
-  console.log(`token: ${tokenData.access_token}`);
-  setStorage("token", tokenData.access_token);
+  console.log(`token: ${access_token}`);
+  setStorage("token", access_token);
 
-  const { code: userInfoCode, msg: userInfoMsg, data: userInfoData } = await getUserInfo(rs.openid, tokenData.access_token);
-  if (userInfoCode != 0 || !userInfoData) {
-    console.log(userInfoMsg);
-    alert(userInfoMsg);
-    return;
-  }
+  const { ux_user_id, optimus_token } = await getUserInfo(openid, access_token);
 
-  setStorage("ux_user_id", userInfoData.ux_user_id);
-  setStorage("optimus_token", userInfoData.optimus_token);
+  console.log(`ux_user_id: ${ux_user_id}`);
+  setStorage("ux_user_id", ux_user_id);
+
+  console.log(`optimus_token: ${optimus_token}`);
+  setStorage("optimus_token", optimus_token);
 
   router.push('/home');
 }

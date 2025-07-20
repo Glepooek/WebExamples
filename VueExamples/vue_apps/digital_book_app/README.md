@@ -1,9 +1,5 @@
 # digital_book_app
 
-## Modules
-* Login
-* 
-
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup
@@ -37,3 +33,12 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## Modules
+* Login
+
+### Infrastructure
+* Local storage
+* Configure env
+* Request
+* Permissions

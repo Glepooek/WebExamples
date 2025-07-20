@@ -1,8 +1,4 @@
-import axios from "axios"
-
-const instance = axios.create({
-    timeout: 10000
-});
+import request from "@/utils/request"
 
 /**
  * 获取sso信息
@@ -10,54 +6,35 @@ const instance = axios.create({
  * @param {string} password 密码
  * @returns {Promise<any>}
  */
-export async function getSsoInfo(username, password) {
-    try {
-        const response = await instance.post('/sso/4.0/sso/login', {
-            username: username,
-            password: password,
-            service: "http://login.nse.unischool.cn"
-        })
-        if (response && response.data) {
-            console.log(response.data);
-            return response.data;
-        } else {
-            throw new Error('Response data is undefined');
-        }
-    } catch (error) {
-        console.log(error)
-    }
+export async function getSSOInfo(username, password) {
+    return await request.post('/sso/4.0/sso/login', {
+        username: username,
+        password: password,
+        service: "http://login.nse.unischool.cn"
+    })
 }
 
 /**
  * 获取token信息
  * @param {string} username 用户名
  * @param {string} password 密码
- * @param {object} rs
+ * @param {string} openid
+ * @param {string} serviceTicket
  * @returns {Promise<Object>} token信息
  */
-export async function getTokenInfo(username, password, rs) {
-    try {
-        const response = await instance.post('/oauth/token', {
-            username: username,
-            password: btoa(password),
-            grant_type: "password",
-            scope: "com.fltrp.szjc.pc",
-            client_secret: "eXGcAI3hpodz0yq8CrtZoB3deyZ1Lb7Jg19",
-            client_id: "szjc-pc",
-            "captchaCode": "",
-            "encodeCaptha": "",
-            serviceTicket: rs.serviceTicket,
-            ssoId: rs.openid
-        })
-        if (response && response.data) {
-            console.log(response.data);
-            return response.data;
-        } else {
-            throw new Error('Response data is undefined');
-        }
-    } catch (error) {
-        console.log(error)
-    }
+export async function getTokenInfo(username, password, openid, serviceTicket) {
+    return await request.post('/oauth/token', {
+        username: username,
+        password: btoa(password),
+        grant_type: "password",
+        scope: import.meta.env.VITE_APP_SCOPE_NAME,
+        client_secret: import.meta.env.VITE_APP_CLIENT_SECRET,
+        client_id: import.meta.env.VITE_APP_CLIENT_ID,
+        captchaCode: "",
+        encodeCaptha: "",
+        serviceTicket: serviceTicket,
+        ssoId: openid
+    })
 }
 
 /**
@@ -66,23 +43,8 @@ export async function getTokenInfo(username, password, rs) {
  * @param {string} token
  * @returns {Promise<Object>}
  */
-export async function getUserInfo(openid, token) {
-    try {
-        instance.defaults.headers.common['Authorization'] = token;
-        instance.defaults.headers.common['Scope'] = "com.fltrp.szjc.pc";
-        instance.defaults.headers.common['x-app-key'] = "K12_CLOUD";
-        instance.defaults.headers.common['x-device'] = "9ea781a8-3868-4f81-aec8-a6dbd40da1e2";
-        
-        const response = await instance.post('/api/information/bindteacherinfo/getselfteacherinfo', {
-            sso_id: openid
-        })
-        if (response && response.data) {
-            console.log(response.data);
-            return response.data;
-        } else {
-            throw new Error('Response data is undefined');
-        }
-    } catch (error) {
-        console.log(error)
-    }
+export async function getUserInfo(openid) {
+    return await request.post('/api/information/bindteacherinfo/getselfteacherinfo', {
+        sso_id: openid
+    })
 }
