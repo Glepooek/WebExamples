@@ -63,9 +63,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { reactive, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { getSsoInfo, getTokenInfo, getUserInfo } from '../apis/loginApi'
+import { setStorage } from '../utils/storage'
 
 const loginInfo = reactive({
   username: '',
@@ -74,7 +75,7 @@ const loginInfo = reactive({
   captcha: '',
   rememberMe: false,
   showPassword: false,
-  agreementAccepted: false,
+  agreementAccepted: true,
   isSmsLogin: false
 })
 
@@ -107,7 +108,7 @@ const handleLogin = async () => {
   }
 
   console.log(`openid: ${rs.openid}`);
-  localStorage.setItem("openid", rs.openid);
+  setStorage("openid", rs.openid);
 
   const { code: tokenCode, msg: tokenMsg, data: tokenData } = await getTokenInfo(loginInfo.username, loginInfo.password, rs);
   if (tokenCode != 0 || !tokenData) {
@@ -117,7 +118,7 @@ const handleLogin = async () => {
   }
 
   console.log(`token: ${tokenData.access_token}`);
-  localStorage.setItem("token", tokenData.access_token);
+  setStorage("token", tokenData.access_token);
 
   const { code: userInfoCode, msg: userInfoMsg, data: userInfoData } = await getUserInfo(rs.openid, tokenData.access_token);
   if (userInfoCode != 0 || !userInfoData) {
@@ -126,8 +127,8 @@ const handleLogin = async () => {
     return;
   }
 
-   localStorage.setItem("ux_user_id", userInfoData.ux_user_id);
-   localStorage.setItem("optimus_token", userInfoData.optimus_token);
+  setStorage("ux_user_id", userInfoData.ux_user_id);
+  setStorage("optimus_token", userInfoData.optimus_token);
 
   router.push('/home');
 }
