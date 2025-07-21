@@ -18,8 +18,16 @@ instance.interceptors.request.use(
         // Do something before request is sent
         const token = getStorage('token');
         if (token) {
-            config.headers.Authorization = token;
+            config.headers['Authorization'] = token;
         }
+
+        if (config.url.indexOf('/api/platform') !== -1) {
+            config.headers['x-version'] = '0.0.1';
+            config.headers['x-timestamp'] = new Date().getTime();// 时间戳
+            config.headers['x-nonce'] = '';// GUID
+            config.headers['x-sign'] = '';
+        }
+
         return config;
     },
     error => {
@@ -77,5 +85,44 @@ instance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+// /**
+//  * 生成sign
+//  * 目前只对/api/platform的接口做加密处理
+//  * @param {string} method - HTTP方法
+//  * @param {string} url - 请求URL
+//  * @param {string} nonce - 随机字符串
+//  * @param {number} timeStamp - 时间戳
+//  * @param {string} [body] - 请求体
+//  * @returns {string|null} 生成的sign
+//  */
+// function generateSign(method, url, nonce, timeStamp, body = null) {
+//     const urlKey = "/api/platform";
+//     if (!url.includes(urlKey)) {
+//         return null;
+//     }
+
+//     // url截取示例 /api/platform/v1/book/series_list
+//     const start = url.indexOf(urlKey);
+//     url = url.substring(start);
+
+//     const secret = "cloudprod";
+
+//     let str;
+//     if (body !== null) {
+//         // 假设存在md5函数
+//         const bodyMd5 = md5(body);
+//         str = `${method}${url}?body=${bodyMd5}&timestamp=${timeStamp}&nonce=${nonce}&secret=${secret}`;
+//     } else {
+//         if (url.includes("?")) {
+//             str = `${method}${url}&timestamp=${timeStamp}&nonce=${nonce}&secret=${secret}`;
+//         } else {
+//             str = `${method}${url}?timestamp=${timeStamp}&nonce=${nonce}&secret=${secret}`;
+//         }
+//     }
+
+//     // 假设存在sha256加密函数
+//     return sha256(str);
+// }
 
 export default instance;

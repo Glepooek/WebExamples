@@ -1,11 +1,11 @@
-import request from '@utils/request.js'
+import request from "@/utils/request"
 
 /**
  * 获取一级菜单列表
  * @returns {Promise<Object>}
  */
 export async function getMenuList() {
-  return request.get('/api/platform/v1/digital/textbook/tab/new')
+  return await request.get('/api/platform/v1/digital/textbook/tab/new')
 }
 
 /**
@@ -14,5 +14,5 @@ export async function getMenuList() {
  * @returns {Promise<Object>}
  */
 export async function getBookList(tabId) {
-  return request.get(`api/platform/v1/digital/textbook/list/v2?tabId=${tabId}`)
+  return await request.get(`api/platform/v1/digital/textbook/list/v2?tabId=${tabId}`)
 }
