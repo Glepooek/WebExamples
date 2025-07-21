@@ -19,7 +19,7 @@ export const getStorage = (key) => {
   const data = localStorage.getItem(key);
   try {
     return JSON.parse(data);
-  } catch (_error) {
+  } catch {
     return data;
   }
 }

@@ -35,7 +35,7 @@ instance.interceptors.response.use(
         // Do something with response data
         const res = response.data;
         if (res.code !== 0 && res.code !== '0') {
-            console.error("响应拦截器错误", res);
+            console.error("业务逻辑错误", res);
             return Promise.reject(new Error(res.message));
         }
 
@@ -46,13 +46,20 @@ instance.interceptors.response.use(
     error => {
         // Do something with response error
         const status = error.response?.status;
+        
+        // Handle signal abort errors
+        if (error.name === 'AbortError' || (error && error.message && error.message.includes('abort'))) {
+            console.error('请求被中止:', error);
+            return Promise.reject(new Error('请求被中止'));
+        }
+        
         switch (status) {
             case 400:
                 console.error("请求参数错误");
                 break;
             case 401:
                 console.error("未授权或token已过期");
-                break
+                break;
             case 403:
                 console.error("没有权限");
                 break;
@@ -62,7 +69,11 @@ instance.interceptors.response.use(
             case 500:
                 console.error("服务内部错误");
                 break;
+            default:
+                console.error("未知错误", error);
+                break;
         }
+           
         return Promise.reject(error);
     }
 );

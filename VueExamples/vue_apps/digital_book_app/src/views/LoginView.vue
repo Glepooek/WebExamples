@@ -101,22 +101,14 @@ const handleLogin = async () => {
   }
 
   const { openid, serviceTicket } = await getSSOInfo(loginInfo.username, loginInfo.password);
-
-  console.log(`openid: ${openid}`);
   setStorage("openid", openid);
 
-  const { access_token } = await getTokenInfo(loginInfo.username, loginInfo.password, openid, serviceTicket);
+  const { access_token: accessToken } = await getTokenInfo(loginInfo.username, loginInfo.password, openid, serviceTicket);
+  setStorage("token", accessToken);
 
-  console.log(`token: ${access_token}`);
-  setStorage("token", access_token);
-
-  const { ux_user_id, optimus_token } = await getUserInfo(openid, access_token);
-
-  console.log(`ux_user_id: ${ux_user_id}`);
-  setStorage("ux_user_id", ux_user_id);
-
-  console.log(`optimus_token: ${optimus_token}`);
-  setStorage("optimus_token", optimus_token);
+  const { ux_user_id: uxUserId, optimus_token: optimusToken } = await getUserInfo(openid);
+  setStorage("uxUserId", uxUserId);
+  setStorage("optimusToken", optimusToken);
 
   router.push('/bookList');
 }

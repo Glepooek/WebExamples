@@ -4,13 +4,16 @@ import request from "@/utils/request"
  * 获取sso信息
  * @param {string} username 用户名
  * @param {string} password 密码
+ * @param {AbortSignal} signal
  * @returns {Promise<any>}
  */
-export async function getSSOInfo(username, password) {
+export async function getSSOInfo(username, password, signal = null) {
     return await request.post('/sso/4.0/sso/login', {
         username: username,
         password: password,
         service: "http://login.nse.unischool.cn"
+    }, {
+        signal: signal
     })
 }
 
@@ -20,9 +23,10 @@ export async function getSSOInfo(username, password) {
  * @param {string} password 密码
  * @param {string} openid
  * @param {string} serviceTicket
+ * @param {AbortSignal} signal
  * @returns {Promise<Object>} token信息
  */
-export async function getTokenInfo(username, password, openid, serviceTicket) {
+export async function getTokenInfo(username, password, openid, serviceTicket, signal = null) {
     return await request.post('/oauth/token', {
         username: username,
         password: btoa(password),
@@ -34,17 +38,21 @@ export async function getTokenInfo(username, password, openid, serviceTicket) {
         encodeCaptha: "",
         serviceTicket: serviceTicket,
         ssoId: openid
+    }, {
+        signal: signal
     })
 }
 
 /**
  * 获取用户信息
  * @param {string} openid
- * @param {string} token
+ * @param {AbortSignal} signal
  * @returns {Promise<Object>}
  */
-export async function getUserInfo(openid) {
+export async function getUserInfo(openid, signal = null) {
     return await request.post('/api/information/bindteacherinfo/getselfteacherinfo', {
         sso_id: openid
+    }, {
+        signal: signal
     })
 }
