@@ -29,7 +29,7 @@ export async function getSSOInfo(username, password, signal = null) {
 export async function getTokenInfo(username, password, openid, serviceTicket, signal = null) {
     return await request.post('/oauth/token', {
         username: username,
-        password: btoa(password),
+        password: btoa(password),// base64编码
         grant_type: "password",
         scope: import.meta.env.VITE_APP_SCOPE_NAME,
         client_secret: import.meta.env.VITE_APP_CLIENT_SECRET,

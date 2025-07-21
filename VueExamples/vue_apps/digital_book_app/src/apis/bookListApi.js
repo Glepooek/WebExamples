@@ -14,5 +14,5 @@ export async function getMenuList() {
  * @returns {Promise<Object>}
  */
 export async function getBookList(tabId) {
-  return await request.get(`api/platform/v1/digital/textbook/list/v2?tabId=${tabId}`)
+  return await request.get(`/api/platform/v1/digital/textbook/list/v2?tabId=${tabId}`)
 }
