@@ -4,14 +4,14 @@
       <el-tab-pane v-for="item in firstLevelTab.tabs" :key="item.id" :label="item.name" :name="item.name">
         <el-tabs v-model="secondLevelTab.selectedTabName">
           <el-tab-pane v-for="item in secondLevelTab.tabs" :key="item.id" :label="item.name" :name="item.name">
-            <el-row class="book-row">
-              <el-col v-for="book in item.items" :key="book.bookTagId" :span="3">
-                <el-card class="book-item" @click="onBookClick(book)">
+            <div class="book-row">
+              <div v-for="book in item.items" :key="book.bookTagId" class="book-item" @click="onBookClick(book)">
+                <el-card>
                   <template #header>{{ book.showName }}</template>
                   <el-image :src="book.cover" class="book-cover" />
                 </el-card>
-              </el-col>
-            </el-row>
+              </div>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </el-tab-pane>
@@ -62,18 +62,31 @@ const onBookClick = (book) => {
 </script>
 
 <style scoped>
+.container {
+  padding: 10px;
+}
+
 .book-row {
+  margin: 10px;
   display: flex;
+  /* 允许项目在必要时换行 */
   flex-wrap: wrap;
+  /* 项目从左到右排列 */
   justify-content: flex-start;
 }
 
 .book-item {
-  width: 166px;
-  height: 299px;
-  flex: 0 0 auto;
-  margin-bottom: 20px; /* 为换行留出空间 */
+  width: 200px;
+  /* 为右侧留出间距 */
+  margin-right: 10px;
+  /* 为下一行留出间距 */
+  margin-bottom: 10px;
   transition: transform 0.3s;
+}
+
+.book-item:last-child {
+  /* 最后一个项目不设置右边距 */
+  margin-right: 0;
 }
 
 .book-item:hover {
@@ -81,15 +94,17 @@ const onBookClick = (book) => {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* 优化书籍封面图片样式 */
 .book-cover {
+  /* 确保高度为 100% */
   width: 100%;
-  height: 100%; /* 确保高度为 100% */
-  object-fit: cover; /* 保持图片比例并覆盖整个容器 */
+  height: 100%;
+  /* 保持图片比例并覆盖整个容器 */
+  object-fit: cover;
 }
 
 /* 移除可能导致冲突的样式 */
-.book-item .el-card__body {
-  padding: 0; /* 移除默认内边距 */
+.book-item ::v-deep(.el-card__body) {
+  /* 移除默认内边距 */
+  padding: 0;
 }
 </style>
