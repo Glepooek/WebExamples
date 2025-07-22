@@ -12,13 +12,18 @@ const router = createRouter({
     {
       path: '/digitalBook',
       name: 'digitalBook',
-      component:  () => import('../views/DigitalBookView.vue'),
+      component: () => import('../views/DigitalBookView.vue'),
     },
     {
       path: '/bookList',
       name: 'bookList',
       component: () => import('../views/BookListView.vue'),
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView.vue'), // 假设你有一个 NotFoundView 组件
+    }
   ],
 })
 

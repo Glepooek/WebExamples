@@ -2,8 +2,11 @@
   <div class="book-container">
     <header class="book-header">
       <el-button type="primary" :icon="ArrowLeft" @click="returnPreviousPage">返回</el-button>
-      <el-input v-model="onlineBookUrl" type="text" style="margin: 0 0 0 10px;"></el-input>
     </header>
+
+    <main>
+        <div>Not Found Page</div>
+    </main>
 
   </div>
 </template>
