@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { reactive, onMounted, watch } from 'vue'
+import { reactive, onMounted, watch, onUnmounted } from 'vue'
 import { getMenuList, getBookList } from '@/apis/bookListApi'
 import { useRouter } from 'vue-router'
 
@@ -36,6 +36,8 @@ const secondLevelTab = reactive({
 
 const router = useRouter()
 
+let currentRequestAbortController = null
+
 onMounted(async () => {
   const menuList = await getMenuList()
   firstLevelTab.tabs = menuList
@@ -44,10 +46,25 @@ onMounted(async () => {
 
 watch(() => firstLevelTab.selectedTabName, async (newTabName) => {
   const tabId = firstLevelTab.tabs.find(tab => tab.name === newTabName).id
-  const bookList = await getBookList(tabId)
-  if (bookList.length > 0) {
-    secondLevelTab.selectedTabName = bookList[0].name
-    secondLevelTab.tabs = bookList
+  
+  // 如果有未完成的请求，先取消
+  if (currentRequestAbortController) {
+    currentRequestAbortController.abort()
+  }
+
+  const abortController = new AbortController()
+  currentRequestAbortController = abortController
+
+  try {
+    const bookList = await getBookList(tabId, abortController.signal)
+    if (bookList.length > 0) {
+      secondLevelTab.selectedTabName = bookList[0].name
+      secondLevelTab.tabs = bookList
+    }
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      console.error('Failed to fetch book list:', error)
+    }
   }
 })
 
@@ -57,8 +74,23 @@ const onBookClick = (book) => {
   router.push({
     name: 'digitalBook',
     query: { onlineBookUrl, secretKey }
-  });
+  })
 }
+
+// 组件卸载时：
+// 取消未完成的异步请求
+// 移除事件监听器
+// 清理定时器或动画
+// 释放其他资源：如 WebSocket 连接、订阅等。
+onUnmounted(() => {
+  // 取消未完成的请求
+  if (currentRequestAbortController) {
+    currentRequestAbortController.abort()
+  }
+  
+  // 清理状态
+  currentRequestAbortController = null
+})
 </script>
 
 <style scoped>
