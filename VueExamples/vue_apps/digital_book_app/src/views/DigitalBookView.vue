@@ -5,7 +5,13 @@
 </template>
 
 <script setup>
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+const onlineBookUrl = route.query.onlineBookUrl;
+const secretKey = route.query.secretKey;
+
+console.log(onlineBookUrl, secretKey);
 </script>
 
 <style scoped>
