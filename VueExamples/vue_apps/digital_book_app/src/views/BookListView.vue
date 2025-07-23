@@ -114,6 +114,7 @@ onUnmounted(() => {
   /* 为下一行留出间距 */
   margin-bottom: 10px;
   transition: transform 0.3s;
+  cursor: pointer;
 }
 
 .book-item:last-child {

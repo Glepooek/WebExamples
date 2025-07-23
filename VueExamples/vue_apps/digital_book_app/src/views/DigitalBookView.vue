@@ -20,6 +20,7 @@
 </template>
 
 <script setup>
+import { onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeft } from '@element-plus/icons-vue'
 
@@ -29,12 +30,22 @@ const router = useRouter()
 const onlineBookUrl = route.query.onlineBookUrl;
 const secretKey = route.query.secretKey;
 
+console.log(onlineBookUrl, secretKey);
+
 const returnPreviousPage = () => {
   // 返回列表页
   router.push({ name: 'bookList' });
 };
 
-console.log(onlineBookUrl, secretKey);
+// 组件卸载时：
+// 取消未完成的异步请求
+// 移除事件监听器
+// 清理定时器或动画
+// 释放其他资源：如 WebSocket 连接、订阅等。
+onUnmounted(() => {
+  
+  
+});
 </script>
 
 <style scoped>
