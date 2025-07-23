@@ -4,10 +4,9 @@
       <el-button type="primary" :icon="ArrowLeft" @click="returnPreviousPage">返回</el-button>
     </header>
 
-    <main>
-        <div>Not Found Page</div>
+    <main class="book-main">
+      <div style="color: red;font-size: 50px;">Not Found Page</div>
     </main>
-
   </div>
 </template>
 
@@ -34,6 +33,8 @@ console.log(onlineBookUrl, secretKey);
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, #4257C4 0%, #4C90E6 100%);
+  display: flex;
+  flex-direction: column;
 }
 
 .book-container::before {
@@ -49,17 +50,13 @@ console.log(onlineBookUrl, secretKey);
 }
 
 .book-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  /* background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px); */
+  padding: 10px;
+}
+
+.book-main {
+  flex: 1;
   display: flex;
+  justify-content: center;
   align-items: center;
-  padding: 0 20px;
-  z-index: 2;
-  /* 确保 header 在最上层 */
 }
 </style>
