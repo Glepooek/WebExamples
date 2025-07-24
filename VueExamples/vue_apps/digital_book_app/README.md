@@ -42,3 +42,7 @@ npm run lint
 * Configure env
 * Request
 * Permissions
+
+## Tools
+
+* Pina, Vue官方推荐的状态管理工具

@@ -65,8 +65,6 @@ onUnmounted(() => {
   width: 100%;
   height: 30%;
   background: url('../assets/book_background.svg') center / cover no-repeat;
-  /* 确保 SVG 在渐变背景之上 */
-  z-index: 1;
 }
 
 .book-main {

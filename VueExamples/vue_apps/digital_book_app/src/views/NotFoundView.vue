@@ -5,17 +5,28 @@
     </header>
 
     <main class="book-main">
-      <div style="color: red;font-size: 50px;">Not Found Page</div>
+      <div>
+        <span style="color: red;font-size: 50px;">Not Found Page</span>
+        <p>
+          <span style="margin-right: 5px;">count: {{ counterStore.count }}, doubleCount: {{ counterStore.doubleCount }}</span>
+          <el-button type="primary" @click="counterStore.increment">Increment</el-button>
+        </p>
+      </div>
     </main>
   </div>
 </template>
 
 <script setup>
+
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeft } from '@element-plus/icons-vue'
+import { useCounterStore } from '@/stores/counter';
 
 const route = useRoute()
 const router = useRouter()
+const counterStore = useCounterStore()
+
+console.log(counterStore.count, counterStore.doubleCount);
 
 const onlineBookUrl = route.query.onlineBookUrl;
 const secretKey = route.query.secretKey;
@@ -45,8 +56,6 @@ console.log(onlineBookUrl, secretKey);
   width: 100%;
   height: 30%;
   background: url('../assets/book_background.svg') center / cover no-repeat;
-  /* 确保 SVG 在渐变背景之上 */
-  z-index: 1;
 }
 
 .book-header {
@@ -58,5 +67,6 @@ console.log(onlineBookUrl, secretKey);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 }
 </style>
