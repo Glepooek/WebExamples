@@ -54,6 +54,33 @@
             font-size: 14px;
             z-index: 1;
         }
+
+        li {
+            list-style-type: none;
+            position: relative;
+            margin: 2px;
+            padding: 0.5em 0.5em 0.5em 2em;
+            background: lightgrey;
+            font-family: sans-serif;
+        }
+
+        li.done {
+            background: #ccff99;
+        }
+
+        li.done::before {
+            content: "";
+            position: absolute;
+            border-color: #009933;
+            border-style: solid;
+            border-width: 0 0.3em 0.25em 0;
+            height: 1em;
+            top: 1.3em;
+            left: 0.6em;
+            margin-top: -1em;
+            transform: rotate(45deg);
+            width: 0.5em;
+        }
     </style>
 </head>
 
@@ -66,6 +93,26 @@
         这里包含了一些<span tabindex="0" data-descr="鼠标悬停时出现的小弹出窗口">工具提示</span>的<span tabindex="0"
             data-descr="文字和标点符号的集合">文字</span>。
     </p>
+
+    <ul>
+        <li>买牛奶</li>
+        <li>带着狗散步</li>
+        <li>锻炼</li>
+        <li>写代码</li>
+        <li>播放音乐</li>
+        <li>放松</li>
+    </ul>
+
+    <script>
+        const list = document.querySelector('ul');
+        list.addEventListener('click', function (e) {
+            if (e.target.tagName === 'LI') {
+                // classList：是 DOM 元素的一个属性，表示该元素的所有 class（类名）集合。
+                // toggle('done')：如果该元素已经有 done 这个类，则移除它；如果没有，则添加它。
+                e.target.classList.toggle('done');
+            }
+        }, false);
+    </script>
 </body>
 
 </html>
