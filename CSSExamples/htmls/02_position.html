@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<!-- https://blog.csdn.net/csgojingyu/article/details/133957640 -->
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>定位</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        .relativeElement {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            background-color: #FFAAAA;
+            z-index: 2;
+        }
+
+        .normalElement {
+            width: 300px;
+            height: 900px;
+            background-color: #AAFFAA;
+
+        }
+
+        .absoluteElement {
+            width: 100px;
+            height: 100px;
+            background-color: #AAAAFF;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .fixedElement {
+            width: 100%;
+            height: 30px;
+            background-color: #FFFFAA;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 99;
+        }
+
+        .stickyElement {
+            width: 100%;
+            height: 30px;
+            background-color: #FFFFAA;
+            position: sticky;
+            top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="relativeElement">
+        <span class="absoluteElement"></span>
+        <div style="width:100px;height:100px;background-color:#AAFFAA;z-index: 9;position: absolute;"></div>
+
+    </div>
+    <div class="stickyElement">粘性导航条</div>
+    <div class="normalElement">
+        <!-- <div class="absoluteElement"></div> -->
+    </div>
+    <div class="normalElement" style="background-color: #AAFFFF"></div>
+    <!-- <div class="fixedElement">导航条——吸顶导航</div> -->
+</body>
+
+</html>
