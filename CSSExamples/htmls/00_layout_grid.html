@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网格布局</title>
+    <style>
+        .container {
+            grid-auto-rows: 100px;
+            /* 为隐式网格设定行高 */
+            border-radius: 10px;
+            border-width: 2px;
+            border-style: solid;
+            border-color: orange;
+
+            display: grid;
+            /* grid-template-columns: 1fr 1fr 1fr; */
+            /* grid-template-columns: repeat(3, 1fr); */
+            /* grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); */
+            grid-template-columns: 1fr 2fr 1fr;
+            /* grid-template-columns: 100px 2fr 1fr; */
+            /* grid-template-columns: 100px repeat(2, 2fr 200px);  */
+
+            /* column-gap: 10px;
+            row-gap: 10px; */
+            gap: 10px;
+        }
+
+        .container .item {
+            background-color: purple;
+            border-radius: 10px;
+            border-width: 2px;
+            border-style: solid;
+            border-color: blue;
+            padding: 10px;
+            margin: 5px;
+        }
+
+        .item1 {
+            /* grid-column-start: 1;
+            grid-column-end: 4; */
+            grid-column: 1 / 4;
+            display: grid;
+            /* grid-template-columns: repeat(3, 1fr); */
+            grid-template-columns: subgrid;
+        }
+
+        .item2 {
+            /* grid-row-start: 2;
+            grid-row-end: 4; */
+            grid-row: 2 / 4;
+        }
+
+        .nested {
+            border: 2px solid #ffec99;
+            border-radius: 5px;
+            background-color: #fff9db;
+            padding: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="item item1">
+            <div class="nested">a</div>
+            <div class="nested">b</div>
+            <div class="nested">c</div>
+        </div>
+        <div class="item item2">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+    </div>
+</body>
+
+</html>
