@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-    
+<html lang="zh-CN">
+
 <!-- https://blog.csdn.net/csgojingyu/article/details/133957640 -->
- 
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,63 +13,46 @@
             margin: 0;
         }
 
-        .relativeElement {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            background-color: #FFAAAA;
-            z-index: 2;
-        }
-
-        .normalElement {
-            width: 300px;
-            height: 900px;
-            background-color: #AAFFAA;
-
-        }
-
-        .absoluteElement {
+        .rectangle {
             width: 100px;
             height: 100px;
-            background-color: #AAAAFF;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 10;
+            display: inline-block;
         }
 
-        .fixedElement {
-            width: 100%;
-            height: 30px;
-            background-color: #FFFFAA;
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 99;
+        .rectangle.left {
+            background-color: blue;
         }
 
-        .stickyElement {
-            width: 100%;
-            height: 30px;
-            background-color: #FFFFAA;
-            position: sticky;
-            top: 10px;
+        .rectangle.right {
+            background-color: red;
+        }
+
+        .rectangle.middle {
+            background-color: yellow;
+            /* position: static; 默认值。 top\bottom\left\right\z-index对其无效 */
+            /* position: relative; 相对定位。相对于其原始位置偏移。 通过top\bottom\left\right控制偏移量 */
+            /* position: absolute;  绝对定位。相对于最近的定位祖先元素偏移 */
+             position: fixed;  /* 固定定位。相对于视口偏移 */
+            /* position: sticky;   粘性定位。相对于最近的定位祖先元素偏移 */
+
+            left: 80px;
+            top: 100px;
+        }
+
+        .huge {
+            width: 600px;
+            height: 2000px;
+            background-color: green;
         }
     </style>
 </head>
 
 <body>
-    <div class="relativeElement">
-        <span class="absoluteElement"></span>
-        <div style="width:100px;height:100px;background-color:#AAFFAA;z-index: 9;position: absolute;"></div>
-
-    </div>
-    <div class="stickyElement">粘性导航条</div>
-    <div class="normalElement">
-        <!-- <div class="absoluteElement"></div> -->
-    </div>
-    <div class="normalElement" style="background-color: #AAFFFF"></div>
-    <!-- <div class="fixedElement">导航条——吸顶导航</div> -->
+    <div class="huge"></div>
+    <div class="rectangle left"></div>
+    <div class="rectangle middle"></div>
+    <div class="rectangle right"></div>
+    <div class="huge"></div>
 </body>
 
 </html>
