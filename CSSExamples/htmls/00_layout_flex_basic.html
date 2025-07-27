@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flex布局</title>
+    <style>
+        .box {
+            display: flex;
+            border: 2px dotted rgb(96 139 168);
+            /* flex-direction: row-reverse; */
+            /* flex-direction: column; */
+            /* flex-direction: column-reverse; */
+            /* flex-wrap: wrap; */
+            /* flex-flow: row wrap;  */
+
+            width: 500px;
+            height: 130px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .box>div {
+            border: 2px solid rgb(96 139 168);
+            border-radius: 5px;
+            background-color: rgb(96 139 168 / 0.2);
+        }
+
+        .one { 
+            flex: 1;
+        }
+
+        .two { 
+            flex: 2;
+        }
+
+        .three { 
+            flex: 3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="one">one</div>
+        <div class="two">two</div>
+        <div class="three">three <br /> has <br /> extra <br /> text</div>
+    </div>
+</body>
+
+</html>
