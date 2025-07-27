@@ -1,63 +1,61 @@
 <template>
   <div class="login-outer-container">
     <div class="login-inner-container">
-      <div class="login-container">
-        <!-- 左侧区域 -->
-        <div class="decorative-left">
-        </div>
-
-        <!-- 右侧区域 -->
-        <div class="login-right">
-
-          <!-- 账号密码登录 -->
-          <div v-show="!loginInfo.isSmsLogin">
-            <h2 class="login-title">账号密码登录</h2>
-            <p class="login-tip">未注册的手机号验证后将自动注册</p>
-
-            <div class="form-group">
-              <input v-model="loginInfo.username" type="text" placeholder="请输入账号/手机号">
-            </div>
-
-            <div class="form-group">
-              <input v-model="loginInfo.password" :type="loginInfo.showPassword ? 'text' : 'password'"
-                placeholder="请输入密码">
-            </div>
-          </div>
-
-          <!-- 手机验证码登录 -->
-          <div v-show="loginInfo.isSmsLogin">
-            <h2 class="login-title">手机验证码登录</h2>
-            <p class="login-tip">未注册的手机号验证后将自动注册</p>
-
-            <div class="form-group">
-              <input v-model="loginInfo.phoneNumber" type="text" placeholder="请输入手机号">
-            </div>
-
-            <div class="form-group">
-              <input v-model="loginInfo.captcha" placeholder="请输入验证码">
-            </div>
-          </div>
-
-          <div class="form-options">
-            <div v-show="!loginInfo.isSmsLogin" class="remember-me">
-              <input id="remember-me" v-model="loginInfo.rememberMe" type="checkbox">
-              <label for="remember-me">记住密码</label>
-            </div>
-            <div class="switch-method" @click="switchLoginMethod">
-              验证码登录
-            </div>
-          </div>
-
-          <button class="login-btn" :disabled="!canLogin" @click="handleLogin">登录</button>
-
-          <div class="agreement">
-            <input id="agreement" v-model="loginInfo.agreementAccepted" type="checkbox">
-            <label for="agreement">阅读并同意 <a href="https://www.unischool.cn/student-pc/user">《用户服务协议》</a> 和 <a
-                href="https://www.unischool.cn/student-pc/privacy">《隐私保护政策》</a></label>
-          </div>
-        </div>
-
+      <!-- 左侧区域 -->
+      <div class="decorative-left">
       </div>
+
+      <!-- 右侧区域 -->
+      <div class="login-right">
+
+        <!-- 账号密码登录 -->
+        <div v-show="!loginInfo.isSmsLogin">
+          <h2 class="login-title">账号密码登录</h2>
+          <p class="login-tip">未注册的手机号验证后将自动注册</p>
+
+          <div class="form-group">
+            <input v-model="loginInfo.username" type="text" placeholder="请输入账号/手机号">
+          </div>
+
+          <div class="form-group">
+            <input v-model="loginInfo.password" :type="loginInfo.showPassword ? 'text' : 'password'"
+              placeholder="请输入密码">
+          </div>
+        </div>
+
+        <!-- 手机验证码登录 -->
+        <div v-show="loginInfo.isSmsLogin">
+          <h2 class="login-title">手机验证码登录</h2>
+          <p class="login-tip">未注册的手机号验证后将自动注册</p>
+
+          <div class="form-group">
+            <input v-model="loginInfo.phoneNumber" type="text" placeholder="请输入手机号">
+          </div>
+
+          <div class="form-group">
+            <input v-model="loginInfo.captcha" placeholder="请输入验证码">
+          </div>
+        </div>
+
+        <div class="form-options">
+          <div v-show="!loginInfo.isSmsLogin" class="remember-me">
+            <input id="remember-me" v-model="loginInfo.rememberMe" type="checkbox">
+            <label for="remember-me">记住密码</label>
+          </div>
+          <div class="switch-method" @click="switchLoginMethod">
+            验证码登录
+          </div>
+        </div>
+
+        <button class="login-btn" :disabled="!canLogin" @click="handleLogin">登录</button>
+
+        <div class="agreement">
+          <input id="agreement" v-model="loginInfo.agreementAccepted" type="checkbox">
+          <label for="agreement">阅读并同意 <a href="https://www.unischool.cn/student-pc/user">《用户服务协议》</a> 和 <a
+              href="https://www.unischool.cn/student-pc/privacy">《隐私保护政策》</a></label>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -135,61 +133,29 @@ const canLogin = computed(() => {
   width: 100%;
   height: 100%;
   background-image: url('../assets/login_background.svg');
-  /* 自动适配并覆盖整个容器 */
-  background-size: cover;
-  /* 居中显示 */
-  background-position: center;
-  /* 不重复 */
-  background-repeat: no-repeat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 74px;
 }
 
 .login-inner-container {
-  width: 85%;
-  height: 80%;
   background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.95) 51%, rgba(255, 255, 255, 0.8) 100%);
   border-radius: 20px;
-  /* border: 1px solid; */
   border-image: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) 1 1;
   backdrop-filter: blur(2px);
+  box-shadow: 0 15px 50px rgba(143, 100, 235, 0.2);
 
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.login-container {
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  border-radius: 25px;
-  box-shadow: 0 15px 50px rgba(143, 100, 235, 0.2);
-  overflow: hidden;
-  display: flex;
-  position: relative;
 }
 
 .decorative-left {
   flex: 1;
-  /* background: linear-gradient(to right, #a78bfa 0%, #8b5cf6 100%); */
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   padding: 0 50px;
-  color: white;
 }
 
 .login-right {
   flex: 1;
   padding: 80px 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
 .login-title {
