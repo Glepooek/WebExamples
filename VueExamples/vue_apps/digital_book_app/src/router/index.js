@@ -20,9 +20,14 @@ const router = createRouter({
       component: () => import('../views/BookListView.vue'),
     },
     {
+      path: '/userInfo/:userId',
+      name: 'userInfo',
+      component: () => import('../views/UserInfo.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
-      component: () => import('../views/NotFoundView.vue'), // 假设你有一个 NotFoundView 组件
+      component: () => import('../views/NotFoundView.vue'),
     }
   ],
 })
