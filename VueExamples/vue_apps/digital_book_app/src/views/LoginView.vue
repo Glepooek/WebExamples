@@ -130,22 +130,28 @@ const canLogin = computed(() => {
 
 <style scoped>
 .login-outer-container {
-  width: 100%;
-  height: 100%;
-  background-image: url('../assets/login_background.svg');
-  padding: 74px;
+    width: 100%;
+    height: 100%;
+    background-image: url('../assets/login_background.svg');
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat;
+    padding: 74px;
 }
 
 .login-inner-container {
-  background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.95) 51%, rgba(255, 255, 255, 0.8) 100%);
-  border-radius: 20px;
-  border-image: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) 1 1;
-  backdrop-filter: blur(2px);
-  box-shadow: 0 15px 50px rgba(143, 100, 235, 0.2);
+    width: 100%;
+    height: 100%;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.95) 51%, rgba(255, 255, 255, 0.8) 100%);
+    border-radius: 20px;
+    border-image: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) 1 1;
+    backdrop-filter: blur(2px);
+    box-shadow: 0 15px 50px rgba(143, 100, 235, 0.2);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .decorative-left {
