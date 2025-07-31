@@ -1,17 +1,37 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>CSS Custom Properties</title>
   <style>
-    :root { 
-        --main-bg-color: blue;
-        --main-text-color: white;
+    /*
+    :root是一个CSS伪类选择器，表示文档的根元素（在HTML中就是<html>标签）。
+    作用：
+    1) 通常用于定义全局的CSS变量（自定义属性），因为在:root下声明的变量可以在整个页面的任意地方被访问和继承。
+    2) 这样可以方便地统一管理和修改样式变量，提高样式的可维护性和复用性。
+    */
+    :root {
+      --main-bg-color: blue;
+      --main-text-color: white;
     }
   </style>
 </head>
+
 <body style="background-color: var(--main-bg-color); color: var(--main-text-color);">
   <h1>CSS Custom Properties</h1>
   <p>This is an example of using CSS custom properties (variables).</p>
+
+  <script>
+    const root = document.documentElement;
+    // root.style 只能获取通过 JS 动态设置的行内 style 属性，不能获取在 CSS 文件或 <style> 标签中定义的变量。
+    //const colorName = root.style.getPropertyValue('--main-bg-color');
+    const colorName = getComputedStyle(root).getPropertyValue('--main-bg-color');
+    console.log(colorName);
+
+    //root.style.setProperty('--main-bg-color', 'green');
+    //root.style.setProperty('--main-text-color', 'black');
+  </script>
 </body>
+
 </html>
