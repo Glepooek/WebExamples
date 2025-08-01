@@ -11,13 +11,16 @@
 
     const route = useRoute()
 
+    // 监听路由参数变化
     watch(() => route.params.userId, (newId, oldId) => {
-      console.log('User', newId)
-      console.log('User', oldId)
-    })
+      console.log('User changed from', oldId, 'to', newId)
+    }, { immediate: true })
 
+    // 使用导航守卫监听路由变化
+    // 没有执行
     onBeforeRouteUpdate((to, from) => {
-      console.log('User', to.params.userId)
-      console.log('User', from.params.userId)
+      console.log('Route updated from', from.params.userId, 'to', to.params.userId)
+      // 确保阻止默认行为或者正确处理导航
+      return true;
     })
 </script>

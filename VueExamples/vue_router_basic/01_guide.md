@@ -24,7 +24,7 @@ Vue Router是Vue官方的客户端路由解决方案。
 
 上述示例还使用了 {{ $route.fullPath }} 。你可以在组件模板中使用 $route 来访问当前的路由对象。
 
-## 创建路由实例（index.js）
+## 创建路由器实例（index.js）
 
 ```js
 import { createMemoryHistory, createRouter } from 'vue-router'
@@ -69,13 +69,13 @@ app.use(router)
 app.mount('#app')
 ```
 
-* 通过调用use()完成路由插件的注册；
+* 通过调用use()完成路由器插件的注册；
 * 在mount()方法之前调用use()
 
-路由插件的职责，包括：
-+ 全局注册 RouterView 和 RouterLink 组件。
-+ 添加全局 $router 和 $route 属性。
-+ 启用 useRouter() 和 useRoute() 组合式函数。
+路由器插件的职责，包括：
++ 全局注册`RouterView`和`RouterLink`组件。
++ 添加全局`$router`和`$route`属性。
++ 启用`useRouter()`和`useRoute()`组合式函数。
 + 触发路由器解析初始路由
 
 ## 访问路由器和当前路由
@@ -83,7 +83,7 @@ app.mount('#app')
 如果你是从ES模块导出路由器实例的，你可以将路由器实例直接导入到你需要它的地方。
 在组件模板中，路由器实例将被暴露为`$router`。当前路由被暴露为`$route`。
 
-如果使用选项式 API，可以在JS中如下访问这两个属性：this.$router 和 this.$route。
+如果使用选项式API，可以在JS中如下访问这两个属性：`this.$router`和`this.$route`。
 
 ```js
 export default {
@@ -96,11 +96,10 @@ export default {
 ```
 这里调用了push()，这是用于编程式导航的方法。
 
-对于组合式 API，不能通过`this`访问组件实例，所以Vue Router给我们提供了一些组合式函数。
+对于组合式API，不能通过`this`访问组件实例，所以Vue Router给我们提供了一些组合式函数。
 可以通过`useRouter()`和`useRoute()`来访问路由器实例和当前路由。
 
 ```js
-<script setup>
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -115,5 +114,4 @@ const search = computed({
     router.replace({ query: { search } })
   },
 })
-</script>
 ```
