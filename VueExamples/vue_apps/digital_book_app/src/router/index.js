@@ -22,7 +22,21 @@ const router = createRouter({
     {
       path: '/userInfo/:userId(\\d+)?',
       name: 'userInfo',
-      component: () => import('../views/UserInfo.vue')
+      component: () => import('../views/UserInfo.vue'),
+      children: [
+        {
+          path: '',
+          component: () => import('../views/UserInfoHome.vue'),
+        },
+        {
+          path: 'profile',
+          component: () => import('../views/UserInfoProfile.vue'),
+        },
+        {
+          path: 'posts',
+          component: () => import('../views/UserInfoPosts.vue'),
+        },
+      ],
     },
     {
       path: '/:pathMatch(.*)*',
