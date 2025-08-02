@@ -20,16 +20,18 @@ const router = createRouter({
       component: () => import('../views/BookListView.vue'),
     },
     {
-      path: '/userInfo/:userId',
+      path: '/userInfo/:userId(\\d+)?',
       name: 'userInfo',
-      component: () => import('../views/UserInfo.vue'),
+      component: () => import('../views/UserInfo.vue')
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
-      component: () => import('../views/NotFoundView.vue'),
+      component: () => import('../views/NotFoundView.vue')
     }
   ],
+  strict: true, // 严格模式，对尾随斜线敏感
+  sensitive: true // 匹配大小写敏感
 })
 
 export default router
