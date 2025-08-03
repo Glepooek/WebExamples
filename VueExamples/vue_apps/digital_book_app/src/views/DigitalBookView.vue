@@ -2,10 +2,10 @@
   <div class="book-container">
     <main class="book-main">
       <div class="leftPage">
-        <img v-if="leftPage && leftPage.background"  style="width: 100%;height: 100%;" :src="leftPage.imgBase64" alt="">
-      </div>
+        <img v-if="leftPage.imgBase64" :src="leftPage.imgBase64" alt="">
+       </div>
       <div class="rightPage">
-        <img v-if="rightPage && rightPage.background"  style="width: 100%;height: 100%;" :src="rightPage.imgBase64" alt="">
+        <img v-if="rightPage.imgBase64" :src="rightPage.imgBase64" alt="">
       </div>
       <div class="rightToolbar"></div>
       <div class="bottomToolbar">
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, reactive } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { init, getDigitalBook, getDigitalBookPage } from '@/apis/digitalBookApi'
 import { ArrowLeft } from '@element-plus/icons-vue'
@@ -35,8 +35,8 @@ const router = useRouter()
 const fileName = route.query.fileName
 const secretKey = route.query.secretKey
 
-const leftPage = reactive({ background: {}, imgBase64: '' })
-const rightPage = reactive({ background: {}, imgBase64: '' })
+const leftPage = ref({ background: {}, imgBase64: '' })
+const rightPage = ref({ background: {}, imgBase64: '' })
 
 const returnPreviousPage = () => {
   // 返回列表页
@@ -50,12 +50,8 @@ onMounted(async () => {
   const leftPageIndex = book.pages[0]
   const rightPageIndex = book.pages[1]
 
-  leftPage.value = await getDigitalBookPage(leftPageIndex)
+  leftPage.value = await getDigitalBookPage(leftPageIndex) 
   rightPage.value = await getDigitalBookPage(rightPageIndex)
-
-  console.log("leftPage", leftPage.value)
-  console.log("rightPage", rightPage.value)
-  console.log(book)
 });
 
 // 组件卸载时：
@@ -95,7 +91,7 @@ onUnmounted(() => {
 
 .leftPage {
   flex: 1;
-  margin: 0 0 48px 180px;
+  margin: 0 0 48px 80px;
   background-color: #d9db36;
   display: flex;
   justify-content: center;
@@ -104,11 +100,19 @@ onUnmounted(() => {
 
 .rightPage {
   flex: 1;
-  margin: 0 180px 48px 0;
+  margin: 0 80px 48px 0;
   background-color: #c442ae;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.leftPage img,
+.rightPage img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  z-index: 1;
 }
 
 .rightToolbar {
@@ -118,6 +122,7 @@ onUnmounted(() => {
   width: 64px;
   height: 100%;
   background: rgba(187, 28, 28, 0.39);
+  z-index: 2;
 }
 
 .bottomToolbar {
@@ -130,6 +135,7 @@ onUnmounted(() => {
   background: rgba(16, 207, 48, 0.336);
   display: grid;
   grid-template-columns: 188px 1fr 217px;
+  z-index: 2;
 }
 
 .bottomToolbar .left {
@@ -147,12 +153,5 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-}
-
-.leftPage img,
-.rightPage img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
 }
 </style>
