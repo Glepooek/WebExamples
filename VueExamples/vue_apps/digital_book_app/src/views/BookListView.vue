@@ -46,7 +46,7 @@ onMounted(async () => {
 
 watch(() => firstLevelTab.selectedTabName, async (newTabName) => {
   const tabId = firstLevelTab.tabs.find(tab => tab.name === newTabName).id
-  
+
   // 如果有未完成的请求，先取消
   if (currentRequestAbortController) {
     currentRequestAbortController.abort()
@@ -69,11 +69,11 @@ watch(() => firstLevelTab.selectedTabName, async (newTabName) => {
 })
 
 const onBookClick = (book) => {
-  const onlineBookUrl = `${import.meta.env.VITE_APP_API_EBOOK_BASE_URL}${book.fileName}`
+  const fileName = book.fileName
   const secretKey = book.secretKey
   router.push({
     name: 'digitalBook',
-    query: { onlineBookUrl, secretKey }
+    query: { fileName, secretKey }
   })
 }
 
@@ -87,7 +87,7 @@ onUnmounted(() => {
   if (currentRequestAbortController) {
     currentRequestAbortController.abort()
   }
-  
+
   // 清理状态
   currentRequestAbortController = null
 })

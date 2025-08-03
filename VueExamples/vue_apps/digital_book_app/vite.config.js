@@ -26,7 +26,12 @@ export default defineConfig({
         target: 'https://k12-teaching.unipus.cn/',
         changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/api/, ''),
-      }
+      },
+      '/digitalBook': {
+        target: 'https://enres.diplotalk.unischool.cn/',
+        changeOrigin: true,
+        // rewrite: (path) => path.replace(/^\/api/, ''),
+      },
     }
   },
   resolve: {

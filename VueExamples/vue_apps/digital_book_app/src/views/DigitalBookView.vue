@@ -9,7 +9,7 @@
           <el-button type="primary" :icon="ArrowLeft" @click="returnPreviousPage">返回</el-button>
         </div>
         <div class="center">
-          <el-input v-model="onlineBookUrl" type="text" style="margin: 0 0 0 10px;"></el-input>
+          <el-input v-model="fileName" type="text" style="margin: 0 0 0 10px;"></el-input>
         </div>
         <div class="right">
           hello
@@ -20,22 +20,28 @@
 </template>
 
 <script setup>
-import { onUnmounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { onMounted, onUnmounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { getDigitalBook } from '@/apis/digitalBookApi'
 import { ArrowLeft } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
 
-const onlineBookUrl = route.query.onlineBookUrl;
-const secretKey = route.query.secretKey;
+const fileName = route.query.fileName
+const secretKey = route.query.secretKey
 
-console.log(onlineBookUrl, secretKey);
+console.log(fileName, secretKey)
 
 const returnPreviousPage = () => {
   // 返回列表页
   router.push({ name: 'bookList' });
 };
+
+onMounted(async() => {
+  const book = await getDigitalBook(fileName, secretKey)
+  console.log(book)
+});
 
 // 组件卸载时：
 // 取消未完成的异步请求

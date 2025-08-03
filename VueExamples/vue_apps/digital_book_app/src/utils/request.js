@@ -30,6 +30,8 @@ instance.interceptors.request.use(
             config.headers['Authorization'] = getStorage('token');
         }
 
+        console.log(config.url)
+
         return config;
     },
     error => {
@@ -44,6 +46,11 @@ instance.interceptors.response.use(
     response => {
         // Do something with response data
         const res = response.data;
+        if (res.code === undefined) {
+            console.log(`响应拦截器${new Date().getTime()}`, res);
+            return res;
+        }
+
         if (res.code !== 0 && res.code !== '0') {
             console.error("业务逻辑错误", res);
             return Promise.reject(new Error(res.message));
