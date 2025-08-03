@@ -1,8 +1,12 @@
 <template>
   <div class="book-container">
     <main class="book-main">
-      <div class="leftPage"></div>
-      <div class="rightPage"></div>
+      <div class="leftPage">
+        <img v-if="leftPage && leftPage.background"  style="width: 100%;height: 100%;" :src="leftPage.imgBase64" alt="">
+      </div>
+      <div class="rightPage">
+        <img v-if="rightPage && rightPage.background"  style="width: 100%;height: 100%;" :src="rightPage.imgBase64" alt="">
+      </div>
       <div class="rightToolbar"></div>
       <div class="bottomToolbar">
         <div class="left">
@@ -20,9 +24,9 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getDigitalBook } from '@/apis/digitalBookApi'
+import { init, getDigitalBook, getDigitalBookPage } from '@/apis/digitalBookApi'
 import { ArrowLeft } from '@element-plus/icons-vue'
 
 const route = useRoute()
@@ -31,15 +35,26 @@ const router = useRouter()
 const fileName = route.query.fileName
 const secretKey = route.query.secretKey
 
-console.log(fileName, secretKey)
+const leftPage = reactive({ background: {}, imgBase64: '' })
+const rightPage = reactive({ background: {}, imgBase64: '' })
 
 const returnPreviousPage = () => {
   // 返回列表页
   router.push({ name: 'bookList' });
 };
 
-onMounted(async() => {
+onMounted(async () => {
+  init(`${import.meta.env.VITE_APP_API_EBOOK_BASE_URL}${fileName}/`, fileName, secretKey)
+
   const book = await getDigitalBook(fileName, secretKey)
+  const leftPageIndex = book.pages[0]
+  const rightPageIndex = book.pages[1]
+
+  leftPage.value = await getDigitalBookPage(leftPageIndex)
+  rightPage.value = await getDigitalBookPage(rightPageIndex)
+
+  console.log("leftPage", leftPage.value)
+  console.log("rightPage", rightPage.value)
   console.log(book)
 });
 
@@ -49,8 +64,8 @@ onMounted(async() => {
 // 清理定时器或动画
 // 释放其他资源：如 WebSocket 连接、订阅等。
 onUnmounted(() => {
-  
-  
+
+
 });
 </script>
 
@@ -82,12 +97,18 @@ onUnmounted(() => {
   flex: 1;
   margin: 0 0 48px 180px;
   background-color: #d9db36;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .rightPage {
   flex: 1;
   margin: 0 180px 48px 0;
   background-color: #c442ae;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .rightToolbar {
@@ -126,5 +147,12 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+.leftPage img,
+.rightPage img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 </style>
