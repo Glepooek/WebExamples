@@ -1,33 +1,33 @@
 <template>
   <div class="book-container">
-    <main class="book-main">
-      <div class="leftPage">
-        <img v-if="leftPage.imgBase64" :src="leftPage.imgBase64" alt="">
-       </div>
-      <div class="rightPage">
-        <img v-if="rightPage.imgBase64" :src="rightPage.imgBase64" alt="">
+    <div class="leftPage">
+      <img v-if="!isTopCover" :src="leftPage.imgBase64" alt="">
+    </div>
+    <div class="rightPage">
+      <img v-if="!isBottomCover" :src="rightPage.imgBase64" alt="">
+    </div>
+    <div class="rightToolbar"></div>
+    <div class="bottomToolbar">
+      <div class="left">
+        <el-button type="primary" :icon="ArrowLeft" @click="returnBookList">返回</el-button>
       </div>
-      <div class="rightToolbar"></div>
-      <div class="bottomToolbar">
-        <div class="left">
-          <el-button type="primary" :icon="ArrowLeft" @click="returnPreviousPage">返回</el-button>
-        </div>
-        <div class="center">
-          <el-input v-model="fileName" type="text" style="margin: 0 0 0 10px;"></el-input>
-        </div>
-        <div class="right">
-          hello
-        </div>
+      <div class="center">
+        <el-input v-model="fileName" type="text" style="margin: 0 0 0 10px;"></el-input>
       </div>
-    </main>
+      <div class="right">
+        <el-button type="primary" :icon="ArrowLeft" @click="gotoPreviousPage"></el-button>
+        <span v-text="pageIndexStr"></span>
+        <el-button type="primary" :icon="ArrowRight" @click="gotoNextPage"> </el-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { init, getDigitalBook, getDigitalBookPage } from '@/apis/digitalBookApi'
-import { ArrowLeft } from '@element-plus/icons-vue'
+import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -38,20 +38,111 @@ const secretKey = route.query.secretKey
 const leftPage = ref({ background: {}, imgBase64: '' })
 const rightPage = ref({ background: {}, imgBase64: '' })
 
-const returnPreviousPage = () => {
-  // 返回列表页
+let bookInfo = {}
+let isTopCover = ref(false)
+let isBottomCover = ref(false)
+let pageIndexStr = ref('')
+
+// 返回列表页
+const returnBookList = () => {
   router.push({ name: 'bookList' });
 };
+
+const gotoPreviousPage = () => {
+  // 获取上一页
+  // const leftPageIndex = leftPage.value.pageIndex
+  // const rightPageIndex = rightPage.value.pageIndex
+
+  // leftPage.value = rightPage.value
+  // rightPage.value = getDigitalBookPage(leftPageIndex - 1)
+
+  currentIndexNumber.value -= 2;
+  console.log('gotoPreviousPage', currentIndexNumber.value);
+};
+
+const gotoNextPage = () => {
+  // 获取下一页
+  // const leftPageIndex = leftPage.value.pageIndex
+  // const rightPageIndex = rightPage.value.pageIndex
+
+  // leftPage.value = rightPage.value
+  // rightPage.value = getDigitalBookPage(rightPageIndex + 1)
+  currentIndexNumber.value += 2;
+  console.log('gotoNextPage', currentIndexNumber.value);
+};
+
+// book.pages数组下标索引
+const currentIndexNumber = computed({
+  get() {
+    return 0
+  },
+  set(index) {
+    if (index < 0) {
+      index = 0;
+    }
+
+    if (index >= bookInfo.pages.length) {
+      index = bookInfo.pages.length - 1;
+    }
+
+    // 双页
+    isTopCover.value = index === 0;
+    isBottomCover.value = index === bookInfo.pages.Count - 1;
+
+    // 判断index左右
+    // - 0
+    // 1 2
+    // 3 4
+    let left = 0;
+    let right = 0;
+    // let lastIndex = 0;
+    // let indexStr = '';
+    if (index === 0 || index % 2 === 0) {
+      // 右
+      left = index - 1;
+      right = index;
+    }
+    else {
+      // 左
+      left = index;
+      right = index + 1;
+    }
+
+    // 首页不显示左
+    if (!isTopCover.value) {
+      const leftPageIndex = bookInfo.pages[left];
+      pageIndexStr.value = leftPageIndex.pageName;
+      getDigitalBookPage(leftPageIndex).then(page => {
+        leftPage.value = page;
+      });
+      // lastIndex = left;
+    }
+
+    // 底页不显示右
+    if (!isBottomCover.value) {
+      const rightPageIndex = bookInfo.pages[right];
+      pageIndexStr.value = !pageIndexStr.value ? rightPageIndex.pageName : `${pageIndexStr.value}-${rightPageIndex.pageName}`;
+      getDigitalBookPage(rightPageIndex).then(page => {
+        rightPage.value = page;
+      });
+      // lastIndex = right;
+    }
+
+    //pageIndexStr.value = indexStr;
+
+  }
+})
 
 onMounted(async () => {
   init(`${import.meta.env.VITE_APP_API_EBOOK_BASE_URL}${fileName}/`, fileName, secretKey)
 
-  const book = await getDigitalBook(fileName, secretKey)
-  const leftPageIndex = book.pages[0]
-  const rightPageIndex = book.pages[1]
+  bookInfo = await getDigitalBook(fileName, secretKey)
+  currentIndexNumber.value = 0
+  // const leftPageIndex = bookInfo.pages[0]
+  // const rightPageIndex = bookInfo.pages[1]
 
-  leftPage.value = await getDigitalBookPage(leftPageIndex) 
-  rightPage.value = await getDigitalBookPage(rightPageIndex)
+  // leftPage.value = await getDigitalBookPage(leftPageIndex)
+  // rightPage.value = await getDigitalBookPage(rightPageIndex)
 });
 
 // 组件卸载时：
@@ -71,7 +162,6 @@ onUnmounted(() => {
   height: 100%;
   background: linear-gradient(90deg, #4257C4 0%, #4C90E6 100%);
   display: flex;
-  flex-direction: column;
 }
 
 .book-container::before {
@@ -84,27 +174,20 @@ onUnmounted(() => {
   background: url('../assets/book_background.svg') center / cover no-repeat;
 }
 
-.book-main {
-  display: flex;
-  flex: 1;
-}
-
 .leftPage {
   flex: 1;
   margin: 0 0 48px 80px;
-  background-color: #d9db36;
+  /* background-color: #d9db36; */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: right;
 }
 
 .rightPage {
   flex: 1;
   margin: 0 80px 48px 0;
-  background-color: #c442ae;
+  /* background-color: #c442ae; */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: left;
 }
 
 .leftPage img,
@@ -121,7 +204,7 @@ onUnmounted(() => {
   right: 0;
   width: 64px;
   height: 100%;
-  background: rgba(187, 28, 28, 0.39);
+  background: rgba(226, 8, 8, 0.39);
   z-index: 2;
 }
 
@@ -131,27 +214,61 @@ onUnmounted(() => {
   left: 12px;
   right: 12px;
   width: calc(100% - 24px);
-  height: 56px;
-  background: rgba(16, 207, 48, 0.336);
+  height: 58px;
+  /* background: rgba(16, 207, 48, 0.336); */
   display: grid;
   grid-template-columns: 188px 1fr 217px;
   z-index: 2;
 }
 
-.bottomToolbar .left {
+/* 提取共同样式 */
+.bottomToolbar .left,
+.bottomToolbar .center,
+.bottomToolbar .right {
   display: flex;
   align-items: center;
+  background-color: #14172B;
+  opacity: 0.72;
+  border-color: #90A3E1;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.bottomToolbar .left {
+  justify-content: flex-start;
 }
 
 .bottomToolbar .center {
-  display: flex;
-  align-items: center;
   justify-content: center;
 }
 
 .bottomToolbar .right {
-  display: flex;
-  align-items: center;
   justify-content: flex-end;
+  padding: 0 12px;
+}
+
+.bottomToolbar .right .el-button {
+  padding: 6px 9px;
+  background-color: #2964FF;
+  opacity: 0.5;
+  border-radius: 2px;
+}
+
+.bottomToolbar .right span {
+  margin: 0 5px;
+  padding: 4px 9px;
+  background-color: #FFFFFF;
+  border-color: #3D4663;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A1E2B;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
 }
 </style>
