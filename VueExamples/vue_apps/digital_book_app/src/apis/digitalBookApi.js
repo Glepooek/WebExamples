@@ -12,6 +12,12 @@ let key = "";
 let md5Key = "";
 let fileName = "";
 
+/**
+ * 为一些变量初始化值
+ * @param {string} path，根路径，如 http://localhost:8080/digitalBook/fileName
+ * @param {string} fileName，一本书的唯一标识，形如bookId + courseId
+ * @param {string} secretKey
+ */
 export function init(path, filename, secretKey) {
     rootPath = path;
     fileName = filename;
@@ -36,16 +42,16 @@ export async function getDigitalBook() {
 /**
  * 获取数字教材页面
  * @param {Object} params 参数对象
- * @param {string} params.jsonFile JSON文件路径
- * @param {string} params.moduleName 模块名称
- * @param {number} params.index 索引
+ * @param {string} params.jsonFile page json文件路径，如0_5/C01.json
+ * @param {string} params.moduleName 所在文件夹名，如0_5
+ * @param {number} params.index 索引，在pages数组中的索引
  * @param {string} params.id ID标识
- * @param {string} params.pageName 页面名称
+ * @param {string} params.pageName 页面名称，如C01
  * @returns {Promise<any>}
  */
 export async function getDigitalBookPage({ jsonFile, moduleName, index, id, pageName }) {
     try {
-        // 使用jsonFile作为文件名参数
+        // console.log('getDigitalBookPage', jsonFile, moduleName, index, id, pageName);
         const md5FileName = getFileFullPath(jsonFile);
         const pageModel = await request.get(`/digitalBook/${fileName}/${md5FileName}`);
         const pageFileName = `${rootPath}${moduleName}/${getFileFullPath(pageModel.background.file)}`;

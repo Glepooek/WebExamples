@@ -9,7 +9,14 @@
     <div class="rightToolbar"></div>
     <div class="bottomToolbar">
       <div class="left">
-        <el-button type="primary" :icon="ArrowLeft" @click="returnBookList">返回</el-button>
+        <el-button type="primary" @click="returnBookList">
+          <div class="button-content">
+            <el-icon :size="25" color="#FFFFFF">
+              <Back />
+            </el-icon>
+            <span class="button-text">返回</span>
+          </div>
+        </el-button>
       </div>
       <div class="center">
         <el-input v-model="fileName" type="text" style="margin: 0 0 0 10px;"></el-input>
@@ -35,7 +42,8 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { init, getDigitalBook, getDigitalBookPage } from '@/apis/digitalBookApi'
-import { CaretLeft, CaretRight } from '@element-plus/icons-vue'
+import { CaretLeft, CaretRight, Back } from '@element-plus/icons-vue'
+import { debounce } from 'lodash'
 
 const route = useRoute()
 const router = useRouter()
@@ -50,26 +58,26 @@ let bookInfo = {}
 let isTopCover = ref(false)
 let isBottomCover = ref(false)
 let pageIndexStr = ref('')
-const currentIndex = ref(0) // 添加一个ref来存储当前索引
+const currentIndex = ref(0)
 
 // 返回列表页
-const returnBookList = () => {
+const returnBookList = debounce(() => {
   router.push({ name: 'bookList' });
-};
+}, 500);
 
-const gotoPreviousPage = () => {
+const gotoPreviousPage = debounce(() => {
   // 获取上一页
   if (currentIndex.value > 0) {
     currentIndexNumber.value -= 2;
   }
-};
+}, 500);
 
-const gotoNextPage = () => {
+const gotoNextPage = debounce(() => {
   // 获取下一页
   if (bookInfo.pages && currentIndex.value < bookInfo.pages.length - 1) {
     currentIndexNumber.value += 2;
   }
-};
+}, 500);
 
 // book.pages数组下标索引
 const currentIndexNumber = computed({
@@ -139,11 +147,6 @@ onMounted(async () => {
 
   bookInfo = await getDigitalBook(fileName, secretKey)
   currentIndexNumber.value = 0
-  // const leftPageIndex = bookInfo.pages[0]
-  // const rightPageIndex = bookInfo.pages[1]
-
-  // leftPage.value = await getDigitalBookPage(leftPageIndex)
-  // rightPage.value = await getDigitalBookPage(rightPageIndex)
 });
 
 // 组件卸载时：
@@ -153,6 +156,16 @@ onMounted(async () => {
 // 释放其他资源：如 WebSocket 连接、订阅等。
 onUnmounted(() => {
 
+  // 清理响应式数据引用
+  bookInfo = null;
+  leftPage.value = null;
+  rightPage.value = null;
+
+  // 重置ref值
+  isTopCover.value = false;
+  isBottomCover.value = false;
+  pageIndexStr.value = '';
+  currentIndex.value = 0;
 
 });
 </script>
@@ -238,6 +251,7 @@ onUnmounted(() => {
 
 .bottomToolbar .left {
   justify-content: flex-start;
+  padding: 6px;
 }
 
 .bottomToolbar .center {
@@ -270,5 +284,36 @@ onUnmounted(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
   display: inline-block;
+}
+
+.bottomToolbar .left .el-button {
+  padding: 0;
+  margin: 0;
+  width: 56px;
+  height: auto;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.bottomToolbar .left .el-button:hover {
+  background-color: rgb(41, 100, 255, 0.5);
+}
+
+.bottomToolbar .left .el-button .el-icon+span {
+  margin-left: 0 !important;
+}
+
+.button-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-text {
+  margin-top: 4px;
+  margin-bottom: 2px;
+  font-size: 14px;
+  color: #A9B2CB;
 }
 </style>

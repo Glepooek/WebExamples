@@ -47,7 +47,7 @@ instance.interceptors.response.use(
         // Do something with response data
         const res = response.data;
         if (res.code === undefined) {
-            console.log(`响应拦截器${new Date().getTime()}`, res);
+            //console.log(`响应拦截器${new Date().getTime()}`, res);
             return res;
         }
 

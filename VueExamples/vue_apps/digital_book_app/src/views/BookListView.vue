@@ -36,7 +36,7 @@ const secondLevelTab = reactive({
 
 const router = useRouter()
 
-let currentRequestAbortController = null
+let requestAbortController = null
 
 onMounted(async () => {
   const menuList = await getMenuList()
@@ -48,12 +48,12 @@ watch(() => firstLevelTab.selectedTabName, async (newTabName) => {
   const tabId = firstLevelTab.tabs.find(tab => tab.name === newTabName).id
 
   // 如果有未完成的请求，先取消
-  if (currentRequestAbortController) {
-    currentRequestAbortController.abort()
+  if (requestAbortController) {
+    requestAbortController.abort()
   }
 
   const abortController = new AbortController()
-  currentRequestAbortController = abortController
+  requestAbortController = abortController
 
   try {
     const bookList = await getBookList(tabId, abortController.signal)
@@ -84,12 +84,12 @@ const onBookClick = (book) => {
 // 释放其他资源：如 WebSocket 连接、订阅等。
 onUnmounted(() => {
   // 取消未完成的请求
-  if (currentRequestAbortController) {
-    currentRequestAbortController.abort()
+  if (requestAbortController) {
+    requestAbortController.abort()
   }
 
   // 清理状态
-  currentRequestAbortController = null
+  requestAbortController = null
 })
 </script>
 
