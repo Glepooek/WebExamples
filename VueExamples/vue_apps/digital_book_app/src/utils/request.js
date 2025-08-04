@@ -56,7 +56,7 @@ instance.interceptors.response.use(
             return Promise.reject(new Error(res.message));
         }
 
-        console.log(`响应拦截器${new Date().getTime()}`, res);
+        //console.log(`响应拦截器${new Date().getTime()}`, res);
         const { data, rs } = res;
         return rs !== undefined ? rs : (data !== undefined ? data : null);
     },

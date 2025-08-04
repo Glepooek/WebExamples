@@ -45,7 +45,6 @@ export async function getDigitalBook() {
  */
 export async function getDigitalBookPage({ jsonFile, moduleName, index, id, pageName }) {
     try {
-        console.log('getDigitalBookPage', jsonFile, moduleName, index, id, pageName);
         // 使用jsonFile作为文件名参数
         const md5FileName = getFileFullPath(jsonFile);
         const pageModel = await request.get(`/digitalBook/${fileName}/${md5FileName}`);

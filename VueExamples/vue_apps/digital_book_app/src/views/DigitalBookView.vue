@@ -15,9 +15,17 @@
         <el-input v-model="fileName" type="text" style="margin: 0 0 0 10px;"></el-input>
       </div>
       <div class="right">
-        <el-button type="primary" :icon="ArrowLeft" @click="gotoPreviousPage"></el-button>
+        <el-button type="primary" @click="gotoPreviousPage">
+          <el-icon :size="20" color="#FFFFFF">
+            <CaretLeft />
+          </el-icon>
+        </el-button>
         <span v-text="pageIndexStr"></span>
-        <el-button type="primary" :icon="ArrowRight" @click="gotoNextPage"> </el-button>
+        <el-button type="primary" @click="gotoNextPage">
+          <el-icon :size="20" color="#FFFFFF">
+            <CaretRight />
+          </el-icon>
+        </el-button>
       </div>
     </div>
   </div>
@@ -27,7 +35,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { init, getDigitalBook, getDigitalBookPage } from '@/apis/digitalBookApi'
-import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
+import { CaretLeft, CaretRight } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -42,6 +50,7 @@ let bookInfo = {}
 let isTopCover = ref(false)
 let isBottomCover = ref(false)
 let pageIndexStr = ref('')
+const currentIndex = ref(0) // 添加一个ref来存储当前索引
 
 // 返回列表页
 const returnBookList = () => {
@@ -50,33 +59,26 @@ const returnBookList = () => {
 
 const gotoPreviousPage = () => {
   // 获取上一页
-  // const leftPageIndex = leftPage.value.pageIndex
-  // const rightPageIndex = rightPage.value.pageIndex
-
-  // leftPage.value = rightPage.value
-  // rightPage.value = getDigitalBookPage(leftPageIndex - 1)
-
-  currentIndexNumber.value -= 2;
-  console.log('gotoPreviousPage', currentIndexNumber.value);
+  if (currentIndex.value > 0) {
+    currentIndexNumber.value -= 2;
+  }
 };
 
 const gotoNextPage = () => {
   // 获取下一页
-  // const leftPageIndex = leftPage.value.pageIndex
-  // const rightPageIndex = rightPage.value.pageIndex
-
-  // leftPage.value = rightPage.value
-  // rightPage.value = getDigitalBookPage(rightPageIndex + 1)
-  currentIndexNumber.value += 2;
-  console.log('gotoNextPage', currentIndexNumber.value);
+  if (bookInfo.pages && currentIndex.value < bookInfo.pages.length - 1) {
+    currentIndexNumber.value += 2;
+  }
 };
 
 // book.pages数组下标索引
 const currentIndexNumber = computed({
   get() {
-    return 0
+    return currentIndex.value
   },
   set(index) {
+    if (!bookInfo.pages) return;
+
     if (index < 0) {
       index = 0;
     }
@@ -85,9 +87,12 @@ const currentIndexNumber = computed({
       index = bookInfo.pages.length - 1;
     }
 
+    // 更新当前索引
+    currentIndex.value = index;
+
     // 双页
     isTopCover.value = index === 0;
-    isBottomCover.value = index === bookInfo.pages.Count - 1;
+    isBottomCover.value = index === bookInfo.pages.length - 1;
 
     // 判断index左右
     // - 0
@@ -95,8 +100,6 @@ const currentIndexNumber = computed({
     // 3 4
     let left = 0;
     let right = 0;
-    // let lastIndex = 0;
-    // let indexStr = '';
     if (index === 0 || index % 2 === 0) {
       // 右
       left = index - 1;
@@ -108,28 +111,26 @@ const currentIndexNumber = computed({
       right = index + 1;
     }
 
+    // 清空页码显示
+    pageIndexStr.value = '';
+
     // 首页不显示左
-    if (!isTopCover.value) {
+    if (!isTopCover.value && left >= 0) {
       const leftPageIndex = bookInfo.pages[left];
       pageIndexStr.value = leftPageIndex.pageName;
       getDigitalBookPage(leftPageIndex).then(page => {
         leftPage.value = page;
       });
-      // lastIndex = left;
     }
 
     // 底页不显示右
-    if (!isBottomCover.value) {
+    if (!isBottomCover.value && right < bookInfo.pages.length) {
       const rightPageIndex = bookInfo.pages[right];
       pageIndexStr.value = !pageIndexStr.value ? rightPageIndex.pageName : `${pageIndexStr.value}-${rightPageIndex.pageName}`;
       getDigitalBookPage(rightPageIndex).then(page => {
         rightPage.value = page;
       });
-      // lastIndex = right;
     }
-
-    //pageIndexStr.value = indexStr;
-
   }
 })
 
@@ -250,8 +251,7 @@ onUnmounted(() => {
 
 .bottomToolbar .right .el-button {
   padding: 6px 9px;
-  background-color: #2964FF;
-  opacity: 0.5;
+  background-color: #1D419F;
   border-radius: 2px;
 }
 
