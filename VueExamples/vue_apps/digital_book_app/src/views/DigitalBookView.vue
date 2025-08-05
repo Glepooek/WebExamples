@@ -22,13 +22,19 @@
         <el-input v-model="fileName" type="text" style="margin: 0 0 0 10px;"></el-input>
       </div>
       <div class="right">
-        <el-button type="primary" @click="gotoPreviousPage">
+        <el-button type="primary" @click="returnBookList">
+          <div class="button-content">
+            <svg-icon icon-name="icon-mulu1" class-name="custom-svg-icon" />
+            <span class="button-text">目录</span>
+          </div>
+        </el-button>
+        <el-button type="primary" class="el-button-switch" @click="gotoPreviousPage">
           <el-icon :size="20" color="#FFFFFF">
             <CaretLeft />
           </el-icon>
         </el-button>
-        <span v-text="pageIndexStr"></span>
-        <el-button type="primary" @click="gotoNextPage">
+        <span class="span-page-number-str" v-text="pageIndexStr"></span>
+        <el-button type="primary" class="el-button-switch" @click="gotoNextPage">
           <el-icon :size="20" color="#FFFFFF">
             <CaretRight />
           </el-icon>
@@ -231,8 +237,25 @@ onUnmounted(() => {
   height: 58px;
   /* background: rgba(16, 207, 48, 0.336); */
   display: grid;
-  grid-template-columns: 188px 1fr 217px;
+  grid-template-columns: 1fr 4fr 1fr;
   z-index: 2;
+}
+
+.bottomToolbar .el-button {
+  padding: 0;
+  margin: 0 4px 0 0;
+  width: 56px;
+  height: auto;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.bottomToolbar .el-button:hover {
+  background-color: rgb(41, 100, 255, 0.5);
+}
+
+.bottomToolbar .el-button .el-icon+span {
+  margin-left: 0 !important;
 }
 
 /* 提取共同样式 */
@@ -241,6 +264,9 @@ onUnmounted(() => {
 .bottomToolbar .right {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+
+  padding: 6px;
   background-color: #14172B;
   opacity: 0.72;
   border-color: #90A3E1;
@@ -249,27 +275,19 @@ onUnmounted(() => {
   border-width: 1px;
 }
 
-.bottomToolbar .left {
-  justify-content: flex-start;
-  padding: 6px;
-}
-
-.bottomToolbar .center {
-  justify-content: center;
-}
-
-.bottomToolbar .right {
-  justify-content: flex-end;
-  padding: 0 12px;
-}
-
-.bottomToolbar .right .el-button {
+/*
+ * 上一页、下一页按钮样式
+ */
+.bottomToolbar .right .el-button-switch {
   padding: 6px 9px;
   background-color: #1D419F;
   border-radius: 2px;
 }
 
-.bottomToolbar .right span {
+/*
+ * 页码文本（如：9-10）样式
+ */
+.bottomToolbar .right .span-page-number-str {
   margin: 0 5px;
   padding: 4px 9px;
   background-color: #FFFFFF;
@@ -286,23 +304,6 @@ onUnmounted(() => {
   display: inline-block;
 }
 
-.bottomToolbar .left .el-button {
-  padding: 0;
-  margin: 0;
-  width: 56px;
-  height: auto;
-  background-color: transparent;
-  border-color: transparent;
-}
-
-.bottomToolbar .left .el-button:hover {
-  background-color: rgb(41, 100, 255, 0.5);
-}
-
-.bottomToolbar .left .el-button .el-icon+span {
-  margin-left: 0 !important;
-}
-
 .button-content {
   display: flex;
   flex-direction: column;
@@ -315,5 +316,11 @@ onUnmounted(() => {
   margin-bottom: 2px;
   font-size: 14px;
   color: #A9B2CB;
+}
+
+.custom-svg-icon {
+  width: 25px;
+  height: 25px;
+  color: red;
 }
 </style>

@@ -1,5 +1,7 @@
 import './assets/main.css'
 import 'element-plus/dist/index.css'
+import './assets/iconfont.js'
+import SvgIcon from './components/SvgIcon.vue'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -18,5 +20,6 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
+app.component('svg-icon', SvgIcon)
 
 app.mount('#app')
