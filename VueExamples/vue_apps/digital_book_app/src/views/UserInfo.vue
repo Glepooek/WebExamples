@@ -4,6 +4,15 @@
       <!-- 当前路由可以通过 $route 在模板中访问 -->
       User {{ $route.params.userId }}
     </h1>
+    <h2>svgs</h2>
+    <div style="display: flex;">
+      <IconCommunity color="red" style="flex: 1;" />
+      <IconDocumentation color="red" style="flex: 1;" />
+      <IconEcosystem color="red" style="flex: 1;" />
+      <IconSupport color="red" style="flex: 1;" />
+      <IconTooling color="red" style="flex: 1;" />
+    </div>
+
     <!-- 路由组件将渲染在这里 -->
     <router-view></router-view>
   </div>
@@ -12,6 +21,11 @@
 <script setup>
 import { watch } from 'vue'
 import { useRoute, onBeforeRouteUpdate } from 'vue-router'
+import IconCommunity from '../components/icons/IconCommunity.vue'
+import IconDocumentation from '../components/icons/IconDocumentation.vue'
+import IconEcosystem from '../components/icons/IconEcosystem.vue'
+import IconSupport from '../components/icons/IconSupport.vue'
+import IconTooling from '../components/icons/IconTooling.vue'
 
 const route = useRoute()
 
@@ -30,7 +44,7 @@ onBeforeRouteUpdate((to, from) => {
 </script>
 
 <style scoped>
-.container { 
+.container {
   padding: 20px;
 }
 

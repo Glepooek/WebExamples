@@ -9,25 +9,84 @@
     <div class="rightToolbar"></div>
     <div class="bottomToolbar">
       <div class="left">
-        <el-button type="primary" @click="returnBookList">
+         <el-button type="primary" @click="returnBookList">
           <div class="button-content">
-            <el-icon :size="25" color="#FFFFFF">
-              <Back />
-            </el-icon>
+            <svg-icon icon-name="icon-tuichu" class-name="custom-svg-icon" />
             <span class="button-text">返回</span>
+          </div>
+        </el-button>
+        <div class="vertical-line" style="margin: 0 4px;"></div>
+        <el-button type="primary">
+          <div class="button-content">
+            <svg-icon icon-name="icon-danye" class-name="custom-svg-icon" />
+            <span class="button-text">单页</span>
           </div>
         </el-button>
       </div>
       <div class="center">
-        <el-input v-model="fileName" type="text" style="margin: 0 0 0 10px;"></el-input>
+        <el-button type="primary">
+          <div class="button-content">
+            <svg-icon icon-name="icon-xuanze" class-name="custom-svg-icon" />
+            <span class="button-text">选择</span>
+          </div>
+        </el-button>
+        <el-button type="primary">
+          <div class="button-content">
+            <svg-icon icon-name="icon-huabi" class-name="custom-svg-icon" />
+            <span class="button-text">画笔</span>
+          </div>
+        </el-button>
+        <el-button type="primary">
+          <div class="button-content">
+            <svg-icon icon-name="icon-xiangpi1" class-name="custom-svg-icon" />
+            <span class="button-text">橡皮</span>
+          </div>
+        </el-button>
+        <el-button type="primary">
+          <div class="button-content">
+            <svg-icon icon-name="icon-qingchu" class-name="custom-svg-icon" />
+            <span class="button-text">清除</span>
+          </div>
+        </el-button>
+        <el-button type="primary">
+          <div class="button-content">
+            <svg-icon icon-name="icon-fangdajing" class-name="custom-svg-icon" />
+            <span class="button-text">放大镜</span>
+          </div>
+        </el-button>
+        <el-button type="primary">
+          <div class="button-content">
+            <svg-icon icon-name="icon-jubugaoliang" class-name="custom-svg-icon" />
+            <span class="button-text">局部高亮</span>
+          </div>
+        </el-button>
+        <el-button type="primary">
+          <div class="button-content">
+            <svg-icon icon-name="icon-jubuzhedang" class-name="custom-svg-icon" />
+            <span class="button-text">局部遮挡</span>
+          </div>
+        </el-button>
+        <el-button type="primary">
+          <div class="button-content">
+            <svg-icon icon-name="icon-cibiao" class-name="custom-svg-icon" />
+            <span class="button-text">词表</span>
+          </div>
+        </el-button>
+        <el-button type="primary">
+          <div class="button-content">
+            <svg-icon icon-name="icon-gengduo" class-name="custom-svg-icon" />
+            <span class="button-text">更多</span>
+          </div>
+        </el-button>
       </div>
       <div class="right">
-        <el-button type="primary" @click="returnBookList">
+        <el-button type="primary">
           <div class="button-content">
             <svg-icon icon-name="icon-mulu1" class-name="custom-svg-icon" />
             <span class="button-text">目录</span>
           </div>
         </el-button>
+        <div class="vertical-line"></div>
         <el-button type="primary" class="el-button-switch" @click="gotoPreviousPage">
           <el-icon :size="20" color="#FFFFFF">
             <CaretLeft />
@@ -48,7 +107,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { init, getDigitalBook, getDigitalBookPage } from '@/apis/digitalBookApi'
-import { CaretLeft, CaretRight, Back } from '@element-plus/icons-vue'
+import { CaretLeft, CaretRight } from '@element-plus/icons-vue'
 import { debounce } from 'lodash'
 
 const route = useRoute()
@@ -237,7 +296,7 @@ onUnmounted(() => {
   height: 58px;
   /* background: rgba(16, 207, 48, 0.336); */
   display: grid;
-  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-columns: auto repeat(3,minmax(auto, 1fr)) auto;
   z-index: 2;
 }
 
@@ -256,6 +315,18 @@ onUnmounted(() => {
 
 .bottomToolbar .el-button .el-icon+span {
   margin-left: 0 !important;
+}
+
+.bottomToolbar .left{
+  grid-column: 1 / 2;
+}
+
+.bottomToolbar .center{
+  grid-column: 3 / 4;
+}
+
+.bottomToolbar .right{
+  grid-column: 5 / 6;
 }
 
 /* 提取共同样式 */
@@ -282,6 +353,9 @@ onUnmounted(() => {
   padding: 6px 9px;
   background-color: #1D419F;
   border-radius: 2px;
+  width: auto;
+  height: auto;
+  margin: 0;
 }
 
 /*
@@ -316,6 +390,15 @@ onUnmounted(() => {
   margin-bottom: 2px;
   font-size: 14px;
   color: #A9B2CB;
+}
+
+.vertical-line {
+  width: 0px;
+  height: 36px;
+  background: rgba(216, 216, 216, 0.01);
+  border: 1px solid #4861AA;
+  opacity: 0.5;
+  margin: 0 13px 0 4px;
 }
 
 .custom-svg-icon {
