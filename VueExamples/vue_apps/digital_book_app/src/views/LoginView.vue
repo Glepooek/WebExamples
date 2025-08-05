@@ -132,7 +132,7 @@ const canLogin = computed(() => {
 .login-outer-container {
     width: 100%;
     height: 100%;
-    background-image: url('../assets/login_background.svg');
+    background-image: url('../assets/svgs/login_background.svg');
     background-size: cover;
     background-position: center; 
     background-repeat: no-repeat;

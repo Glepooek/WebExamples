@@ -55,7 +55,7 @@ console.log(onlineBookUrl, secretKey);
   left: 0;
   width: 100%;
   height: 30%;
-  background: url('../assets/book_background.svg') center / cover no-repeat;
+  background: url('../assets/svgs/book_background.svg') center / cover no-repeat;
 }
 
 .book-header {

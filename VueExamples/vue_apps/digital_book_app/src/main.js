@@ -1,6 +1,6 @@
-import './assets/main.css'
+import './assets/csss/main.css'
 import 'element-plus/dist/index.css'
-import './assets/iconfont.js'
+import './assets/svgs/iconfont.js'
 import SvgIcon from './components/SvgIcon.vue'
 
 import { createApp } from 'vue'

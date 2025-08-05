@@ -5,7 +5,8 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from 'vue'
+// `defineProps` is a compiler macro and no longer needs to be imported.
+import { computed } from 'vue'
 
 const props = defineProps({
     iconName: { type: String, required: true },
