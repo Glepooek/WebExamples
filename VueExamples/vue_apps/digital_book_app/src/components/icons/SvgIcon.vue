@@ -1,50 +1,30 @@
 <template>
-  <div class="svg-container" :style="containerStyle">
-    <svg 
-      aria-hidden="true" 
-      :width="computedSize" 
-      :height="computedSize"
-      :style="svgStyle"
-      :class="svgClass" 
-    >
+  <div class="svg-container">
+    <svg aria-hidden="true" :width="computedSize" :height="computedSize" :class="svgClass">
       <use :xlink:href="iconClassName" :fill="computedColor" />
     </svg>
-    <span 
-      v-if="iconText" 
-      class="svg-text"
-      :style="textStyle"
-    >
+    <span v-if="iconText" class="svg-text">
       {{ iconText }}
     </span>
   </div>
 </template>
 
 <script setup>
-// `defineProps` is a compiler macro and no longer needs to be imported.
 import { computed } from 'vue'
 
 const props = defineProps({
   iconName: { type: String, required: true },
   iconText: { type: String, default: '' },
-  className: { type: String, default: '' },
   size: { type: String, default: '1em' },
   color: { type: String, default: '#FFFFFF' },
 
-  svgStyle: { type: Object, default: () => ({}) },
-  containerStyle: { type: Object, default: () => ({}) },
-  textStyle: { type: Object, default: () => ({}) }
+  className: { type: String, default: '' }
 })
 
 const iconClassName = computed(() => `#${props.iconName}`)
 const computedSize = computed(() => props.size)
 const computedColor = computed(() => props.color || 'currentColor')
-const svgClass = computed(() => {
-  const classes = ['svg-icon']
-  if (props.className) {
-    classes.push(props.className)
-  }
-  return classes.join(' ')
-})
+const svgClass = computed(() => props.className)
 </script>
 
 <style scoped>
@@ -55,16 +35,10 @@ const svgClass = computed(() => {
   justify-content: center;
 }
 
-.svg-icon {
-  position: relative;
-  fill: currentColor;
-  vertical-align: -2px;
-}
-
 .svg-text {
   margin-top: 4px;
   margin-bottom: 2px;
-  font-size: 12px;
+  font-size: 14px;
   color: #A9B2CB;
 }
 </style>

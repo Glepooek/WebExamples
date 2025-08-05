@@ -10,45 +10,45 @@
     <div class="bottomToolbar">
       <div class="left">
         <el-button type="primary" @click="returnBookList">
-          <svg-icon icon-name="icon-tuichu" icon-text="返回" size="25px" />
+          <svg-icon icon-name="icon-tuichu" icon-text="返回" class-name="custom-svg-icon" />
         </el-button>
         <div class="vertical-line" style="margin: 0 4px;"></div>
         <el-button type="primary">
-          <svg-icon icon-name="icon-danye" icon-text="单页" size="25px" />
+          <svg-icon icon-name="icon-danye" icon-text="单页" class-name="custom-svg-icon" />
         </el-button>
       </div>
       <div class="center">
         <el-button type="primary">
-          <svg-icon icon-name="icon-xuanze" icon-text="选择" size="25px" />
+          <svg-icon icon-name="icon-xuanze" icon-text="选择" class-name="custom-svg-icon" />
         </el-button>
         <el-button type="primary">
-          <svg-icon icon-name="icon-huabi" icon-text="画笔" size="25px" />
+          <svg-icon icon-name="icon-huabi" icon-text="画笔" class-name="custom-svg-icon" />
         </el-button>
         <el-button type="primary">
-          <svg-icon icon-name="icon-xiangpi1" icon-text="橡皮" size="25px" />
+          <svg-icon icon-name="icon-xiangpi1" icon-text="橡皮" class-name="custom-svg-icon" />
         </el-button>
         <el-button type="primary">
-          <svg-icon icon-name="icon-qingchu" icon-text="清除" size="25px" />
+          <svg-icon icon-name="icon-qingchu" icon-text="清除" class-name="custom-svg-icon" />
         </el-button>
         <el-button type="primary">
-          <svg-icon icon-name="icon-fangdajing" icon-text="放大镜" size="25px" />
+          <svg-icon icon-name="icon-fangdajing" icon-text="放大镜" class-name="custom-svg-icon" />
         </el-button>
         <el-button type="primary">
-          <svg-icon icon-name="icon-jubugaoliang" icon-text="局部高亮" size="25px" />
+          <svg-icon icon-name="icon-jubugaoliang" icon-text="局部高亮" class-name="custom-svg-icon" />
         </el-button>
         <el-button type="primary">
-          <svg-icon icon-name="icon-jubuzhedang" icon-text="局部遮挡" size="25px" />
+          <svg-icon icon-name="icon-jubuzhedang" icon-text="局部遮挡" class-name="custom-svg-icon" />
         </el-button>
         <el-button type="primary">
-          <svg-icon icon-name="icon-cibiao" icon-text="词表" size="25px" />
+          <svg-icon icon-name="icon-cibiao" icon-text="词表" class-name="custom-svg-icon" />
         </el-button>
         <el-button type="primary">
-          <svg-icon icon-name="icon-gengduo" icon-text="更多" size="25px" />
+          <svg-icon icon-name="icon-gengduo" icon-text="更多" class-name="custom-svg-icon" />
         </el-button>
       </div>
       <div class="right">
         <el-button type="primary">
-          <svg-icon icon-name="icon-mulu1" icon-text="目录" size="25px" />
+          <svg-icon icon-name="icon-mulu1" icon-text="目录" class-name="custom-svg-icon" />
         </el-button>
         <div class="vertical-line"></div>
         <el-button type="primary" class="el-button-switch" @click="gotoPreviousPage">
@@ -199,7 +199,7 @@ onUnmounted(() => {
 });
 </script>
 
-<style scoped>
+<style>
 .book-container {
   width: 100%;
   height: 100%;
@@ -354,8 +354,9 @@ onUnmounted(() => {
   margin: 0 13px 0 4px;
 }
 
-/* .custom-svg-icon { 
+.custom-svg-icon {
   width: 25px;
   height: 25px;
-} */
+  color: red;/* 不起作用 */
+}
 </style>
