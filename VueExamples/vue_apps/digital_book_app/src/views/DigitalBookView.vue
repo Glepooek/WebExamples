@@ -9,82 +9,46 @@
     <div class="rightToolbar"></div>
     <div class="bottomToolbar">
       <div class="left">
-         <el-button type="primary" @click="returnBookList">
-          <div class="button-content">
-            <svg-icon icon-name="icon-tuichu" class-name="custom-svg-icon" />
-            <span class="button-text">返回</span>
-          </div>
+        <el-button type="primary" @click="returnBookList">
+          <svg-icon icon-name="icon-tuichu" icon-text="返回" size="25px" />
         </el-button>
         <div class="vertical-line" style="margin: 0 4px;"></div>
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-danye" class-name="custom-svg-icon" />
-            <span class="button-text">单页</span>
-          </div>
+          <svg-icon icon-name="icon-danye" icon-text="单页" size="25px" />
         </el-button>
       </div>
       <div class="center">
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-xuanze" class-name="custom-svg-icon" />
-            <span class="button-text">选择</span>
-          </div>
+          <svg-icon icon-name="icon-xuanze" icon-text="选择" size="25px" />
         </el-button>
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-huabi" class-name="custom-svg-icon" />
-            <span class="button-text">画笔</span>
-          </div>
+          <svg-icon icon-name="icon-huabi" icon-text="画笔" size="25px" />
         </el-button>
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-xiangpi1" class-name="custom-svg-icon" />
-            <span class="button-text">橡皮</span>
-          </div>
+          <svg-icon icon-name="icon-xiangpi1" icon-text="橡皮" size="25px" />
         </el-button>
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-qingchu" class-name="custom-svg-icon" />
-            <span class="button-text">清除</span>
-          </div>
+          <svg-icon icon-name="icon-qingchu" icon-text="清除" size="25px" />
         </el-button>
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-fangdajing" class-name="custom-svg-icon" />
-            <span class="button-text">放大镜</span>
-          </div>
+          <svg-icon icon-name="icon-fangdajing" icon-text="放大镜" size="25px" />
         </el-button>
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-jubugaoliang" class-name="custom-svg-icon" />
-            <span class="button-text">局部高亮</span>
-          </div>
+          <svg-icon icon-name="icon-jubugaoliang" icon-text="局部高亮" size="25px" />
         </el-button>
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-jubuzhedang" class-name="custom-svg-icon" />
-            <span class="button-text">局部遮挡</span>
-          </div>
+          <svg-icon icon-name="icon-jubuzhedang" icon-text="局部遮挡" size="25px" />
         </el-button>
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-cibiao" class-name="custom-svg-icon" />
-            <span class="button-text">词表</span>
-          </div>
+          <svg-icon icon-name="icon-cibiao" icon-text="词表" size="25px" />
         </el-button>
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-gengduo" class-name="custom-svg-icon" />
-            <span class="button-text">更多</span>
-          </div>
+          <svg-icon icon-name="icon-gengduo" icon-text="更多" size="25px" />
         </el-button>
       </div>
       <div class="right">
         <el-button type="primary">
-          <div class="button-content">
-            <svg-icon icon-name="icon-mulu1" class-name="custom-svg-icon" />
-            <span class="button-text">目录</span>
-          </div>
+          <svg-icon icon-name="icon-mulu1" icon-text="目录" size="25px" />
         </el-button>
         <div class="vertical-line"></div>
         <el-button type="primary" class="el-button-switch" @click="gotoPreviousPage">
@@ -296,7 +260,7 @@ onUnmounted(() => {
   height: 58px;
   /* background: rgba(16, 207, 48, 0.336); */
   display: grid;
-  grid-template-columns: auto repeat(3,minmax(auto, 1fr)) auto;
+  grid-template-columns: auto repeat(3, minmax(auto, 1fr)) auto;
   z-index: 2;
 }
 
@@ -317,15 +281,15 @@ onUnmounted(() => {
   margin-left: 0 !important;
 }
 
-.bottomToolbar .left{
+.bottomToolbar .left {
   grid-column: 1 / 2;
 }
 
-.bottomToolbar .center{
+.bottomToolbar .center {
   grid-column: 3 / 4;
 }
 
-.bottomToolbar .right{
+.bottomToolbar .right {
   grid-column: 5 / 6;
 }
 
@@ -378,20 +342,9 @@ onUnmounted(() => {
   display: inline-block;
 }
 
-.button-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.button-text {
-  margin-top: 4px;
-  margin-bottom: 2px;
-  font-size: 14px;
-  color: #A9B2CB;
-}
-
+/*
+ * 竖线样式。底部工具栏分割功能区 
+ */
 .vertical-line {
   width: 0px;
   height: 36px;
@@ -401,9 +354,8 @@ onUnmounted(() => {
   margin: 0 13px 0 4px;
 }
 
-.custom-svg-icon {
+/* .custom-svg-icon { 
   width: 25px;
   height: 25px;
-  color: red;
-}
+} */
 </style>

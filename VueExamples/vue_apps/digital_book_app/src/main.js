@@ -1,7 +1,7 @@
 import './assets/csss/main.css'
 import 'element-plus/dist/index.css'
 import './assets/svgs/iconfont.js'
-import SvgIcon from './components/SvgIcon.vue'
+import SvgIcon from './components/icons/SvgIcon.vue'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
