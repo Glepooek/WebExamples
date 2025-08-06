@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>JSON</title>
+</head>
+
+<body>
+    <script>
+        const obj = {
+            name: '张三',
+            age: 18,
+            sex: '男',
+            hobby: ['吃饭', '睡觉', '打豆豆'],
+            address: {
+                province: '北京',
+                city: '北京',
+                street: '朝阳区'
+            }
+        }
+
+        // console.log(JSON.stringify(obj))
+        // 使用 replacer 参数过滤属性
+        console.log(JSON.stringify(obj, ['name', 'age', 'sex']))
+        // 使用 space 参数美化输出
+        // console.log(JSON.stringify(obj, null, 4))
+
+        const user = {
+            name: "张三",
+            age: 30,
+            password: "secret123",
+            email: "zhangsan@example.com",
+            salary: 50000,
+            department: "技术部"
+        };
+
+        // 使用函数作为 replacer 参数
+        const jsonString = JSON.stringify(user, function (key, value) {
+            // 隐藏密码字段
+            if (key === "password") {
+                return undefined; // 返回 undefined 会忽略该属性
+            }
+
+            // 年龄小于0时替换为null
+            if (key === "age" && value < 0) {
+                return null;
+            }
+
+            // 邮箱地址脱敏处理
+            if (key === "email") {
+                // 将邮箱中间部分替换为*
+                return value.replace(/(.{2}).*(@.*)/, "$1***$2");
+            }
+
+            // 薪资信息只有管理员可见
+            if (key === "salary") {
+                // 在实际应用中，这里可以检查用户权限
+                const isAdmin = false; // 假设当前用户不是管理员
+                return isAdmin ? value : undefined;
+            }
+
+            // 返回原始值
+            return value;
+        });
+
+        console.log(jsonString);
+        // 输出: {"name":"张三","age":30,"email":"zh***@example.com","department":"技术部"}
+        // 注意 password 和 salary 字段被过滤掉了
+    </script>
+</body>
+
+</html>
