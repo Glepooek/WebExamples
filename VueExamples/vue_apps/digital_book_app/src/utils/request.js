@@ -19,7 +19,7 @@ instance.interceptors.request.use(
         // Do something before request is sent
         if (config.url.indexOf('/api/platform') !== -1) {
             const timestamp = new Date().getTime()
-            const guid = generateGUID();
+            const guid = crypto.randomUUID();
             config.headers['accesstoken'] = getStorage('optimusToken');
             config.headers['x-version'] = '0.0.1';
             config.headers['x-timestamp'] = timestamp// 时间戳
@@ -95,17 +95,17 @@ instance.interceptors.response.use(
     }
 );
 
-/**
- * 生成GUID
- * @returns {string} 生成的GUID
- */
-function generateGUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0,
-            v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
+// /**
+//  * 生成GUID
+//  * @returns {string} 生成的GUID
+//  */
+// function generateGUID() {
+//     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+//         const r = Math.random() * 16 | 0,
+//             v = c === 'x' ? r : (r & 0x3 | 0x8);
+//         return v.toString(16);
+//     });
+// }
 
 /**
  * 生成sign
