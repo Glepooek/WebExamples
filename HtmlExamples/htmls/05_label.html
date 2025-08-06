@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>label </title>
+
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* 
+        inline元素特点：
+        元素会在一行内显示，不会独占一行
+        不能设置宽度和高度
+        上下margin不生效
+        
+        block元素特点：
+        元素会独占一行
+        可以设置宽度和高度
+        上下margin生效
+        
+        inline-block元素特点：
+        元素会在一行内显示（像inline元素）
+        可以设置宽度和高度（像block元素）
+        上下margin都生效 */
+
+        label {
+            display: inline-block;
+            width: 80px;
+            text-align: right;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- <label>用户名：
+        <input type="text" name="username"></input>
+    </label> -->
+
+    <div class="container">
+        <div>
+            <label for="username">用户名：</label>
+            <input type="text" name="username" id="username"></input>
+        </div>
+        <div>
+            <label for="password">密码：</label>
+            <input type="password" name="password" id="password"></input>
+        </div>
+    </div>
+    </div>
+
+</body>
+
+</html>
