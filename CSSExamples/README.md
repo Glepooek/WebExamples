@@ -1,0 +1,1 @@
+margin collapse （外边距塌陷）

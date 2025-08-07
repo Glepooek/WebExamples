@@ -5,9 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>背景不透明度示例</title>
     <style>
+        :root {
+            --padding:20px;
+            --margin: 20px 0;
+            --border-radius:5px;
+            --color: white;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
+            padding: var(--padding);
         }
 
         .container {
@@ -22,28 +29,28 @@
         /* 方法一：使用 RGBA */
         .rgba-example {
             background-color: rgba(255, 0, 0, 0.5); /* 红色背景，50% 不透明度 */
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
+            padding: var(--padding);
+            margin: var(--margin);
+            border-radius: var(--border-radius);
         }
 
         /* 方法二：使用 HSLA */
         .hsla-example {
             background-color: hsla(120, 100%, 25%, 0.7); /* 绿色背景，70% 不透明度 */
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
-            color: white;
+            padding: var(--padding);
+            margin: var(--margin);
+            border-radius: var(--border-radius);
+            color: var(--color);
         }
 
         /* 方法三：使用伪元素（适用于背景图片） */
         .pseudo-element-example {
             position: relative;
-            padding: 20px;
-            margin: 20px 0;
-            color: white;
+            padding: var(--padding);
+            margin: var(--margin);
+            border-radius: var(--border-radius);
+            color: var(--color);
             text-align: center;
-            border-radius: 5px;
         }
 
         .pseudo-element-example::before {
@@ -57,24 +64,24 @@
             background-size: cover;
             opacity: 0.5;
             z-index: -1;
-            border-radius: 5px;
+            border-radius: var(--border-radius);
         }
 
         /* 方法四：使用 opacity（会影响内容） */
         .opacity-example {
             background-color: blue;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 5px;
+            padding: var(--padding);
+            margin: var(--margin);
+            border-radius: var(--border-radius);
         }
 
         .opacity-example-content {
             opacity: 0.5;
-            color: white;
+            color: var(--color);
         }
 
         .example-content {
-            background-color: white;
+            background-color: var(--color);
             padding: 10px;
             border-radius: 3px;
             margin-top: 10px;
@@ -90,6 +97,7 @@
             <p>使用 rgba(255, 0, 0, 0.5) 设置红色背景，50% 不透明度</p>
             <div class="example-content">
                 <p>这里的内容不受背景透明度影响</p>
+                <a href="https://zhuanlan.zhihu.com/p/337857229">外边距塌陷</a>
             </div>
         </div>
 
@@ -98,6 +106,7 @@
             <p>使用 hsla(120, 100%, 25%, 0.7) 设置绿色背景，70% 不透明度</p>
             <div class="example-content">
                 <p>这里的内容不受背景透明度影响</p>
+                <a href="https://zhuanlan.zhihu.com/p/30168984">深度解析外边距塌陷</a>
             </div>
         </div>
 
