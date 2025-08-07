@@ -72,7 +72,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { init, getDigitalBook, getDigitalBookPage } from '@/apis/digitalBookApi'
 import { CaretLeft, CaretRight } from '@element-plus/icons-vue'
-import { debounce } from 'lodash'
+import { debounce } from 'es-toolkit'
 
 const route = useRoute()
 const router = useRouter()
@@ -92,21 +92,21 @@ const currentIndex = ref(0)
 // 返回列表页
 const returnBookList = debounce(() => {
   router.push({ name: 'bookList' });
-}, 500);
+}, 300);
 
 const gotoPreviousPage = debounce(() => {
   // 获取上一页
   if (currentIndex.value > 0) {
     currentIndexNumber.value -= 2;
   }
-}, 500);
+}, 300);
 
 const gotoNextPage = debounce(() => {
   // 获取下一页
   if (bookInfo.pages && currentIndex.value < bookInfo.pages.length - 1) {
     currentIndexNumber.value += 2;
   }
-}, 500);
+}, 300);
 
 // book.pages数组下标索引
 const currentIndexNumber = computed({

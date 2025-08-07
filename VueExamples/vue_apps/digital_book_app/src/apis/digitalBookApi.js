@@ -95,13 +95,14 @@ function getFileFullPath(fileName, directory = "", needFileNameMd5 = true) {
 
 /**
  * 获取密钥
- * @param {string} secretKey
+ * @param {string} secretKey 待解密字符串
  * @returns {string}
  */
 function getKey(secretKey){
     if (!secretKey) {
         throw new Error('Secret key is required');
     }
+    // RSA 解密
     const jsencrypt = new JSEncrypt();
     jsencrypt.setPrivateKey(bookPrivateKey);
     return jsencrypt.decrypt(secretKey);
