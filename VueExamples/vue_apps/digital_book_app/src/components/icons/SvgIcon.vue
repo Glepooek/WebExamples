@@ -1,7 +1,7 @@
 <template>
   <div class="svg-container">
-    <svg aria-hidden="true" :width="computedSize" :height="computedSize" :class="svgClass">
-      <use :xlink:href="iconClassName" :fill="computedColor" />
+    <svg class="svg-icon" aria-hidden="true" >
+      <use :xlink:href="computedIconName" />
     </svg>
     <span v-if="iconText" class="svg-text">
       {{ iconText }}
@@ -13,18 +13,34 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  iconName: { type: String, required: true },
-  iconText: { type: String, default: '' },
-  size: { type: String, default: '1em' },
-  color: { type: String, default: '#FFFFFF' },
-
-  className: { type: String, default: '' }
+  iconName: {
+    type: String,
+    required: true
+  },
+  iconText: {
+    type: String,
+    default: ''
+  },
+  iconSize: {
+    type: String,
+    default: '1.5rem'
+  },
+  fontSize: {
+    type: String,
+    default: '14px'
+  },
+  color: {
+    type: String,
+    default: '#A9B2CB'
+  },
+  hoverColor: {
+    type: String,
+    default: '#fff'
+  },
 })
 
-const iconClassName = computed(() => `#${props.iconName}`)
-const computedSize = computed(() => props.size)
-const computedColor = computed(() => props.color || 'currentColor')
-const svgClass = computed(() => props.className)
+const computedIconName = computed(() => `#${props.iconName}`)
+
 </script>
 
 <style scoped>
@@ -35,10 +51,24 @@ const svgClass = computed(() => props.className)
   justify-content: center;
 }
 
+.svg-icon {
+  width: v-bind(iconSize);
+  height: v-bind(iconSize);
+  fill: v-bind(color);
+}
+
 .svg-text {
   margin-top: 4px;
   margin-bottom: 2px;
-  font-size: 14px;
-  color: #A9B2CB;
+  font-size: v-bind(fontSize);
+  color: v-bind(color);
+}
+
+.svg-container:hover .svg-icon {
+  fill: v-bind('hoverColor || color');
+}
+
+.svg-container:hover .svg-text {
+  color: v-bind('hoverColor || color');
 }
 </style>
