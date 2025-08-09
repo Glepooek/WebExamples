@@ -47,7 +47,7 @@
         </el-button>
       </div>
       <div class="right">
-        <el-button type="primary">
+        <el-button ref="buttonRef" v-click-outside="onClickOutside" type="primary">
           <svg-icon icon-name="icon-mulu1" icon-text="目录" />
         </el-button>
         <div class="vertical-line"></div>
@@ -65,14 +65,25 @@
       </div>
     </div>
   </div>
+
+  <el-popover ref="popoverRef" 
+    v-model:visible="popoverVisible"
+    :virtual-ref="buttonRef" 
+    trigger="click" 
+    placement="top"
+    width="auto"
+    virtual-triggering>
+    <BookCatalog :catalog-list="bookInfo.catalog" @page-number-enter="handlePageNumber" @catalog-item-click="handleCatalogItemClick"></BookCatalog>
+  </el-popover>
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, unref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { init, getDigitalBook, getDigitalBookPage } from '@/apis/digitalBookApi'
-import { CaretLeft, CaretRight } from '@element-plus/icons-vue'
 import { debounce } from 'es-toolkit'
+import { CaretLeft, CaretRight } from '@element-plus/icons-vue'
+import BookCatalog from '@/components/BookCatalog.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -87,6 +98,7 @@ let bookInfo = {}
 let isTopCover = ref(false)
 let isBottomCover = ref(false)
 let pageIndexStr = ref('')
+let popoverVisible = ref(false)
 const currentIndex = ref(0)
 
 // 返回列表页
@@ -94,19 +106,33 @@ const returnBookList = debounce(() => {
   router.push({ name: 'bookList' });
 }, 300);
 
+// 获取上一页
 const gotoPreviousPage = debounce(() => {
-  // 获取上一页
   if (currentIndex.value > 0) {
     currentIndexNumber.value -= 2;
   }
 }, 300);
 
+// 获取下一页
 const gotoNextPage = debounce(() => {
-  // 获取下一页
   if (bookInfo.pages && currentIndex.value < bookInfo.pages.length - 1) {
     currentIndexNumber.value += 2;
   }
 }, 300);
+
+// 通过输入页码跳转
+const handlePageNumber = pageName => {
+  popoverVisible.value = false;
+  const pageIndex = bookInfo.pages.findIndex(item => item.pageName === pageName)
+  currentIndexNumber.value = pageIndex;
+}
+
+// 通过目录点击跳转
+const handleCatalogItemClick = catalogInfo => {
+  popoverVisible.value = false;
+  const pageIndex = bookInfo.pages.findIndex(item => item.pageName === catalogInfo.pageName)
+  currentIndexNumber.value = pageIndex;
+};
 
 // book.pages数组下标索引
 const currentIndexNumber = computed({
@@ -197,9 +223,15 @@ onUnmounted(() => {
   currentIndex.value = 0;
 
 });
+
+const buttonRef = ref()
+const popoverRef = ref()
+const onClickOutside = () => {
+  unref(popoverRef).popperRef?.delayHide?.()
+}
 </script>
 
-<style>
+<style scoped>
 .book-container {
   width: 100%;
   height: 100%;
@@ -352,12 +384,5 @@ onUnmounted(() => {
   border: 1px solid #4861AA;
   opacity: 0.5;
   margin: 0 13px 0 4px;
-}
-
-.custom-svg-icon {
-  width: 25px;
-  height: 25px;
-  color: red;
-  /* 不起作用 */
 }
 </style>
