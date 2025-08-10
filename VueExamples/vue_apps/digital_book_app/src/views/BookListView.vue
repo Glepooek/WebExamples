@@ -44,7 +44,7 @@ onMounted(async () => {
   firstLevelTab.selectedTabName = menuList[0].name
 })
 
-watch(() => firstLevelTab.selectedTabName, async (newTabName) => {
+const unwatch = watch(() => firstLevelTab.selectedTabName, async (newTabName) => {
   const tabId = firstLevelTab.tabs.find(tab => tab.name === newTabName).id
 
   // 如果有未完成的请求，先取消
@@ -83,6 +83,8 @@ const onBookClick = (book) => {
 // 清理定时器或动画
 // 释放其他资源：如 WebSocket 连接、订阅等。
 onUnmounted(() => {
+  unwatch()
+  
   // 取消未完成的请求
   if (requestAbortController) {
     requestAbortController.abort()
