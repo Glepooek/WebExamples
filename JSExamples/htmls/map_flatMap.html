@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript map 和 flatMap 函数详解</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .example {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007acc;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>JavaScript map 和 flatMap 函数详解</h1>
+    
+    <p>请打开浏览器控制台（F12）查看输出结果。</p>
+
+    <script>
+        console.log('=== JavaScript map 和 flatMap 函数详解 ===');
+
+        // map函数示例
+        console.log('\n--- map 函数示例 ---');
+        /*
+         * map() 方法创建一个新数组，其结果是对原数组中的每个元素调用一次提供的函数后的返回值
+         * 语法: array.map(function(currentValue, index, arr), thisValue)
+         * 参数:
+         * - currentValue: 当前正在处理的元素
+         * - index (可选): 当前元素的索引
+         * - arr (可选): map 方法调用的数组
+         * - thisValue (可选): 执行回调时使用的 this 值
+         */
+        
+        let numbers = [1, 2, 3, 4, 5];
+        console.log('原数组:', numbers);
+        
+        // 简单映射：将每个元素乘以2
+        let doubled = numbers.map(x => x * 2);
+        console.log('每个元素乘以2:', doubled);
+        
+        // 使用索引参数
+        let withIndex = numbers.map((value, index) => value * index);
+        console.log('每个元素乘以其索引:', withIndex);
+        
+        // 处理对象数组
+        let users = [
+            { name: 'Alice', age: 25 },
+            { name: 'Bob', age: 30 },
+            { name: 'Charlie', age: 35 }
+        ];
+        let userNames = users.map(user => user.name);
+        console.log('提取所有用户名:', userNames);
+        
+        // 转换对象数组
+        let userDescriptions = users.map(user => `${user.name} is ${user.age} years old`);
+        console.log('生成用户描述:', userDescriptions);
+
+        // flatMap函数示例
+        console.log('\n--- flatMap 函数示例 ---');
+        /*
+         * flatMap() 方法首先使用映射函数映射每个元素，然后将结果压缩成一个新数组
+         * 它等价于先执行 map() 操作，再执行 flat() 操作，默认深度为1
+         * 语法: array.flatMap(function(currentValue, index, arr), thisValue)
+         */
+        
+        // 处理嵌套数组
+        let sentences = ['Hello World', 'The weather is nice'];
+        console.log('原数组:', sentences);
+        
+        // 使用 map + split 会产生嵌套数组
+        let mapResult = sentences.map(sentence => sentence.split(' '));
+        console.log('使用 map + split:', mapResult);
+        
+        // 使用 flatMap 可以直接得到扁平化的数组
+        let flatMapResult = sentences.flatMap(sentence => sentence.split(' '));
+        console.log('使用 flatMap:', flatMapResult);
+        
+        // 更复杂的示例：根据条件返回不同数量的元素
+        let numbers2 = [1, 2, 3, 4, 5];
+        console.log('\n原数组:', numbers2);
+        
+        // 对偶数返回该数和它的平方，对奇数只返回该数
+        let conditionalResult = numbers2.flatMap(num => {
+            if (num % 2 === 0) {
+                return [num, num * num];
+            } else {
+                return [num];
+            }
+        });
+        console.log('条件映射结果:', conditionalResult);
+        
+        // 实际应用示例：处理课程和学生数据
+        console.log('\n--- 实际应用示例 ---');
+        let courses = [
+            { name: 'Math', students: ['Alice', 'Bob'] },
+            { name: 'Science', students: ['Charlie', 'David', 'Eve', 'Alice'] },
+            { name: 'Art', students: ['Frank'] }
+        ];
+        console.log('课程数据:', courses);
+        
+        // 获取所有学生（使用 map 会产生嵌套数组）
+        let studentsNested = courses.map(course => course.students);
+        console.log('使用 map 获取学生 (嵌套):', studentsNested);
+        
+        // 获取所有学生（使用 flatMap 得到扁平化数组）
+        let allStudents = courses.flatMap(course => course.students);
+        console.log('使用 flatMap 获取所有学生:', allStudents);
+        
+        // 为每个学生创建 "学生:课程" 格式的字符串
+        let studentCourses = courses.flatMap(course => 
+            course.students.map(student => `${student}:${course.name}`)
+        );
+        console.log('学生和课程对应关系:', studentCourses);
+    </script>
+</body>
+
+</html>
