@@ -17,7 +17,10 @@
                  class="catalog-item"
                  :class="{ 'catalog-item-indented': item.parentId }"
                  @click="handleCatalogItemClick(item)">
-                <span class="catalog-title">{{ item.title }}</span>
+                <span class="catalog-title">
+                  <svg-icon v-show="!item.parentId" icon-name="icon-mulu" icon-size="16px" />
+                  {{ item.title }}
+                </span>
                 <span class="page-number">{{ item.pageName }}</span>
             </div>
         </div>
@@ -77,34 +80,35 @@ const handleCatalogItemClick = (item) => {
 
 <style scoped>
 .container {
+    width: 322px;
+    height: 358px;    
+    background: rgba(40, 47, 73, 0.95); /* #282f49 0.95 */
+    border: 1px solid rgba(144, 163, 225, 0.4); /* #90a3e1 0.4 */
+
     display: flex;
     flex-direction: column;
-    width: 322px;
-    height: 358px;
-    background: rgba(40, 47, 73, 0.95);
-    /* #282f49 0.95 */
-    border: 1px solid rgba(144, 163, 225, 0.4);
-    /* #90a3e1 0.4 */
 }
 
 .header {
     height: 56px;
-    font-size: 17px;
     color: #A9B2CB;
 
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
 .header .title {
+    font-size: 17px;
     margin-left: 20px;
 }
 
 .header .skip-page {
-    margin-right: 20px;
-    text-align: right;
     font-size: 12px;
+    margin-right: 20px;
+    
+    display: flex;
+    align-items: center;
 }
 
 .header .skip-page .el-input {
@@ -139,15 +143,17 @@ const handleCatalogItemClick = (item) => {
 }
 
 .catalog-item {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(144, 163, 225, 0.2);
+
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(144, 163, 225, 0.2);
+    align-items: center; 
 }
 
 .catalog-item:hover {
     cursor: pointer;
+    background: rgba(144, 163, 225, 0.1);
 }
 
 .catalog-item:last-child {
@@ -158,11 +164,13 @@ const handleCatalogItemClick = (item) => {
     font-size: 14px;
     color: #FFFFFF;
     flex: 1;
-    text-align: left;
     margin-right: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    display: flex;
+    align-items: center;
 }
 
 .catalog-item-indented .catalog-title {
@@ -172,7 +180,6 @@ const handleCatalogItemClick = (item) => {
 .catalog-item .page-number {
     font-size: 12px;
     color: #A9B2CB;
-    text-align: right;
     min-width: fit-content;
 }
 </style>
