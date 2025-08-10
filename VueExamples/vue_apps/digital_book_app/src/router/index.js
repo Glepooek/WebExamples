@@ -10,7 +10,7 @@ const router = createRouter({
       component: LoginView,
     },
     {
-      path: '/digitalBook',
+      path: '/digitalBook/:fileName/:secretKey',
       name: 'digitalBook',
       component: () => import('../views/DigitalBookView.vue'),
     },
@@ -26,6 +26,7 @@ const router = createRouter({
       children: [
         {
           path: '',
+          name: 'userInfoHome',
           component: () => import('../views/UserInfoHome.vue'),
         },
         {

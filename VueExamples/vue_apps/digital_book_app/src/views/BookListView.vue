@@ -73,7 +73,7 @@ const onBookClick = (book) => {
   const secretKey = book.secretKey
   router.push({
     name: 'digitalBook',
-    query: { fileName, secretKey }
+    params: { fileName, secretKey }
   })
 }
 

@@ -30,8 +30,6 @@ instance.interceptors.request.use(
             config.headers['Authorization'] = getStorage('token');
         }
 
-        console.log(config.url)
-
         return config;
     },
     error => {
@@ -44,7 +42,6 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
     response => {
-        // Do something with response data
         const res = response.data;
         if (res.code === undefined) {
             //console.log(`响应拦截器${new Date().getTime()}`, res);
@@ -61,7 +58,6 @@ instance.interceptors.response.use(
         return rs !== undefined ? rs : (data !== undefined ? data : null);
     },
     error => {
-        // Do something with response error
         const status = error.response?.status;
 
         // Handle signal abort errors
@@ -94,18 +90,6 @@ instance.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
-// /**
-//  * 生成GUID
-//  * @returns {string} 生成的GUID
-//  */
-// function generateGUID() {
-//     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-//         const r = Math.random() * 16 | 0,
-//             v = c === 'x' ? r : (r & 0x3 | 0x8);
-//         return v.toString(16);
-//     });
-// }
 
 /**
  * 生成sign

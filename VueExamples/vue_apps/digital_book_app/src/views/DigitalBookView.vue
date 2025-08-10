@@ -84,12 +84,13 @@ import { init, getDigitalBook, getDigitalBookPage } from '@/apis/digitalBookApi'
 import { debounce } from 'es-toolkit'
 import { CaretLeft, CaretRight } from '@element-plus/icons-vue'
 import BookCatalog from '@/components/BookCatalog.vue'
+import { ClickOutside as vClickOutside } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
 
-const fileName = route.query.fileName
-const secretKey = route.query.secretKey
+const fileName = route.params.fileName
+const secretKey = route.params.secretKey
 
 const leftPage = ref({ background: {}, imgBase64: '' })
 const rightPage = ref({ background: {}, imgBase64: '' })
@@ -98,7 +99,7 @@ let bookInfo = {}
 let isTopCover = ref(false)
 let isBottomCover = ref(false)
 let pageIndexStr = ref('')
-let popoverVisible = ref(false)
+const popoverVisible = ref(false)
 const currentIndex = ref(0)
 
 // 返回列表页
@@ -221,6 +222,7 @@ onUnmounted(() => {
   isBottomCover.value = false;
   pageIndexStr.value = '';
   currentIndex.value = 0;
+  popoverVisible.value = false;
 
 });
 
