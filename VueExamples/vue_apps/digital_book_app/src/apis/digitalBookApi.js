@@ -15,14 +15,14 @@ let fileName = "";
 /**
  * 为一些变量初始化值
  * @param {string} path，根路径，如 http://localhost:8080/digitalBook/fileName
- * @param {string} fileName，一本书的唯一标识，形如bookId + courseId
+ * @param {string} fileNameParam，一本书的唯一标识，形如bookId + courseId
  * @param {string} secretKey
  */
-export function init(path, filename, secretKey) {
+export function init(path, fileNameParam, secretKey) {
     rootPath = path;
-    fileName = filename;
-    key = getKey(secretKey)
-    md5Key = em(key)
+    fileName = fileNameParam;
+    key = getKey(secretKey);
+    md5Key = em(key);
 }
 
 /**
@@ -31,8 +31,8 @@ export function init(path, filename, secretKey) {
  */
 export async function getDigitalBook() {
     try {
-        const md5FileName = getFileFullPath(bookJsonFileName);
-        return await request.get(`/digitalBook/${fileName}/${md5FileName}`);
+        const filePath = getFilePath(bookJsonFileName);
+        return await request.get(`/digitalBook/${fileName}/${filePath}`);
     } catch (error) {
         console.error('Error fetching digital book:', error);
         throw error;
@@ -44,53 +44,55 @@ export async function getDigitalBook() {
  * @param {Object} params 参数对象
  * @param {string} params.jsonFile page json文件路径，如0_5/C01.json
  * @param {string} params.moduleName 所在文件夹名，如0_5
- * @param {number} params.index 索引，在pages数组中的索引
- * @param {string} params.id ID标识
- * @param {string} params.pageName 页面名称，如C01
  * @returns {Promise<any>}
  */
-export async function getDigitalBookPage({ jsonFile, moduleName, index, id, pageName }) {
+export async function getDigitalBookPage({ jsonFile, moduleName }) {
     try {
         // console.log('getDigitalBookPage', jsonFile, moduleName, index, id, pageName);
-        const md5FileName = getFileFullPath(jsonFile);
-        const pageModel = await request.get(`/digitalBook/${fileName}/${md5FileName}`);
-        const pageFileName = `${rootPath}${moduleName}/${getFileFullPath(pageModel.background.file)}`;
+        const filePath = getFilePath(jsonFile);
+        const pageModel = await request.get(`/digitalBook/${fileName}/${filePath}`);
+        const pageFilePath = `${rootPath}${moduleName}/${getFilePath(pageModel.background.file)}`;
         
         let imgBase64 = '';
         // 添加将图片转换为base64的功能
         try {
-          imgBase64 = await fetchImageAsBase64(pageFileName);
+          imgBase64 = await fetchImageAsBase64(pageFilePath);
         } catch (error) {
           console.warn('图片转换为base64失败:', error.message);
         }
         
-        return { background: pageModel.background, imgBase64: imgBase64};
+        return { pageModel: pageModel, imgBase64: imgBase64};
     } catch (error) {
         console.error('Error fetching digital book list:', error);
         throw error;
     }
 }
 
-function getFileFullPath(fileName, directory = "", needFileNameMd5 = true) {
+/**
+ * 获取拼接的文件路径
+ * @param {string} fileName 文件名（有时会带目录）
+ * @param {string} directory 所在目录
+ * @param {boolean} needFileNameMd5 是否需要将文件名进行MD5加密
+ * @returns {string} 完整路径
+ */
+function getFilePath(fileName, directory = "", needFileNameMd5 = true) {
     if (!fileName) {
         throw new Error('Invalid arguments');
     }
 
-    const temp = fileName.split('/');
-    if  (temp.length === 1) {
-        fileName = needFileNameMd5 ? toMd5(fileName) : fileName;
-    }
-    else {
-        const realFileName = needFileNameMd5 ? toMd5(temp[temp.length - 1]) : temp[temp.length - 1];
-        fileName = `${temp[0]}/${realFileName}`;
+    let processedFileName = fileName;
+    const pathSegments = fileName.split('/');
+    
+    if (pathSegments.length > 1) {
+        const actualFileName = pathSegments[pathSegments.length - 1];
+        const processedFileNamePart = needFileNameMd5 ? toMd5(actualFileName) : actualFileName;
+        pathSegments[pathSegments.length - 1] = processedFileNamePart;
+        processedFileName = pathSegments.join('/');
+    } else {
+        processedFileName = needFileNameMd5 ? toMd5(fileName) : fileName;
     }
     
-    let result = fileName;
-    if (directory) {
-        result = `${directory}/${fileName}`;
-    }
-
-    return result;
+    return directory ? `${directory}/${processedFileName}` : processedFileName;
 }
 
 /**

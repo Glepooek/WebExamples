@@ -65,6 +65,7 @@ import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { getSSOInfo as getSSOInfo, getTokenInfo, getUserInfo } from '@/apis/loginApi'
 import { setStorage } from '@/utils/storage'
+import { debounce } from 'es-toolkit'
 
 const loginInfo = reactive({
   username: '',
@@ -79,7 +80,7 @@ const loginInfo = reactive({
 
 const router = useRouter()
 
-const handleLogin = async () => {
+const handleLogin = debounce(async () => {
   if (loginInfo.isSmsLogin) {
     if (!loginInfo.phoneNumber || !loginInfo.captcha) {
       alert('请填写手机号和验证码');
@@ -109,7 +110,7 @@ const handleLogin = async () => {
   setStorage("optimusToken", optimusToken);
 
   router.push('/bookList');
-}
+}, 300)
 
 const switchLoginMethod = () => {
   loginInfo.isSmsLogin = !loginInfo.isSmsLogin;
@@ -130,28 +131,28 @@ const canLogin = computed(() => {
 
 <style scoped>
 .login-outer-container {
-    width: 100%;
-    height: 100%;
-    background-image: url('../assets/svgs/login_background.svg');
-    background-size: cover;
-    background-position: center; 
-    background-repeat: no-repeat;
-    padding: 74px;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/svgs/login_background.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 74px;
 }
 
 .login-inner-container {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 
-    background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.95) 51%, rgba(255, 255, 255, 0.8) 100%);
-    border-radius: 20px;
-    border-image: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) 1 1;
-    backdrop-filter: blur(2px);
-    box-shadow: 0 15px 50px rgba(143, 100, 235, 0.2);
+  background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.95) 51%, rgba(255, 255, 255, 0.8) 100%);
+  border-radius: 20px;
+  border-image: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1)) 1 1;
+  backdrop-filter: blur(2px);
+  box-shadow: 0 15px 50px rgba(143, 100, 235, 0.2);
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .decorative-left {

@@ -67,7 +67,7 @@
   </div>
 
   <el-popover ref="popoverRef" 
-    v-model:visible="popoverVisible"
+    v-model:visible="isCatalogVisible"
     :virtual-ref="buttonRef" 
     trigger="click" 
     placement="top"
@@ -83,8 +83,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { init, getDigitalBook, getDigitalBookPage } from '@/apis/digitalBookApi'
 import { debounce } from 'es-toolkit'
 import { CaretLeft, CaretRight } from '@element-plus/icons-vue'
-import BookCatalog from '@/components/BookCatalog.vue'
 import { ClickOutside as vClickOutside } from 'element-plus'
+import BookCatalog from '@/components/BookCatalog.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -92,14 +92,14 @@ const router = useRouter()
 const fileName = route.params.fileName
 const secretKey = route.params.secretKey
 
-const leftPage = ref({ background: {}, imgBase64: '' })
-const rightPage = ref({ background: {}, imgBase64: '' })
-
 let bookInfo = {}
-let isTopCover = ref(false)
-let isBottomCover = ref(false)
-let pageIndexStr = ref('')
-const popoverVisible = ref(false)
+
+const leftPage = ref({ pageModel: {}, imgBase64: '' })
+const rightPage = ref({ pageModel: {}, imgBase64: '' })
+const isTopCover = ref(false)
+const isBottomCover = ref(false)
+const pageIndexStr = ref('')
+const isCatalogVisible = ref(false)
 const currentIndex = ref(0)
 
 // 返回列表页
@@ -109,28 +109,24 @@ const returnBookList = debounce(() => {
 
 // 获取上一页
 const gotoPreviousPage = debounce(() => {
-  if (currentIndex.value > 0) {
     currentIndexNumber.value -= 2;
-  }
 }, 300);
 
 // 获取下一页
 const gotoNextPage = debounce(() => {
-  if (bookInfo.pages && currentIndex.value < bookInfo.pages.length - 1) {
     currentIndexNumber.value += 2;
-  }
 }, 300);
 
 // 通过输入页码跳转
 const handlePageNumber = pageName => {
-  popoverVisible.value = false;
+  isCatalogVisible.value = false;
   const pageIndex = bookInfo.pages.findIndex(item => item.pageName === pageName)
   currentIndexNumber.value = pageIndex;
 }
 
 // 通过目录点击跳转
 const handleCatalogItemClick = catalogInfo => {
-  popoverVisible.value = false;
+  isCatalogVisible.value = false;
   const pageIndex = bookInfo.pages.findIndex(item => item.pageName === catalogInfo.pageName)
   currentIndexNumber.value = pageIndex;
 };
@@ -201,7 +197,7 @@ const currentIndexNumber = computed({
 onMounted(async () => {
   init(`${import.meta.env.VITE_APP_API_EBOOK_BASE_URL}${fileName}/`, fileName, secretKey)
 
-  bookInfo = await getDigitalBook(fileName, secretKey)
+  bookInfo = await getDigitalBook()
   currentIndexNumber.value = 0
 });
 
@@ -222,7 +218,7 @@ onUnmounted(() => {
   isBottomCover.value = false;
   pageIndexStr.value = '';
   currentIndex.value = 0;
-  popoverVisible.value = false;
+  isCatalogVisible.value = false;
 
 });
 
