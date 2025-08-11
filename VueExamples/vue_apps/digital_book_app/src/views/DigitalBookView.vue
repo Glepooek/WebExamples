@@ -2,9 +2,23 @@
   <div class="book-container">
     <div class="leftPage">
       <img v-if="!isTopCover" :src="leftPage.imgBase64" alt="">
+      <ClickRead
+        v-for="item in leftPage.pageModel.clickRead" 
+        :key="item.id"
+        :x="item.x" 
+        :y="item.y" 
+        :width="item.width" 
+        :height="item.height" />
     </div>
     <div class="rightPage">
       <img v-if="!isBottomCover" :src="rightPage.imgBase64" alt="">
+      <ClickRead
+        v-for="item in rightPage.pageModel.clickRead" 
+        :key="item.id"
+        :x="item.x" 
+        :y="item.y" 
+        :width="item.width" 
+        :height="item.height" />
     </div>
     <div class="rightToolbar"></div>
     <div class="bottomToolbar">
@@ -67,13 +81,15 @@
   </div>
 
   <el-popover ref="popoverRef" 
-    v-model:visible="isCatalogVisible"
+    v-model:visible="isCatalogVisible" 
     :virtual-ref="buttonRef" 
-    trigger="click" 
-    placement="top"
-    width="auto"
+    trigger="click"
+    placement="top" 
+    width="auto" 
     virtual-triggering>
-    <BookCatalog :catalog-list="bookInfo.catalog" @page-number-enter="handlePageNumber" @catalog-item-click="handleCatalogItemClick"></BookCatalog>
+    <BookCatalog :catalog-list="bookInfo.catalog" 
+      @page-number-enter="handlePageNumber"
+      @catalog-item-click="handleCatalogItemClick"></BookCatalog>
   </el-popover>
 </template>
 
@@ -85,6 +101,7 @@ import { debounce } from 'es-toolkit'
 import { CaretLeft, CaretRight } from '@element-plus/icons-vue'
 import { ClickOutside as vClickOutside } from 'element-plus'
 import BookCatalog from '@/components/BookCatalog.vue'
+import ClickRead from '@/components/ClickRead.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -109,12 +126,12 @@ const returnBookList = debounce(() => {
 
 // 获取上一页
 const gotoPreviousPage = debounce(() => {
-    currentIndexNumber.value -= 2;
+  currentIndexNumber.value -= 2;
 }, 300);
 
 // 获取下一页
 const gotoNextPage = debounce(() => {
-    currentIndexNumber.value += 2;
+  currentIndexNumber.value += 2;
 }, 300);
 
 // 通过输入页码跳转
@@ -253,6 +270,8 @@ const onClickOutside = () => {
   /* background-color: #d9db36; */
   display: flex;
   justify-content: right;
+  position: relative;
+  overflow: hidden;
 }
 
 .rightPage {
@@ -261,6 +280,8 @@ const onClickOutside = () => {
   /* background-color: #c442ae; */
   display: flex;
   justify-content: left;
+  position: relative;
+  overflow: hidden;
 }
 
 .leftPage img,
