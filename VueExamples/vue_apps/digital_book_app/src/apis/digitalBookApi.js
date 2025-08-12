@@ -75,7 +75,7 @@ export async function getDigitalBookPage({ jsonFile, moduleName }) {
  * @param {boolean} needFileNameMd5 是否需要将文件名进行MD5加密
  * @returns {string} 完整路径
  */
-function getFilePath(fileName, directory = "", needFileNameMd5 = true) {
+export function getFilePath(fileName, directory = "", needFileNameMd5 = true) {
     if (!fileName) {
         throw new Error('Invalid arguments');
     }

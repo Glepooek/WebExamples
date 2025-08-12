@@ -2,23 +2,17 @@
   <div class="book-container">
     <div class="leftPage">
       <img v-if="!isTopCover" :src="leftPage.imgBase64" alt="">
-      <ClickRead
-        v-for="item in leftPage.pageModel.clickRead" 
-        :key="item.id"
-        :x="item.x" 
-        :y="item.y" 
-        :width="item.width" 
-        :height="item.height" />
+      <ClickRead v-for="item in leftPage.pageModel.clickRead" 
+        :key="item.id" 
+        :click-read-model="item" 
+        :module-name="leftPage.moduleName" />
     </div>
     <div class="rightPage">
       <img v-if="!isBottomCover" :src="rightPage.imgBase64" alt="">
-      <ClickRead
-        v-for="item in rightPage.pageModel.clickRead" 
-        :key="item.id"
-        :x="item.x" 
-        :y="item.y" 
-        :width="item.width" 
-        :height="item.height" />
+      <ClickRead v-for="item in rightPage.pageModel.clickRead" 
+        :key="item.id" 
+        :click-read-model="item" 
+        :module-name="leftPage.moduleName" />
     </div>
     <div class="rightToolbar"></div>
     <div class="bottomToolbar">
@@ -70,7 +64,7 @@
             <CaretLeft />
           </el-icon>
         </el-button>
-        <span class="span-page-number-str" v-text="pageIndexStr"></span>
+        <span class="page-number-str" v-text="pageIndexStr"></span>
         <el-button type="primary" class="el-button-switch" @click="gotoNextPage">
           <el-icon :size="20" color="#FFFFFF">
             <CaretRight />
@@ -80,15 +74,9 @@
     </div>
   </div>
 
-  <el-popover ref="popoverRef" 
-    v-model:visible="isCatalogVisible" 
-    :virtual-ref="buttonRef" 
-    trigger="click"
-    placement="top" 
-    width="auto" 
-    virtual-triggering>
-    <BookCatalog :catalog-list="bookInfo.catalog" 
-      @page-number-enter="handlePageNumber"
+  <el-popover ref="popoverRef" v-model:visible="isCatalogVisible" :virtual-ref="buttonRef" trigger="click"
+    placement="top" width="auto" virtual-triggering>
+    <BookCatalog :catalog-list="bookInfo.catalog" @page-number-enter="handlePageNumber"
       @catalog-item-click="handleCatalogItemClick"></BookCatalog>
   </el-popover>
 </template>
@@ -111,8 +99,8 @@ const secretKey = route.params.secretKey
 
 let bookInfo = {}
 
-const leftPage = ref({ pageModel: {}, imgBase64: '' })
-const rightPage = ref({ pageModel: {}, imgBase64: '' })
+const leftPage = ref({ pageModel: {}, imgBase64: '', moduleName: '' })
+const rightPage = ref({ pageModel: {}, imgBase64: '', moduleName: '' })
 const isTopCover = ref(false)
 const isBottomCover = ref(false)
 const pageIndexStr = ref('')
@@ -196,7 +184,11 @@ const currentIndexNumber = computed({
       const leftPageIndex = bookInfo.pages[left];
       pageIndexStr.value = leftPageIndex.pageName;
       getDigitalBookPage(leftPageIndex).then(page => {
-        leftPage.value = page;
+        leftPage.value = {
+          pageModel: page.pageModel || {},
+          imgBase64: page.imgBase64 || '',
+          moduleName: leftPageIndex.moduleName || ''
+        };
       });
     }
 
@@ -205,7 +197,11 @@ const currentIndexNumber = computed({
       const rightPageIndex = bookInfo.pages[right];
       pageIndexStr.value = !pageIndexStr.value ? rightPageIndex.pageName : `${pageIndexStr.value}-${rightPageIndex.pageName}`;
       getDigitalBookPage(rightPageIndex).then(page => {
-        rightPage.value = page;
+        rightPage.value = {
+          pageModel: page.pageModel || {},
+          imgBase64: page.imgBase64 || '',
+          moduleName: rightPageIndex.moduleName || ''
+        };
       });
     }
   }
@@ -376,9 +372,11 @@ const onClickOutside = () => {
 /*
  * 页码文本（如：9-10）样式
  */
-.bottomToolbar .right .span-page-number-str {
-  margin: 0 5px;
-  padding: 4px 9px;
+.bottomToolbar .right .page-number-str {
+  margin: 0 4px;
+  padding: 5px;
+  width: 62px;
+  text-align: center;
   background-color: #FFFFFF;
   border-color: #3D4663;
   border-style: solid;
