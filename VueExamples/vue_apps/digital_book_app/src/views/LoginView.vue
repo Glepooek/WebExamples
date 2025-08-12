@@ -64,7 +64,7 @@
 import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { getSSOInfo as getSSOInfo, getTokenInfo, getUserInfo } from '@/apis/loginApi'
-import { setStorage } from '@/utils/storage'
+import { useUserInfoStore } from '@/stores/userInfo'
 import { debounce } from 'es-toolkit'
 
 const loginInfo = reactive({
@@ -79,6 +79,7 @@ const loginInfo = reactive({
 })
 
 const router = useRouter()
+const userInfoStore = useUserInfoStore()
 
 const handleLogin = debounce(async () => {
   if (loginInfo.isSmsLogin) {
@@ -100,16 +101,13 @@ const handleLogin = debounce(async () => {
   }
 
   const { openid, serviceTicket } = await getSSOInfo(loginInfo.username, loginInfo.password);
-  setStorage("openid", openid);
-
   const { access_token: accessToken } = await getTokenInfo(loginInfo.username, loginInfo.password, openid, serviceTicket);
-  setStorage("token", accessToken);
+  userInfoStore.loginSuccess(accessToken);
 
-  const { ux_user_id: uxUserId, optimus_token: optimusToken } = await getUserInfo(openid);
-  setStorage("uxUserId", uxUserId);
-  setStorage("optimusToken", optimusToken);
+  const { ux_user_id: uxUserId, optimus_token: optimusToken, phone: userName } = await getUserInfo(openid);
+  userInfoStore.loginSuccess(accessToken, optimusToken, uxUserId, userName);
 
-  router.push('/bookList');
+  router.push({ name: 'bookList' });
 }, 300)
 
 const switchLoginMethod = () => {
