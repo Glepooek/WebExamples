@@ -29,11 +29,12 @@
 
         .rectangle.middle {
             background-color: yellow;
-            /* position: static; 默认值。 top\bottom\left\right\z-index对其无效 */
-            /* position: relative; 相对定位。相对于其原始位置偏移。 通过top\bottom\left\right控制偏移量 */
-            /* position: absolute;  绝对定位。相对于最近的定位祖先元素偏移 */
-             position: fixed;  /* 固定定位。相对于视口偏移 */
-            /* position: sticky;   粘性定位。相对于最近的定位祖先元素偏移 */
+            /* position: static; 默认值。元素在正常文档流中，top\bottom\left\right\z-index对其无效 */
+            /* position: relative; 相对定位。相对于元素本身的位置进行偏移，仍占据原文档流空间 */
+            /* position: absolute; 绝对定位。相对于最近的非static定位祖先元素，脱离文档流 */
+            /* position: fixed; 固定定位。相对于浏览器视口进行定位，脱离文档流 */
+            /* position: sticky; 粘性定位。结合了相对定位和固定定位，元素在跨越特定阈值前表现为相对定位，之后表现为固定定位。 */
+            position: sticky;
 
             left: 80px;
             top: 100px;
