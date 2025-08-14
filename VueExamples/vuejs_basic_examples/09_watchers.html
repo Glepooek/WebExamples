@@ -27,40 +27,70 @@
         </p>
         <p>{{ answer }}</p>
         <img v-if="imgUrl" :src="imgUrl" alt="Answer image" />
+
+        <div>
+            <button @click="someobj.count++">count is: {{ someobj.count }}</button>
+        </div>
     </div>
 
     <script type="module">
-        import { createApp } from 'vue'
+        import { createApp, ref, watch, reactive } from 'vue'
+        import axios from 'axios'
 
         const app = createApp({
-            data() {
-                return {
-                    question: '',
-                    answer: 'Questions usually contain a question mark. ;-)',
-                    imgUrl:'',
-                    loading: false
-                }
-            },
-            watch: {
-                question(newQuestion, oldQuestion) {
-                    if (newQuestion.includes('?')) {
-                        this.getAnswer()
-                    }
-                }
-            },
-            methods: {
-                async getAnswer() {
-                    this.loading = true
-                    this.answer = 'Thinging...'
+            setup() {
+                const question = ref('')
+                const answer = ref('Questions usually contain a question mark. ;-)')
+                const imgUrl = ref('')
+                const loading = ref(false)
+
+                const someobj = reactive({ count: 0 });
+
+                async function getAnswer() {
+                    loading.value = true
+                    answer.value = 'Thinking...'
                     try {
                         const res = await axios.get('https://yesno.wtf/api')
-                        this.answer = res.data.answer
-                        this.imgUrl = res.data.image
+                        answer.value = res.data.answer
+                        imgUrl.value = res.data.image
                     } catch (error) {
-                        this.answer = 'Error, could not load answer. ' + error
+                        answer.value = 'Error, could not load answer. ' + error
                     } finally {
-                        this.loading = false
+                        loading.value = false
                     }
+                }
+
+                watch(question, (newQuestion, oldQuestion) => {
+                    if (newQuestion.includes('?') || newQuestion.includes('？')) {
+                        getAnswer()
+                    }
+                })
+
+                // watch(() => someobj.count, (newQuestion, oldQuestion) => {
+                //     console.log(newQuestion, oldQuestion);
+                // })
+
+                // watch(someobj, (newValue, oldValue) => {
+                //     // newValue和oldValue是同一对象
+                //     // 在所有嵌套属性变更时，都会触发监听器
+                //     console.log(newValue, oldValue);
+                // })
+
+                watch(() => someobj, (newValue, oldValue) => {
+                    // newValue和oldValue是同一对象
+                    // 仅当someobj被替换时才会触发监听器
+                    console.log(newValue === oldValue);
+                }, {
+                    deep: true
+                })
+
+                return {
+                    question,
+                    answer,
+                    imgUrl,
+                    loading,
+                    getAnswer,
+                    someobj
                 }
             }
         })
