@@ -60,13 +60,14 @@
 	</div>
 
 	<script type="module">
-		import { createApp } from 'vue'
+		import { createApp, ref } from 'vue'
 
 		const vm = createApp({})
 		vm.component('button-counter', {
-			data() {
+			setup() {
+				const count = ref(0)
 				return {
-					count: 0
+					count
 				}
 			},
 			template: `
@@ -79,26 +80,27 @@
 		const vm2 = createApp({})
 		vm2.component('blog-post', {
 			props: ['title'],
-			template: '<h3>{{title}}</h3>'
+			template: '<h2>{{title}}</h2>'
 		})
 		vm2.mount("#component-demo1")
 
 		const vm3 = createApp({
-			data() {
+			setup() {
+				const posts = ref([
+					{ id: 1, title: 'Hello Vue.js' },
+					{ id: 2, title: 'what is Vue.js' },
+					{ id: 3, title: 'why Vue.js is so fun' }
+				])
 				return {
-					posts: [
-						{ id: 1, title: 'Hello Vue.js' },
-						{ id: 2, title: 'what is Vue.js' },
-						{ id: 3, title: 'why Vue.js is so fun' }
-					]
+					posts
 				}
 			}
 		})
 		// 通过prop向子组件传递数据
 		// 一个组件默认可以有任意数量的prop
 		vm3.component('blog-post', {
-			props: ['title'],
-			template: '<h3>{{title}}</h3>'
+			props: ['id', 'title'],
+			template: '<h3>{{id}}——{{title}}</h3>'
 		})
 		vm3.mount("#component-demo2")
 
