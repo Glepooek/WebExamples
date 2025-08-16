@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { reactive, onMounted, watch, onUnmounted } from 'vue'
+import { reactive, onMounted, watch, onUnmounted, onWatcherCleanup } from 'vue'
 import { getMenuList, getBookList } from '@/apis/bookListApi'
 import { useRouter } from 'vue-router'
 
@@ -35,7 +35,6 @@ const secondLevelTab = reactive({
 })
 
 const router = useRouter()
-
 let requestAbortController = null
 
 onMounted(async () => {
@@ -44,15 +43,21 @@ onMounted(async () => {
   firstLevelTab.selectedTabName = menuList[0].name
 })
 
-const unwatch = watch(() => firstLevelTab.selectedTabName, async (newTabName) => {
-  const tabId = firstLevelTab.tabs.find(tab => tab.name === newTabName).id
+watch(() => firstLevelTab.selectedTabName, async (newTabName) => {
+  const tab = firstLevelTab.tabs.find(tab => tab.name === newTabName)
 
-  // 如果有未完成的请求，先取消
-  if (requestAbortController) {
-    requestAbortController.abort()
+  if (!tab) {
+    console.warn('Tab not found for name:', newTabName)
+    return
   }
 
+  const tabId = tab.id
   const abortController = new AbortController()
+
+  onWatcherCleanup(() => {
+    abortController.abort()
+  })
+
   requestAbortController = abortController
 
   try {
@@ -83,8 +88,6 @@ const onBookClick = (book) => {
 // 清理定时器或动画
 // 释放其他资源：如 WebSocket 连接、订阅等。
 onUnmounted(() => {
-  unwatch()
-  
   // 取消未完成的请求
   if (requestAbortController) {
     requestAbortController.abort()
