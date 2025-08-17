@@ -11,4 +11,9 @@ const emit = defineEmits(['enlargeText'])
 const enlargeText = () => {
     emit('enlargeText')
 }
+
+defineExpose({
+    emit,
+    enlargeText
+})
 </script>

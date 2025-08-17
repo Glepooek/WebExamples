@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>模版引用</title>
+    <!--导入映射表-->
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+          "es-toolkit": "https://esm.sh/es-toolkit@%5E1"
+        }
+      }
+    </script>
+    <style>
+      input {
+        display: block;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <input type="button" ref="myButton" value="Click me" />
+
+      <!-- <input type="button" value="ref function" :ref="(e1)=> {  console.log(e1) }" /> -->
+      <input type="button" value="ref function" :ref="getRefElement" />
+    </div>
+
+    <script type="module">
+      import { createApp, ref, useTemplateRef, onMounted } from "vue"
+
+      const app = createApp({
+        setup() {
+          const btnRef = useTemplateRef("myButton")
+
+          onMounted(() => {
+            console.log(btnRef.value.value)
+            btnRef.value.onclick = () => {
+              console.log("clicked")
+            }
+          })
+
+          const getRefElement = e1 => {
+            console.log(e1.value)
+          }
+
+          return {
+            getRefElement,
+          }
+        },
+      })
+
+      app.mount("#app")
+    </script>
+  </body>
+</html>

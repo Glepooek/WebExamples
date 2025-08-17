@@ -1,7 +1,7 @@
 <template>
     <div :style="{ fontSize: postFontSize + 'px' }">
         <BlogPost v-for="post in posts" :key="post.id" :id="post.id" :title="post.title"
-            @enlarge-text="postFontSize = postFontSize + 2" />
+            @enlarge-text="postFontSize = postFontSize + 2" ref="blogPosts" />
         <AlertBox> Something bad happened.</AlertBox>
     </div>
 
@@ -9,7 +9,7 @@
 
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, useTemplateRef } from 'vue'
 import BlogPost from '@/components/BlogPost.vue';
 import AlertBox from '@/components/AlertBox.vue';
 
@@ -21,5 +21,10 @@ const posts = ref([
 
 const postFontSize = ref(16);
 
+const blogPostsRef = useTemplateRef('blogPosts');
+
+onMounted(() => {
+    console.log(blogPostsRef.value[0].emit)
+})
 
 </script>
