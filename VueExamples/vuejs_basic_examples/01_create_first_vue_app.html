@@ -1,59 +1,63 @@
 <html>
-
-<head>
+  <head>
     <!--
+        通过CDN引入Vue
         引入的是全局构建版本，Vue会暴露全局变量Vue。
         但是无法使用单文件组件 (SFC) 语法。
     -->
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
 
+    <!-- 使用ES模块构建版本 -->
+    <!-- import { createApp, ref } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js' -->
+
     <!--导入映射表-->
     <script type="importmap">
-    {
-         "imports": {
-            "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
-            "es-toolkit": "https://esm.sh/es-toolkit@%5E1",
-            "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+          "es-toolkit": "https://esm.sh/es-toolkit@%5E1",
+          "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
         }
-    }
+      }
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <button @click="count++">
-            Count is: {{ count }}
-        </button>
-        <div>{{msg}}</div>
+      <button @click="count++">Count is: {{ count }}</button>
+      <div>{{msg}}</div>
     </div>
 
     <script type="module">
-        // 对象解构赋值
-        import { createApp } from 'vue'
+      // 对象解构赋值
+      import { createApp, ref } from "vue"
 
-        // createApp是一个创建应用实例的方法。传入的参数是根组件。
-        // 在一个页面中可以创建多个应用实例。
-        const app = createApp({
-            // 下面是根组件选项
+      // createApp是一个创建应用实例的方法。传入的参数是根组件。
+      // 在一个页面中可以创建多个应用实例。
+      const app = createApp({
+        // 下面是根组件选项
 
-            data() {
-                return {
-                    count: 0,
-                    msg: ''
-                }
-            }
-        })
+        setup() {
+          const count = ref(0)
+          const msg = ref("Hello World!")
 
-        app.config.errorHandler = () => {
-            // 处理错误
-        }
+          return {
+            count,
+            msg,
+          }
+        },
+      })
 
-        // 应用实例必须在调用mount方法后才会渲染出来。
-        // 该方法接收一个“容器”参数，可以是一个实际的 DOM 元素或是一个 CSS 选择器字符串。
-        app.mount('#app')
+      // 应用配置
+      app.config.errorHandler = () => {
+        // 处理错误
+      }
 
+      //   app.component('TodoDeleteButton', TodoDeleteButton)
+
+      // 应用实例必须在调用mount方法后才会渲染出来。
+      // 该方法接收一个“容器”参数，可以是一个实际的 DOM 元素或是一个 CSS 选择器字符串。
+      app.mount("#app")
     </script>
-
-</body>
-
+  </body>
 </html>
