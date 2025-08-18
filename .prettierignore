@@ -1,0 +1,6 @@
+# 忽略目录
+dist
+node_modules
+
+# 忽略文件
+*md

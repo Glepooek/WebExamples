@@ -1,190 +1,196 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" lang="zh-CN" />
+    <title>插值</title>
+    <!--导入映射表-->
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+          "es-toolkit": "https://esm.sh/es-toolkit@%5E1",
+          "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
 
-<head>
-	<meta charset="utf-8" />
-	<title>插值</title>
-	<!--导入映射表-->
-	<script type="importmap">
-	{
-		 "imports": {
-			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
-			"es-toolkit": "https://esm.sh/es-toolkit@%5E1",
-			"axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
-		}
-	}
-	</script>
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			margin: 20px;
-		}
+      #app,
+      #app2,
+      #app3 {
+        margin-bottom: 20px;
+      }
 
-		#app,
-		#app2,
-		#app3 {
-			margin-bottom: 20px;
-		}
+      button {
+        margin-right: 10px;
+      }
 
-		button {
-			margin-right: 10px;
-		}
+      ol {
+        list-style-type: none;
+        padding: 0;
+      }
+    </style>
+  </head>
 
-		ol {
-			list-style-type: none;
-			padding: 0;
-		}
+  <body>
+    <!--插值-->
+    <div id="app">
+      <p>{{message}},{{message2}}</p>
+      <button @click="increment">the count value: {{count}}</button>
+      <button @click="getNews">getNews</button>
+      <button @click="getAds">getAds</button>
+      <ol v-show="isShowNews">
+        <li v-for="newInfo in news">
+          <a :href="newInfo.url">{{newInfo.name}}</a>
+        </li>
+      </ol>
+      <ol>
+        <li v-for="ad in ads">
+          <img :src="ad.imgUrls" :title="ad.name" style="height: 280px; width: 100%" />
+        </li>
+      </ol>
+    </div>
 
-		li {
-			margin: 5px 0;
-		}
-	</style>
-</head>
+    <div id="app2">
+      <!--双大括号内的数据，被解析为文本-->
+      <!--插值语法不能用在HTML属性上-->
+      <p>Using text interpolation: {{rawHTML}}</p>
+      <!--v-html可以将HTML代码解析为真正的HTML代码-->
+      <p>Using v-html directive:<span v-html="rawHTML"></span></p>
+      <!--v-bind指令可用在属性上-->
+      <button :disabled="isButtonDisabled">是否可用</button>
+    </div>
 
-<body>
-	<!--插值-->
-	<div id="app">
-		<p>{{message}},{{message2}}</p>
-		<button @click="increment"> the count value: {{count}}</button>
-		<button @click="getNews"> getNews </button>
-		<button @click="getAds"> getAds </button>
-		<ol v-show="isShowNews">
-			<li v-for="newInfo in news">
-				<a :href="newInfo.url">{{newInfo.name}}</a>
-			</li>
-		</ol>
-		<ol>
-			<li v-for="ad in ads">
-				<img :src="ad.imgUrls" :title="ad.name" style="height: 280px;width: 100%;" />
-			</li>
-		</ol>
-	</div>
+    <!--JS表达式-->
+    <div id="app3">
+      <p>{{number + 1}}</p>
+      <p>{{ok ? 'YES' : 'NO'}}</p>
+      <p>{{message.split('').reverse().join('')}}</p>
+    </div>
 
-	<div id="app2">
-		<!--双大括号内的数据，被解析为文本-->
-		<!--插值语法不能用在HTML属性上-->
-		<p>Using mustaches{{rawHTML}}</p>
-		<!--v-html可以将HTML代码解析为真正的HTML代码-->
-		<p>Using v-html directive:<span v-html="rawHTML"></span></p>
-		<!--v-bind指令可用在属性上-->
-		<button :disabled="isButtonDisabled">是否可用</button>
-	</div>
+    <script type="module">
+      import { createApp, ref } from 'vue'
+      import { debounce } from 'es-toolkit'
+      import axios from 'axios'
 
-	<!--JS表达式-->
-	<div id="app3">
-		<p>{{number + 1}}</p>
-		<p>{{ok ? 'YES' : 'NO'}}</p>
-		<p>{{message.split('').reverse().join('')}}</p>
-	</div>
+      const axiosInstance = axios.create({
+        baseURL: 'https://www.unischool.cn/api/',
+        timeout: 1000,
+        headers: { scope: 'com.fltrp.szjc.pc.web' },
+      })
 
-	<script type="module">
-		import { createApp } from 'vue'
-		import { debounce } from 'es-toolkit'
-		import axios from 'axios'
+      const app = createApp({
+        setup() {
+          const message = ref('Hello World!')
+          const message2 = ref('Hello Vue!')
+          const count = ref(0)
+          const news = ref([])
+          const ads = ref([])
+          const isShowNews = ref(false)
 
-		const axiosInstance = axios.create({
-			baseURL: 'https://www.unischool.cn/api/',
-			timeout: 1000,
-			headers: { 'scope': 'com.fltrp.szjc.pc.web' }
-		});
+          const increment = debounce(() => {
+            count.value++
+          }, 500)
 
-		const app = createApp({
-			data() {
-				return {
-					message: "Hello World!",
-					message2: "Hello Vue!",
-					count: 0,
-					news: [],
-					ads: [],
-					isShowNews: false
-				}
-			},
-			methods: {
-				increment: debounce(function () {
-					this.count++
-				}, 500),
-				getNews() {
-					axiosInstance.get('gateway/getNewsList?op_path=gateway%2FgetNewsList&needScope=true&page=1&pageSize=4')
-						.then(response => {
-							// response.data 可能已经是对象，无需再 JSON.parse
-							let result = response.data;
-							// 若是字符串则解析
-							if (typeof result === 'string') {
-								try {
-									result = JSON.parse(result);
-								} catch (e) {
-									console.error('JSON parse error:', e);
-									return;
-								}
-							}
-							// 解析 content 节点
-							// 假设结构为 { data: { content: [...] } }
-							//let content = null;
-							if (result && result.data && result.data.content) {
-								this.news = result.data.content;
-								if (this.news.length === 0) {
-									console.warn('No news items found in content');
-									return;
-								}
-								this.isShowNews = true; // 显示新闻列表
-								console.log('content 节点:', this.news);
-							} else {
-								console.warn('未找到 content 节点', result);
-							}
-						})
-						.catch(error => {
-							console.error("Error fetching news:", error)
-						})
-				},
-				getAds() {
-					axios.post("https://voice.fltrp.com/api/ab/open/load", {
-						op_path: "ab/open/load",
-						fromWY: true,
-						appKey: "digit_teach_platform",
-						positionCodes: ["410201"]
-					})
-						.then(response => {
-							let result = response.data;
-							if (result && result.data) {
-								this.ads = result.data["410201"].advertisements;
-								if (this.ads.length === 0) {
-									console.warn('No ads found in content');
-									return;
-								}
-								console.log('content 节点:', this.ads);
-							} else {
-								console.warn('未找到 content 节点', result);
-							}
-						})
-						.catch(error => {
-							console.error("Error fetching ads:", error)
-						})
-				}
-			}
-		})
+          const getNews = () => {
+            axiosInstance
+              .get('gateway/getNewsList?op_path=gateway%2FgetNewsList&needScope=true&page=1&pageSize=4')
+              .then(response => {
+                // response.data 可能已经是对象，无需再 JSON.parse
+                let result = response.data
+                // 若是字符串则解析
+                if (typeof result === 'string') {
+                  try {
+                    result = JSON.parse(result)
+                  } catch (e) {
+                    console.error('JSON parse error:', e)
+                    return
+                  }
+                }
+                // 解析 content 节点
+                // 假设结构为 { data: { content: [...] } }
+                //let content = null;
+                if (result && result.data && result.data.content) {
+                  news.value = result.data.content
+                  if (news.value.length === 0) {
+                    console.warn('No news items found in content')
+                    return
+                  }
+                  isShowNews.value = true // 显示新闻列表
+                  console.log('content 节点:', news.value)
+                } else {
+                  console.warn('未找到 content 节点', result)
+                }
+              })
+              .catch(error => {
+                console.error('Error fetching news:', error)
+              })
+          }
 
-		app.mount("#app")
+          const getAds = () => {
+            axios
+              .post('https://voice.fltrp.com/api/ab/open/load', {
+                op_path: 'ab/open/load',
+                fromWY: true,
+                appKey: 'digit_teach_platform',
+                positionCodes: ['410201'],
+              })
+              .then(response => {
+                let result = response.data
+                if (result && result.data) {
+                  ads.value = result.data['410201'].advertisements
+                  if (ads.value.length === 0) {
+                    console.warn('No ads found in content')
+                    return
+                  }
+                  console.log('content 节点:', ads.value)
+                } else {
+                  console.warn('未找到 content 节点', result)
+                }
+              })
+              .catch(error => {
+                console.error('Error fetching ads:', error)
+              })
+          }
 
-		createApp({
-			data() {
-				return {
-					rawHTML: '<span style="color:red">this should be red!</span>',
-					isButtonDisabled: true
-				}
-			}
-		}).mount("#app2")
+          return {
+            message,
+            message2,
+            count,
+            news,
+            ads,
+            isShowNews,
+            increment,
+            getNews,
+            getAds,
+          }
+        },
+      })
 
-		createApp({
-			el: '#app3',
-			data() {
-				return {
-					number: 10,
-					ok: true,
-					message: 'Hello Vue.js'
-				}
-			}
-		}).mount("#app3")
-	</script>
-</body>
+      app.mount('#app')
 
+      createApp({
+        data() {
+          return {
+            rawHTML: '<span style="color:red">this should be red!</span>',
+            isButtonDisabled: true,
+          }
+        },
+      }).mount('#app2')
+
+      createApp({
+        data() {
+          return {
+            number: 10,
+            ok: true,
+            message: 'Hello Vue.js',
+          }
+        },
+      }).mount('#app3')
+    </script>
+  </body>
 </html>

@@ -28,33 +28,33 @@
         onUpdated,
         onBeforeUnmount,
         onUnmounted,
-      } from "vue"
+      } from 'vue'
       const count = ref(0)
 
       const app = createApp({
         setup() {
           onBeforeMount(() => {
-            console.log("onBeforeMounted")
+            console.log('onBeforeMounted')
           })
 
           onMounted(() => {
-            console.log("onMounted")
+            console.log('onMounted')
           })
 
           onBeforeUpdate(() => {
-            console.log("onBeforeUpdate")
+            console.log('onBeforeUpdate')
           })
 
           onUpdated(() => {
-            console.log("onUpdated")
+            console.log('onUpdated')
           })
 
           onBeforeUnmount(() => {
-            console.log("onBeforeUnmount")
+            console.log('onBeforeUnmount')
           })
 
           onUnmounted(() => {
-            console.log("onUnmounted")
+            console.log('onUnmounted')
           })
 
           return {
@@ -63,7 +63,7 @@
         },
       })
 
-      app.mount("#app")
+      app.mount('#app')
     </script>
   </body>
 </html>
