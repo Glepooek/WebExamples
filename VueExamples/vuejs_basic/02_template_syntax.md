@@ -1,7 +1,7 @@
 Vue使用一种基于HTML的模板语法。在底层机制中，Vue会将模板编译成高度优化的JavaScript代码。
 
 ## 文本插值
-“Mustache”（胡子）语法，即双大括号。双大括号标签会被替换为Vue组件实例的msg属性值。
+“Mustache”（胡子）语法，即双大括号。如下示例，双大括号标签会被替换为Vue组件实例的msg属性值。
 
 ```html
  <span>Message: {{ msg }}</span>
@@ -52,7 +52,7 @@ Vue使用一种基于HTML的模板语法。在底层机制中，Vue会将模板�
 <button :disabled="isDisabled">Button</button>
 ```
 
-当isDisabled为真值或一个空字符串 (即 <button disabled="">) 时，元素的disabled属性启用。而当其为其他假值时属性将被忽略。
+当isDisabled为真值或一个空字符串 (即`<button disabled="">`) 时，元素的disabled属性启用。而当其为其他假值时属性将被忽略。
 
 ### 动态绑定多个值
 
@@ -104,7 +104,7 @@ Vue在所有的数据绑定中都支持JS表达式。
 ```
 
 ### 受限的全局访问
-`模板中的表达式将被沙盒化，仅能够访问到有限的全局对象列表。该列表中会暴露常用的内置全局对象，比如 Math 和 Date。`
+`模板中的表达式将被沙盒化，仅能够访问到有限的全局对象列表。该列表中会暴露常用的内置全局对象，比如Math和Date等。`
 
 没有显式包含在列表中的全局对象将不能在模板内表达式中访问，例如用户附加在`window`上的属性。然而，你也可以自行在`app.config.globalProperties`上显式地添加它们，供所有的 Vue 表达式使用。
 
@@ -113,7 +113,6 @@ Vue在所有的数据绑定中都支持JS表达式。
   <div>
     <h1>{{ $appName }}</h1>
     <p>{{ $filters.capitalize('hello world') }}</p>
-    <button @click="$http()">发送请求</button>
   </div>
 </template>
 
@@ -146,8 +145,6 @@ app.mount('#app')
 ```html
 <p v-if="seen">Now you see me</p>
 ```
-
-![指令语法图](assets/指令语法图.png)
 
 ### 参数
 某些指令会需要一个“参数”，在指令名后通过一个冒号隔开做标识。例如用`v-bind`指令来响应式地更新一个HTML属性：
@@ -200,7 +197,6 @@ app.mount('#app')
 动态参数中表达式的值应当是一个`字符串`，或者是`null`。特殊值null意为显式移除该绑定。其他非字符串的值会触发警告。
 
 ### 动态参数语法的限制​
-动态参数表达式因为某些字符的缘故有一些语法限制，比如空格和引号，在HTML属性名称中都是不合法的。例如下面的示例：
 
 ```html
 <!-- 这会触发一个编译器警告 -->
@@ -213,9 +209,21 @@ app.mount('#app')
 * 避免在名称中使用大写字母，因为浏览器会强制将其转换为小写
 
 ### 修饰符
-修饰符是以点开头的特殊后缀，表明指令需要以一些特殊的方式被绑定。例如`.prevent`修饰符会告知`v-on`指令对触发的事件调用event.preventDefault()：
+修饰符是以点开头的特殊后缀，表明指令需要以一些特殊的方式被绑定。例如`.prevent`修饰符会告知`v-on`指令对触发的事件调用`event.preventDefault()`：
 
 ```html
 <form @submit.prevent="onSubmit">...</form>
 ```
-之后在讲到 v-on 和 v-model 的功能时，将会看到其他修饰符的例子。
+
+* stop - 调用 event.stopPropagation()。
+* prevent - 调用 event.preventDefault()。
+* capture - 在捕获模式添加事件监听器。
+* self - 只有事件从元素本身发出才触发处理函数。
+* {keyAlias} - 只在某些按键下触发处理函数。
+* once - 最多触发一次处理函数。
+* left - 只在鼠标左键事件触发处理函数。
+* right - 只在鼠标右键事件触发处理函数。
+* middle - 只在鼠标中键事件触发处理函数。
+* passive - 通过 { passive: true } 附加一个 DOM 事件。
+
+![指令语法图](assets/指令语法图.png)

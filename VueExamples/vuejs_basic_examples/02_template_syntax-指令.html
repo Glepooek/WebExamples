@@ -37,7 +37,10 @@
 
     <!--事件监听器-->
     <div id="app5">
-      <p>{{message}}</p>
+      <!--插值可更新部分文本-->
+      <p>插值：{{message}}</p>
+      <!--v-text会更新全部文本-->
+      <p>v-text：<span v-text="message"></span></p>
       <button @click="requestMessage">翻转消息</button>
     </div>
 
@@ -147,7 +150,7 @@
       })
       app7.component('todo-item', {
         props: ['todo'],
-        template: '<li>{{ $filters.capitalize(todo.text) }} —— {{ $appName }}</li>',
+        template: '<li>{{ $filters.capitalize(todo.text) }} —— {{ $appName }} —— {{ new Date() }}</li>',
       })
 
       // 添加全局变量
