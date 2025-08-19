@@ -41,7 +41,13 @@
       <p>插值：{{message}}</p>
       <!--v-text会更新全部文本-->
       <p>v-text：<span v-text="message"></span></p>
-      <button @click="requestMessage">翻转消息</button>
+      <button @click.self="requestMessage">翻转消息</button>
+      <!--事件监听器对象语法-->
+      <button
+        v-on="{ click:(event) => requestMessage(event), mouseenter: (event) => doMouseEnter('hi', event), mouseleave: (event) => doMouseLeave(event) }"
+      >
+        对象语法
+      </button>
     </div>
 
     <!--表单输入和应用状态之间的双向绑定-->
@@ -105,13 +111,24 @@
       var app5 = createApp({
         setup() {
           const message = ref('Hello Vue.js')
-          const requestMessage = () => {
+          const requestMessage = event => {
             message.value = message.value.split('').reverse().join('')
+            console.log(`事件类型：${event.type}`)
+          }
+
+          const doMouseEnter = (msg, event) => {
+            console.log(`事件类型：${event.type}`)
+          }
+
+          const doMouseLeave = event => {
+            console.log(`事件类型：${event.type}`)
           }
 
           return {
             message,
             requestMessage,
+            doMouseEnter,
+            doMouseLeave,
           }
         },
       }).mount('#app5')
