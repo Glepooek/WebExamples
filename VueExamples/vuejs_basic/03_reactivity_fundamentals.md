@@ -1,4 +1,4 @@
-选项卡式API：
+# 选项卡式API
 
 ## 声明响应式状态
 用data选项来声明组件的响应式状态。此选项的值为返回一个对象的函数。
@@ -70,3 +70,89 @@ export default {
   }
 }
 ```
+
+# 组合式API
+
+## 声明响应式状态
+
+### ref()
+在组合式API中，推荐使用`ref()`函数来声明响应式状态。
+`ref()`函数接收一个参数作为初始值，并将其包裹在一个带有`.value`属性的ref对象中返回。
+
+```js
+import { ref } from 'vue'
+const count = ref(0)
+
+console.log(count) // { value: 0 }
+console.log(count.value) // 0
+count.value++
+console.log(count.value) // 1
+```
+
+要在组件模版中访问ref对象，请在组件的`setup()`函数中声明并返回它们。
+
+```vue
+<template>
+  <div>{{ count }}</div>
+</template>
+
+<script>
+  import { ref } from 'vue'
+  export default {
+    setup() {
+      const count = ref(0)
+      return { count }
+    }
+  }
+</script>
+```
+
+在模版中使用ref对象时，不需要附加`.value`。原因是：在模版中使用时，ref对象会被自动解包。
+也可以在事件监听器中改变ref对象。
+
+```vue
+<button @click="count++">
+  {{ count }}
+</button>
+```
+
+可以在同一作用域内声明更改`ref`的函数，并将它们作为方法与状态一起公开：
+
+```js
+import { ref } from 'vue'
+
+export default {
+  setup() {
+    const count = ref(0)
+
+    function increment() {
+      // 在 JavaScript 中需要 .value
+      count.value++
+    }
+
+    // 不要忘记同时暴露 increment 函数
+    return {
+      count,
+      increment
+    }
+  }
+}
+```
+
+然后，暴露的方法可以被用作事件监听器：
+
+```html
+<button @click="increment">
+  {{ count }}
+</button>
+```
+
+### `<script setup>`
+
+### 为什么要使用ref
+
+
+### 深层响应性
+
+
+### DOM更新时机
