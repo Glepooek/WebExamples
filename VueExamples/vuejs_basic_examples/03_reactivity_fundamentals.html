@@ -3,43 +3,88 @@
   <head>
     <meta charset="utf-8" />
     <title>Vue 3响应式基础</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net.cn/npm/swiper@11/swiper-bundle.min.css" />
     <!--导入映射表-->
     <script type="importmap">
       {
         "imports": {
           "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
           "es-toolkit": "https://esm.sh/es-toolkit@%5E1",
-          "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
+          "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js",
+          "swiper": "https://cdn.jsdelivr.net.cn/npm/swiper@11/swiper-bundle.min.mjs"
         }
       }
     </script>
+
+    <style>
+      html,
+      body {
+        position: relative;
+        height: 100%;
+      }
+
+      body {
+        background: #eee;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      .swiper {
+        width: 100%;
+        height: 50%;
+      }
+
+      .swiper-slide img {
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+
+      .swiper-pagination-bullet {
+        width: 20px;
+        height: 5px;
+        border-radius: 20%;
+      }
+    </style>
   </head>
 
   <body>
-    <div id="app">
-      <h1>响应式原理</h1>
-      <p>点击按钮修改数据：</p>
-      <p>消息：{{ obj.id}}</p>
+    <!-- Swiper -->
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <img src="./assets/clound.png" alt="Slide 1" />
+        </div>
+        <div class="swiper-slide">
+          <img src="./assets/test.png" alt="Slide 2" />
+        </div>
+      </div>
+      <!-- Add Pagination -->
+      <div class="swiper-pagination"></div>
     </div>
 
     <script type="module">
-      import { createApp, ref, shallowReactive } from 'vue'
+      import Swiper from 'swiper'
 
-      const app = createApp({
-        setup() {
-          const count = ref(0)
-          const obj = { id: ref(3) }
-
-          console.log('obj:', obj)
-
-          return {
-            count,
-            obj,
-          }
-        },
+      // 等待DOM加载完成
+      document.addEventListener('DOMContentLoaded', function () {
+        var swiper = new Swiper('.swiper', {
+          loop: true,
+          spaceBetween: 30,
+          centeredSlides: true,
+          autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+        })
       })
-
-      app.mount('#app')
     </script>
   </body>
 </html>
