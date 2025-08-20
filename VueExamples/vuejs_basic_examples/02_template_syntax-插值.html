@@ -33,6 +33,10 @@
         list-style-type: none;
         padding: 0;
       }
+
+      .highlight {
+        color: red;
+      }
     </style>
   </head>
 
@@ -176,7 +180,7 @@
       createApp({
         data() {
           return {
-            rawHTML: '<span style="color:red">this should be red!</span>',
+            rawHTML: '<span class="highlight">this should be red!</span>',
             isButtonDisabled: true,
           }
         },

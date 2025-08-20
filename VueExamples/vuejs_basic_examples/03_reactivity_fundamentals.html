@@ -19,49 +19,23 @@
     <div id="app">
       <h1>响应式原理</h1>
       <p>点击按钮修改数据：</p>
-      <button @click="updateMessage">修改消息</button>
-      <p>消息：{{ message }}</p>
+      <p>消息：{{ obj.id}}</p>
     </div>
 
     <script type="module">
-      import { createApp, ref } from 'vue'
-
-      // const app = createApp({
-      //     data() {
-      //         return {
-      //             message: 'Hello, Vue 3!'
-      //         }
-      //     },
-      //     methods: {
-      //         updateMessage: function () {
-      //             // 修改响应式数据
-      //             this.message = '消息已更新！';
-      //         }
-      //     },
-      //     mounted() {
-      //         // 在组件挂载后执行
-      //         console.log('组件已挂载，当前消息:', this.message);
-      //     }
-      // });
-
-      // app.mount('#app');
+      import { createApp, ref, shallowReactive } from 'vue'
 
       const app = createApp({
         setup() {
-          const message = ref('Hello Vue.js')
-          console.log(message)
-          const updateMessage = event => {
-            message.value = message.value.split('').reverse().join('')
-            console.log(`事件类型：${event.type}`)
-          }
+          const count = ref(0)
+          const obj = { id: ref(3) }
+
+          console.log('obj:', obj)
 
           return {
-            message,
-            updateMessage,
+            count,
+            obj,
           }
-        },
-        mounted() {
-          console.log('组件已挂载，当前消息:', this.message)
         },
       })
 
