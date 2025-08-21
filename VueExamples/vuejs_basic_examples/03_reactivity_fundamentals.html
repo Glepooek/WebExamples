@@ -3,98 +3,45 @@
   <head>
     <meta charset="utf-8" />
     <title>Vue 3响应式基础</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net.cn/npm/swiper@11/swiper-bundle.min.css" />
     <!--导入映射表-->
     <script type="importmap">
       {
         "imports": {
           "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
           "es-toolkit": "https://esm.sh/es-toolkit@%5E1",
-          "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js",
-          "swiper": "https://cdn.jsdelivr.net.cn/npm/swiper@11/swiper-bundle.min.mjs"
+          "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
         }
       }
     </script>
-
-    <style>
-      html,
-      body {
-        position: relative;
-        height: 100%;
-      }
-
-      body {
-        background: #eee;
-        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        color: #000;
-        margin: 0;
-        padding: 0;
-      }
-
-      .swiper {
-        width: 100%;
-        height: 50%;
-      }
-
-      .swiper-slide img {
-        max-width: 100%;
-        height: auto;
-        object-fit: cover;
-      }
-
-      .swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
-      .swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
-        margin: 0;
-      }
-
-      .swiper .swiper-pagination-bullet-active {
-        background: #275dff;
-        border-radius: 99px;
-      }
-
-      .swiper-pagination-bullet {
-        width: 80px;
-        height: 5px;
-        border-radius: 99px;
-      }
-    </style>
   </head>
 
   <body>
-    <!-- Swiper -->
-    <div class="swiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <img src="./assets/clound.png" alt="Slide 1" />
-        </div>
-        <div class="swiper-slide">
-          <img src="./assets/test.png" alt="Slide 2" />
-        </div>
-      </div>
-      <!-- Add Pagination -->
-      <div class="swiper-pagination"></div>
+    <div id="app">
+      <h1>{{ message }}</h1>
+      <p>Count: {{ count }}</p>
+      <button @click="increment">Increment</button>
     </div>
 
     <script type="module">
-      import Swiper from 'swiper'
+      import { createApp, ref } from 'vue'
 
-      // 等待DOM加载完成
-      document.addEventListener('DOMContentLoaded', function () {
-        var swiper = new Swiper('.swiper', {
-          loop: true,
-          spaceBetween: 30,
-          centeredSlides: true,
-          autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-          },
-          pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-          },
-        })
+      const app = createApp({
+        setup() {
+          const message = ref('Hello Vue 3!')
+          const count = ref(0)
+          const increment = () => {
+            count.value++
+          }
+
+          return {
+            message,
+            count,
+            increment,
+          }
+        },
       })
+
+      app.mount('#app')
     </script>
   </body>
 </html>

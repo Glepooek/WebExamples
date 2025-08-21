@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>swiper</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net.cn/npm/swiper@11/swiper-bundle.min.css" />
+    <!--导入映射表-->
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+          "es-toolkit": "https://esm.sh/es-toolkit@%5E1",
+          "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js",
+          "swiper": "https://cdn.jsdelivr.net.cn/npm/swiper@11/swiper-bundle.min.mjs"
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        background: #fff;
+        font-family: Microsoft YaHei, sans-serif;
+        font-size: 14px;
+        color: #000;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 30px 80px 20px 80px;
+      }
+
+      .header img {
+        width: 376px;
+        height: auto;
+      }
+
+      .header span {
+        background: linear-gradient(180deg, #1c91ff 0%, #2954ff 100%);
+        font-size: 18px;
+        font-weight: bold;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .swiper {
+        width: 100%;
+        height: 50%;
+      }
+
+      .swiper-slide img {
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+
+      .swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
+      .swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
+        margin: 0;
+      }
+
+      .swiper .swiper-pagination-bullet-active {
+        background: #275dff;
+        border-radius: 99px;
+      }
+
+      .swiper-pagination-bullet {
+        width: 80px;
+        height: 5px;
+        border-radius: 99px;
+      }
+
+      .downBox {
+        padding: 58px 0;
+        margin: 0 auto;
+        width: 930px;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .downBox .downContent {
+        width: 286px;
+        height: 284px;
+        background: #ffffff;
+        box-shadow: 0px 0px 10px 0px #d5e8ff;
+        position: relative;
+      }
+
+      .introduce {
+        background: linear-gradient(103deg, #2b7fff 1%, #32c5ff 99%);
+        padding: 82px 183px;
+        color: #fff;
+        text-align: center;
+      }
+
+      .introduce .title {
+        font-size: 32px;
+        font-weight: bold;
+      }
+
+      .introduce .content {
+        font-size: 16px;
+        margin-top: 24px;
+        line-height: 32px;
+        display: block;
+      }
+
+      .content-list {
+        text-align: center;
+        width: 1206px;
+        margin: 0 auto;
+        margin-top: 55px;
+        padding-bottom: 12px;
+      }
+
+      .content-list .list-img {
+        margin-bottom: 68px;
+      }
+
+      .list-img img {
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .content-list .odd {
+        padding: 0 39px;
+      }
+
+      .footer {
+        height: 116px;
+        background: #111827;
+        font-size: 16px;
+        color: #9ca3af;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <img src="../assets/logo.png" alt="Logo" />
+        <span>客服电话：4008987008</span>
+      </div>
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <img src="../assets/clound.png" alt="Slide 1" />
+          </div>
+          <div class="swiper-slide">
+            <img src="../assets/test.png" alt="Slide 2" />
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+      <div class="downBox">
+        <div class="downContent"></div>
+        <div class="downContent"></div>
+        <div class="downContent"></div>
+      </div>
+      <div class="introduce">
+        <span class="title">产品介绍</span>
+        <span class="content">
+          外研U学教学云平台是以外研英语教材与资源为中心，专门为英语教师量身打造的覆盖备课、授课、练习等全流程的教学平台，平台提供课件、教案、微课、音视频等各种权威资源，及简单高效的课件编辑功能、授课工具、数字教材等，帮助教师快捷有效地备课、授课，此外，平台还提供丰富多样的同步和听说练习资源，帮助教师有效提升学生英语水平。
+        </span>
+      </div>
+      <div class="content-list">
+        <div class="list-img">
+          <img src="../assets/intro0.png" />
+        </div>
+        <div class="list-img odd">
+          <img src="../assets/intro1.png" />
+        </div>
+        <div class="list-img">
+          <img src="../assets/intro2.png" />
+        </div>
+        <div class="list-img odd">
+          <img src="../assets/intro3.png" />
+        </div>
+      </div>
+      <div class="footer">
+        <span>© 2025外研U学教学平台. All rights reserved.</span>
+      </div>
+    </div>
+
+    <script type="module">
+      import Swiper from 'swiper'
+
+      // 等待DOM加载完成
+      document.addEventListener('DOMContentLoaded', function () {
+        var swiper = new Swiper('.swiper', {
+          loop: true,
+          spaceBetween: 30,
+          centeredSlides: true,
+          autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+        })
+      })
+    </script>
+  </body>
+</html>
