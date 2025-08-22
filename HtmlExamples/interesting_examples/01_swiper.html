@@ -128,6 +128,16 @@
           .then(data =>  downloadInfo = data || {})
         }
 
+      // Detect when the user is leaving or returning to the page
+      window.addEventListener('visibilitychange', (event) => {
+        if (event.target.visibilityState === 'hidden') {
+          console.log('User is leaving the page', document.URL);
+        }
+        if (event.target.visibilityState === 'visible') {
+           console.log('User is back on the page', document.URL);
+        }
+      });
+
       function toggleInstallIntro(osName){
         if (!downloadInfo || !osName){
           return;
@@ -136,6 +146,7 @@
         const helpDocUrl = downloadInfo[osName]?.helpDocUrl;
         if (helpDocUrl) {
           console.log(helpDocUrl);
+          // Opens the URL in a new tab/window
           window.open(helpDocUrl, '_blank');
           // window.location.href = helpDocUrl;
         }
@@ -148,6 +159,7 @@
 
         const downloadUrl = downloadInfo[osName]?.downloadUrl;
         if (downloadUrl) {
+          // Redirects the current page/tab to the URL
           window.location.href = downloadUrl;
         }
       }
