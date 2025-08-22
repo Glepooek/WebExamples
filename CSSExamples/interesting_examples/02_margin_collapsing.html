@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS 边距塌陷</title>
+    <style>
+      p {
+        display: block;
+        margin-top: 50px;
+        margin-bottom: 15px;
+        margin-left: 0;
+        margin-right: 0;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <!--BFC\Containing Block -->
+  <body>
+    <div style="margin-top: 20px; overflow: hidden">
+      <p style="background-color: red; color: white">hello</p>
+      <p style="background-color: blue; color: white">world</p>
+      <p style="background-color: yellow; color: white">hi</p>
+    </div>
+  </body>
+</html>
