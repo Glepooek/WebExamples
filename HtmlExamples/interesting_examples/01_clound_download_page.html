@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8" lang="zh-CN" />
     <title>swiper</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net.cn/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="../assets/csss/download_page.css" />
@@ -25,12 +25,8 @@
     </div>
     <div class="swiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <img src="../assets/imgs/clound.png" alt="Slide 1" />
-        </div>
-        <div class="swiper-slide">
-          <img src="../assets/imgs/test.png" alt="Slide 2" />
-        </div>
+        <img class="swiper-slide" src="../assets/imgs/clound.png" alt="Slide 1" />
+        <img class="swiper-slide" src="../assets/imgs/test.png" alt="Slide 2" />
       </div>
       <div class="swiper-pagination"></div>
     </div>
@@ -92,7 +88,6 @@
       <img class="odd" src="../assets/imgs/intro1.png" />
       <img src="../assets/imgs/intro2.png" />
       <img class="odd" src="../assets/imgs/intro3.png" />
-      </div>
     </div>
     <div class="footer">
       <span>© 2025外研U学教学平台. All rights reserved.</span>
@@ -119,48 +114,50 @@
       })
     </script>
 
-     <script>
-      let downloadInfo = {};
+    <script>
+      let downloadInfo = {}
 
-      window.onload = ()=> {
-        fetch(`https://k12-teaching-cdn.unipus.cn/digital-platform/online/Setup-digital-platform-download.json?v=${Date.now()}`)
+      window.onload = () => {
+        fetch(
+          `https://k12-teaching-cdn.unipus.cn/digital-platform/online/Setup-digital-platform-download.json?v=${Date.now()}`
+        )
           .then(response => response.json())
-          .then(data =>  downloadInfo = data || {})
-        }
+          .then(data => (downloadInfo = data || {}))
+      }
 
       // Detect when the user is leaving or returning to the page
-      window.addEventListener('visibilitychange', (event) => {
+      window.addEventListener('visibilitychange', event => {
         if (event.target.visibilityState === 'hidden') {
-          console.log('User is leaving the page', document.URL);
+          console.log('User is leaving the page', document.URL)
         }
         if (event.target.visibilityState === 'visible') {
-           console.log('User is back on the page', document.URL);
+          console.log('User is back on the page', document.URL)
         }
-      });
+      })
 
-      function toggleInstallIntro(osName){
-        if (!downloadInfo || !osName){
-          return;
+      function toggleInstallIntro(osName) {
+        if (!downloadInfo || !osName) {
+          return
         }
 
-        const helpDocUrl = downloadInfo[osName]?.helpDocUrl;
+        const helpDocUrl = downloadInfo[osName]?.helpDocUrl
         if (helpDocUrl) {
-          console.log(helpDocUrl);
+          console.log(helpDocUrl)
           // Opens the URL in a new tab/window
-          window.open(helpDocUrl, '_blank');
+          window.open(helpDocUrl, '_blank')
           // window.location.href = helpDocUrl;
         }
       }
 
-      function toggleDownloadExe(osName){
-        if (!downloadInfo || !osName){
-          return;
+      function toggleDownloadExe(osName) {
+        if (!downloadInfo || !osName) {
+          return
         }
 
-        const downloadUrl = downloadInfo[osName]?.downloadUrl;
+        const downloadUrl = downloadInfo[osName]?.downloadUrl
         if (downloadUrl) {
           // Redirects the current page/tab to the URL
-          window.location.href = downloadUrl;
+          window.location.href = downloadUrl
         }
       }
     </script>

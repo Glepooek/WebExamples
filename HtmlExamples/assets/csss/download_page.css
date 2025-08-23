@@ -39,7 +39,6 @@ body {
 
 .swiper-pagination-bullet-active {
   background: #275dff;
-  border-radius: 99px;
 }
 
 .swiper-pagination-bullet {
@@ -142,7 +141,7 @@ body {
 
 .introduce {
   background: linear-gradient(103deg, #2b7fff 1%, #32c5ff 99%);
-  padding: 82px 0;
+  padding: 82px 130px;
   color: #fff;
   text-align: center;
 }
@@ -154,25 +153,23 @@ body {
 
 .introduce .content {
   font-size: 16px;
-  margin: 0 auto;
   margin-top: 24px;
   line-height: 32px;
-  width: 1024px;
   display: block;
 }
 
 .content-list {
-  text-align: center;
-  width: 1206px;
-  margin: 0 auto;
-  margin-top: 55px;
-  padding-bottom: 12px;
+  padding: 55px 116px 12px 116px;
 }
 
 .content-list img {
-  margin: 0 auto;
   margin-bottom: 68px;
+  object-fit: cover;
   width: 100%;
+}
+
+.content-list .odd {
+  margin-right: 39px;
 }
 
 .footer {
