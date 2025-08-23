@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="cn-zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS display属性</title>
+    <style>
+      :root {
+        text-align: center;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        display: flex;
+        align-items: center;
+      }
+
+      .controlZone {
+        border: 2px solid green;
+        padding: 10px;
+        margin: 10px;
+        flex: 1;
+      }
+
+      .exampleZone {
+        flex: 2;
+      }
+
+      .exampleContainer {
+        display: block;
+        border: 2px dashed orange;
+      }
+
+      .child {
+        background: lightblue;
+        display: inline-block;
+        width: 150px;
+      }
+
+      .fake-list {
+        display: list-item;
+        list-style-type: decimal-leading-zero;
+        list-style-position: inside;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>display example</h2>
+    <div class="container">
+      <div class="controlZone">
+        <label for="display">选择一个 display 值：</label>
+        <select id="display">
+          <option selected>block</option>
+          <option>inline</option>
+          <option>inline-block</option>
+          <option>inline flow-root</option>
+          <option>none</option>
+          <option>flex</option>
+          <option>inline-flex</option>
+          <option>inline flex</option>
+          <option>grid</option>
+          <option>inline-grid</option>
+          <option>inline grid</option>
+          <option>table</option>
+          <option>block table</option>
+          <option>list-item</option>
+        </select>
+      </div>
+      <div class="exampleZone">
+        <span> some text a</span>
+        <div class="exampleContainer">
+          <div class="child">child a</div>
+          <div class="child">child b</div>
+          <div class="child">child c</div>
+        </div>
+        <span> some text b</span>
+        <div class="fake-list">hello</div>
+      </div>
+    </div>
+
+    <script>
+      const displaySelect = document.getElementById('display')
+      const exampleContainer = document.querySelector('.exampleContainer')
+
+      displaySelect.addEventListener('change', event => {
+        const selectedValue = event.target.value
+        exampleContainer.style.display = selectedValue
+      })
+    </script>
+  </body>
+</html>
