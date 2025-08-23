@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inline-block 演示</title>
+    <style>
+        .container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            margin: 10px;
+        }
+        
+        .inline {
+            display: inline;
+        }
+        
+        .block {
+            display: block;
+        }
+        
+        .inline-block {
+            display: inline-block;
+        }
+        
+        h3 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h2>display 属性对比演示</h2>
+    
+    <div class="container">
+        <h3>display: inline（行内元素）</h3>
+        <div class="box inline">Box 1</div>
+        <div class="box inline">Box 2</div>
+        <div class="box inline">Box 3</div>
+        <p>注意：行内元素无法设置宽度和高度</p>
+    </div>
+    
+    <div class="container">
+        <h3>display: block（块级元素）</h3>
+        <div class="box block">Box 1</div>
+        <div class="box block">Box 2</div>
+        <div class="box block">Box 3</div>
+        <p>注意：块级元素会独占一行</p>
+    </div>
+    
+    <div class="container">
+        <h3>display: inline-block（行内块级元素）</h3>
+        <div class="box inline-block">Box 1</div>
+        <div class="box inline-block">Box 2</div>
+        <div class="box inline-block">Box 3</div>
+        <p>注意：行内块级元素既可以在一行内排列，又可以设置宽度和高度</p>
+    </div>
+</body>
+</html>

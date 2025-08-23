@@ -6,91 +6,84 @@
 
     <style>
       .dropdown {
-        position: relative;
+        /* 不会占据整行空间 */
         display: inline-block;
       }
 
-      .dropbtn {
+      .dropdown-btn {
+        width: 200px;
+        padding: 10px 20px;
         background-color: blueviolet;
         color: white;
-        padding: 10px 20px;
-        border: none;
         border-radius: 5px;
-        width: 200px;
         display: flex;
         align-items: center;
         justify-content: space-around;
       }
 
-      .dropdown-content {
-        display: none;
-        position: absolute;
+      .dropdown-menu {
+        width: 240px;
         background-color: white;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-        width: 240px;
         border-radius: 5px;
+        display: none;
+        /* 位置还在正常文档流中，但不占据空间，不影响其他元素布局 */
+        position: absolute;
       }
 
-      .dropdown-content span {
+      .dropdown-menu span {
         display: block;
         padding: 12px 16px;
         border-bottom: #d5e8ff solid 1px;
       }
 
-      .dropdown-content span:last-child {
+      .dropdown-menu span:last-child {
         border-bottom: none;
       }
 
-      .dropdown-content span:hover {
+      .dropdown-menu span:hover {
         background-color: lightgray;
         cursor: pointer;
       }
 
-      .dropdown-content span:first-child:hover {
+      .dropdown-menu span:first-child:hover {
         border-radius: 5px 5px 0 0;
       }
 
-      .dropdown-content span:last-child:hover {
+      .dropdown-menu span:last-child:hover {
         border-radius: 0 0 5px 5px;
       }
 
-      .dropdown:hover .dropdown-content {
+      .dropdown:hover .dropdown-menu {
         display: block;
       }
     </style>
   </head>
   <body>
     <div class="dropdown">
-      <div class="dropbtn">
+      <div class="dropdown-btn">
         下载visual studio
-        <svg
-          t="1755870683363"
-          class="icon"
-          viewBox="0 0 1026 1024"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          p-id="5602"
-          width="20"
-          height="20"
-          fill="currentColor"
-        >
+        <svg viewBox="0 0 1026 1024" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor">
           <path
             d="M506.368 806.912c-3.584-0.512-7.168-1.024-10.752-2.048-9.216-2.048-17.408-7.168-24.064-13.312l-3.072-3.072-389.632-404.992c-12.288-12.8-18.432-27.136-17.408-45.056 1.024-31.232 28.672-56.832 58.368-54.272 14.336 1.024 26.624 7.68 36.864 17.92L506.88 666.624c1.024 1.024 1.536 2.048 3.584 4.096 1.024-2.048 1.536-3.584 2.56-4.608 116.736-121.856 233.984-243.2 350.72-365.056 9.728-9.728 20.992-16.896 34.304-18.432 0.512 0 0.512-0.512 1.024-0.512h11.776c0.512 0 1.024 0.512 2.048 0.512 22.016 3.584 39.424 19.456 45.056 41.984l2.048 8.704v12.288c-0.512 0-0.512 0.512-0.512 1.024-1.536 14.336-8.192 26.112-18.432 35.84-25.6 26.112-50.688 52.736-76.288 79.36-103.936 108.032-208.384 216.064-312.32 324.608-5.632 6.144-12.288 11.264-19.968 13.824-7.168 2.56-14.336 4.608-21.504 6.656h-4.608z"
             p-id="5603"
           ></path>
         </svg>
       </div>
-      <div class="dropdown-content">
+      <div class="dropdown-menu">
         <span onclick="toggleDownloadExe('windows')">Windows版本</span>
         <span onclick="toggleDownloadExe('uos')">UOS版本</span>
         <span onclick="toggleDownloadExe('kylinos')">Kylinos版本</span>
       </div>
     </div>
+    <div>
+      <p>选择您的操作系统以下载相应版本的 Visual Studio。</p>
+    </div>
 
     <script>
       let downloadInfo = {}
       window.onload = function () {
+        // 请求Url加时间戳，是为了防止浏览器缓存
         fetch(
           `https://k12-teaching-cdn.unipus.cn/digital-platform/online/Setup-digital-platform-download.json?v=${Date.now()}`
         )
@@ -108,7 +101,7 @@
           // Redirects the current page/tab to the URL
           window.location.href = downloadUrl
 
-          const element = document.getElementsByClassName('dropdown-content')[0]
+          const element = document.getElementsByClassName('dropdown-menu')[0]
           if (element) {
             // element.style.display = 'none'
             // // 移除style
