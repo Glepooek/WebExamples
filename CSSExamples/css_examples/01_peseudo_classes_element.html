@@ -1,119 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pseudo Classes and Element</title>
     <style>
-        p:hover {
-            color: rgb(72, 255, 0);
-        }
+      p:hover {
+        color: rgb(72, 255, 0);
+      }
 
-        p:active {
-            color: yellow;
-        }
+      p:active {
+        color: yellow;
+      }
 
-        p::first-line {
-            color: blue;
-            text-transform: uppercase;
-        }
+      p::first-line {
+        color: blue;
+        text-transform: uppercase;
+      }
 
-        a:active {
-            font-size: 20px;
-        }
+      a:active {
+        font-size: 20px;
+      }
 
-        /* 用于装饰 */
-        p::after {
-            content: "This is a paragraph";
-            color: red;
-            background-color: #ffba10;
-            border-color: black;
-            border-style: dotted;
-        }
+      /* 用于装饰 */
+      p::after {
+        content: 'This is a paragraph';
+        color: red;
+        background-color: #ffba10;
+        border-color: black;
+        border-style: dotted;
+      }
 
-        /* 属性选择器 */
-        span[data-descr] {
-            position: relative;
-            text-decoration: underline;
-            color: #00f;
-            cursor: help;
-        }
+      /* 属性选择器 */
+      span[data-descr] {
+        position: relative;
+        text-decoration: underline;
+        color: #00f;
+        cursor: help;
+      }
 
-        /*用于工具提示*/
-        span[data-descr]:hover::after {
-            content: attr(data-descr);
-            position: absolute;
-            left: 0;
-            top: 100%;
-            min-width: 200px;
-            border: 1px #aaaaaa solid;
-            border-radius: 10px;
-            background-color: #ffffcc;
-            padding: 12px;
-            color: #000000;
-            font-size: 14px;
-            z-index: 1;
-        }
+      /*用于工具提示*/
+      span[data-descr]:hover::after {
+        content: attr(data-descr);
+        position: absolute;
+        left: 0;
+        top: 100%;
+        min-width: 200px;
+        border: 1px #aaaaaa solid;
+        border-radius: 10px;
+        background-color: #ffffcc;
+        padding: 12px;
+        color: #000000;
+        font-size: 14px;
+        z-index: 1;
+      }
 
-        li {
-            list-style-type: none;
-            position: relative;
-            margin: 2px;
-            padding: 0.5em 0.5em 0.5em 2em;
-            background: lightgrey;
-            font-family: sans-serif;
-        }
+      li {
+        list-style-type: none;
+        position: relative;
+        margin: 2px;
+        padding: 0.5em 0.5em 0.5em 2em;
+        background: lightgrey;
+        font-family: sans-serif;
+      }
 
-        li.done {
-            background: #ccff99;
-        }
+      li.done {
+        background: #ccff99;
+      }
 
-        li.done::before {
-            content: "";
-            position: absolute;
-            border-color: #009933;
-            border-style: solid;
-            border-width: 0 0.3em 0.25em 0;
-            height: 1em;
-            top: 1.3em;
-            left: 0.6em;
-            margin-top: -1em;
-            transform: rotate(45deg);
-            width: 0.5em;
-        }
+      li.done::before {
+        content: '';
+        position: absolute;
+        border-color: #009933;
+        border-style: solid;
+        border-width: 0 0.3em 0.25em 0;
+        height: 1em;
+        top: 1.3em;
+        left: 0.6em;
+        margin-top: -1em;
+        transform: rotate(45deg);
+        width: 0.5em;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <p>
-        lorem ipsum dolor sit amet consectetur adipisicing elit. lorem ipsum dolor sit amet consectetur adipisicing
-        elit. lorem ipsum dolor sit amet consectetur adipisicing elit.<a href="#">百度一下，你就知道</a>
+      lorem ipsum dolor sit amet consectetur adipisicing elit. lorem ipsum dolor sit amet consectetur adipisicing elit.
+      lorem ipsum dolor sit amet consectetur adipisicing elit.<a href="#">百度一下，你就知道</a>
     </p>
     <p>
-        这里包含了一些<span tabindex="0" data-descr="鼠标悬停时出现的小弹出窗口">工具提示</span>的<span tabindex="0"
-            data-descr="文字和标点符号的集合">文字</span>。
+      这里包含了一些<span tabindex="0" data-descr="鼠标悬停时出现的小弹出窗口">工具提示</span>的<span
+        tabindex="0"
+        data-descr="文字和标点符号的集合"
+        >文字</span
+      >。
     </p>
 
     <ul>
-        <li>买牛奶</li>
-        <li>带着狗散步</li>
-        <li>锻炼</li>
-        <li>写代码</li>
-        <li>播放音乐</li>
-        <li>放松</li>
+      <li>买牛奶</li>
+      <li>带着狗散步</li>
+      <li>锻炼</li>
+      <li>写代码</li>
+      <li>播放音乐</li>
+      <li>放松</li>
     </ul>
 
     <script>
-        const list = document.querySelector('ul');
-        list.addEventListener('click', function (e) {
-            if (e.target.tagName === 'LI') {
-                // classList：是 DOM 元素的一个属性，表示该元素的所有 class（类名）集合。
-                // toggle('done')：如果该元素已经有 done 这个类，则移除它；如果没有，则添加它。
-                e.target.classList.toggle('done');
-            }
-        }, false);
+      const list = document.querySelector('ul')
+      list.addEventListener(
+        'click',
+        function (e) {
+          if (e.target.tagName === 'LI') {
+            // classList：是 DOM 元素的一个属性，表示该元素的所有 class（类名）集合。
+            // toggle('done')：如果该元素已经有 done 这个类，则移除它；如果没有，则添加它。
+            e.target.classList.toggle('done')
+          }
+        },
+        false
+      )
     </script>
-</body>
-
+  </body>
 </html>

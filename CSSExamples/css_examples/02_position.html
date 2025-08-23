@@ -1,59 +1,57 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+  <!-- https://blog.csdn.net/csgojingyu/article/details/133957640 -->
 
-<!-- https://blog.csdn.net/csgojingyu/article/details/133957640 -->
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>定位</title>
     <style>
-        body {
-            margin: 0;
-        }
+      body {
+        margin: 0;
+      }
 
-        .rectangle {
-            width: 100px;
-            height: 100px;
-            display: inline-block;
-        }
+      .rectangle {
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+      }
 
-        .rectangle.left {
-            background-color: blue;
-        }
+      .rectangle.left {
+        background-color: blue;
+      }
 
-        .rectangle.right {
-            background-color: red;
-        }
+      .rectangle.right {
+        background-color: red;
+      }
 
-        .rectangle.middle {
-            background-color: yellow;
-            /* position: static; 默认值。元素在正常文档流中，top\bottom\left\right\z-index对其无效 */
-            /* position: relative; 相对定位。相对于元素本身的位置进行偏移，仍占据原文档流空间 */
-            /* position: absolute; 绝对定位。相对于最近的非static定位祖先元素，脱离文档流 */
-            /* position: fixed; 固定定位。相对于浏览器视口进行定位，脱离文档流 */
-            /* position: sticky; 粘性定位。结合了相对定位和固定定位，元素在跨越特定阈值前表现为相对定位，之后表现为固定定位。 */
-            position: sticky;
+      .rectangle.middle {
+        background-color: yellow;
+        /* position: static; 默认值。元素在正常文档流中，top\bottom\left\right\z-index对其无效 */
+        /* position: relative; 相对定位。相对于元素本身的位置进行偏移，仍占据原文档流空间 */
+        /* position: absolute; 绝对定位。相对于最近的非static定位祖先元素，脱离文档流 */
+        /* position: fixed; 固定定位。相对于浏览器视口进行定位，脱离文档流 */
+        /* position: sticky; 粘性定位。结合了相对定位和固定定位，元素在跨越特定阈值前表现为相对定位，之后表现为固定定位。 */
+        position: sticky;
 
-            left: 80px;
-            top: 100px;
-        }
+        left: 80px;
+        top: 100px;
+      }
 
-        .huge {
-            width: 600px;
-            height: 2000px;
-            background-color: green;
-        }
+      .huge {
+        width: 600px;
+        height: 2000px;
+        background-color: green;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="huge"></div>
     <div class="rectangle left"></div>
     <div class="rectangle middle"></div>
     <div class="rectangle right"></div>
     <div class="huge"></div>
-</body>
-
+  </body>
 </html>
