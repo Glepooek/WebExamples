@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Router Alias Detailed Example</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+  <style>
+    .example-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    
+    nav {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+    }
+    
+    nav a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #007bff;
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
+    
+    nav a.router-link-active {
+      background-color: #007bff;
+      color: white;
+    }
+    
+    .component-container {
+      border: 2px solid #007bff;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #e9f4ff;
+      margin: 20px 0;
+    }
+    
+    .explanation {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 20px 0;
+    }
+    
+    .code-block {
+      background-color: #f8f9fa;
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      margin: 15px 0;
+    }
+    
+    h3 {
+      color: #007bff;
+      border-bottom: 1px solid #dee2e6;
+      padding-bottom: 5px;
+    }
+    
+    .nested-router-view {
+      border: 2px dashed #28a745;
+      padding: 15px;
+      margin: 10px 0;
+      background-color: #d4edda;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    table, th, td {
+      border: 1px solid #dee2e6;
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #f8f9fa;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="example-container">
+      <h1>Vue Router 别名(Alias)详细示例</h1>
+      
+      <div class="explanation">
+        <p><strong>别名 vs 重定向的区别：</strong></p>
+        <ul>
+          <li><strong>重定向</strong>：当用户访问 /home 时，URL 会被 / 替换，然后匹配成 /</li>
+          <li><strong>别名</strong>：将 / 别名为 /home，意味着当用户访问 /home 时，URL 仍然是 /home，但会被匹配为用户正在访问 /</li>
+        </ul>
+      </div>
+      
+      <nav>
+        <router-link to="/">首页</router-link>
+        <router-link to="/home">首页别名(/home)</router-link>
+        <router-link to="/users">用户列表</router-link>
+        <router-link to="/users/list">用户列表别名(/users/list)</router-link>
+        <router-link to="/people">用户列表别名(/people)</router-link>
+        <router-link to="/users/123">用户详情(/users/123)</router-link>
+        <router-link to="/123">用户详情别名(/123)</router-link>
+        <router-link to="/users/123/profile">用户资料(/users/123/profile)</router-link>
+      </nav>
+      
+      <router-view></router-view>
+      
+      <div class="explanation">
+        <h2>别名详细说明</h2>
+        
+        <h3>1. 基本别名</h3>
+        <div class="code-block">
+          { path: '/', component: Homepage, alias: '/home' }
+        </div>
+        <p>这个配置表示访问 / 和 /home 都会渲染 Homepage 组件，但URL会保持原样。</p>
+        
+        <h3>2. 多个别名</h3>
+        <div class="code-block">
+          { 
+            path: '', 
+            component: UserList, 
+            alias: ['/people', 'list'] 
+          }
+        </div>
+        <p>一个路由可以有多个别名，访问 /users、/users/list 和 /people 都会渲染 UserList 组件。</p>
+        
+        <h3>3. 嵌套路由中的别名</h3>
+        <div class="code-block">
+          {
+            path: '/users/:id',
+            component: UsersByIdLayout,
+            children: [
+              { 
+                path: 'profile', 
+                component: UserDetails, 
+                alias: ['/:id', ''] 
+              }
+            ]
+          }
+        </div>
+        <p>在嵌套路由中，别名可以是绝对路径（以 / 开头）或相对路径。</p>
+        
+        <h3>别名与重定向的关键区别</h3>
+        <table>
+          <tr>
+            <th>特性</th>
+            <th>别名 (Alias)</th>
+            <th>重定向 (Redirect)</th>
+          </tr>
+          <tr>
+            <td>URL变化</td>
+            <td>保持用户输入的URL</td>
+            <td>URL被替换为目标路径</td>
+          </tr>
+          <tr>
+            <td>浏览器历史</td>
+            <td>只记录一个历史条目</td>
+            <td>可能记录两个历史条目（取决于实现）</td>
+          </tr>
+          <tr>
+            <td>用户体验</td>
+            <td>用户看到的是输入的URL</td>
+            <td>用户看到的是目标URL</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    const { createRouter, createWebHashHistory } = VueRouter;
+    
+    // 组件定义
+    const Homepage = {
+      template: `
+        <div class="component-container">
+          <h2>首页组件 (Homepage)</h2>
+          <p>当前路由路径: {{ $route.path }}</p>
+          <p>这是首页组件，可以通过 / 或 /home 访问</p>
+        </div>
+      `
+    };
+    
+    const UsersLayout = {
+      template: `
+        <div class="component-container">
+          <h2>用户布局组件 (UsersLayout)</h2>
+          <p>当前路由路径: {{ $route.path }}</p>
+          <p>这是用户功能的布局容器</p>
+          <div class="nested-router-view">
+            <router-view></router-view>
+          </div>
+        </div>
+      `
+    };
+    
+    const UserList = {
+      template: `
+        <div>
+          <h3>用户列表组件 (UserList)</h3>
+          <p>当前路由路径: {{ $route.path }}</p>
+          <p>可以通过以下URL访问此组件:</p>
+          <ul>
+            <li>/users (原始路径)</li>
+            <li>/users/list (相对别名)</li>
+            <li>/people (绝对别名)</li>
+          </ul>
+        </div>
+      `
+    };
+    
+    const UsersByIdLayout = {
+      template: `
+        <div class="component-container">
+          <h2>用户详情布局组件 (UsersByIdLayout)</h2>
+          <p>当前路由路径: {{ $route.path }}</p>
+          <p>用户ID: {{ $route.params.id }}</p>
+          <div class="nested-router-view">
+            <router-view></router-view>
+          </div>
+        </div>
+      `
+    };
+    
+    const UserDetails = {
+      template: `
+        <div>
+          <h3>用户详情组件 (UserDetails)</h3>
+          <p>当前路由路径: {{ $route.path }}</p>
+          <p>用户ID: {{ $route.params.id }}</p>
+          <p>可以通过以下URL访问此组件:</p>
+          <ul>
+            <li>/users/:id/profile (原始路径)</li>
+            <li>/:id (绝对别名)</li>
+            <li>/users/:id (空路径别名)</li>
+          </ul>
+        </div>
+      `
+    };
+
+    // 路由配置
+    const routes = [
+      { 
+        path: '/', 
+        component: Homepage,
+        alias: '/home'  // 别名配置
+      },
+      {
+        path: '/users',
+        component: UsersLayout,
+        children: [
+          // 为这 3 个 URL 呈现 UserList
+          // - /users
+          // - /users/list
+          // - /people
+          { 
+            path: '', 
+            component: UserList, 
+            alias: ['/people', 'list'] 
+          }
+        ]
+      },
+      {
+        path: '/users/:id',
+        component: UsersByIdLayout,
+        children: [
+          // 为这 3 个 URL 呈现 UserDetails
+          // - /users/24
+          // - /users/24/profile
+          // - /24
+          { 
+            path: 'profile', 
+            component: UserDetails, 
+            alias: ['/:id', ''] 
+          }
+        ]
+      }
+    ];
+
+    const router = createRouter({
+      history: createWebHashHistory(),
+      routes
+    });
+
+    const app = createApp({});
+    app.use(router);
+    app.mount('#app');
+  </script>
+</body>
+</html>

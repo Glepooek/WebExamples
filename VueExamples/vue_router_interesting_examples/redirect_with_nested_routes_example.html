@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirect with Nested Routes Example</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+  <style>
+    .router-link-active {
+      font-weight: bold;
+      color: #3498db;
+    }
+    
+    .example-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    
+    nav {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f5f5f5;
+    }
+    
+    nav a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #333;
+    }
+    
+    .nested-router-view {
+      border: 2px dashed #3498db;
+      padding: 15px;
+      margin: 10px 0;
+      background-color: #e8f4fc;
+    }
+    
+    .explanation {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 20px 0;
+    }
+    
+    pre {
+      background-color: #f8f9fa;
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="example-container">
+      <h1>Redirect with Nested Routes Example</h1>
+      
+      <div class="explanation">
+        <p><strong>说明:</strong> 这个示例展示了在嵌套路由中使用 redirect 时为什么需要 component 属性。</p>
+        <p>当我们有一个带有 children 和 redirect 属性的路由记录时，它也应该有 component 属性，因为父路由需要渲染以显示嵌套路由的内容。</p>
+      </div>
+      
+      <nav>
+        <router-link to="/user">User (重定向到 /user/profile)</router-link>
+        <router-link to="/user/profile">Profile</router-link>
+        <router-link to="/user/posts">Posts</router-link>
+        <router-link to="/about">About (普通重定向)</router-link>
+      </nav>
+      
+      <router-view></router-view>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    const { createRouter, createWebHashHistory } = VueRouter;
+    
+    // 父组件 - 用户组件容器
+    const User = {
+      template: `
+        <div>
+          <h2>User Section</h2>
+          <p>这是用户区域，包含嵌套的子路由</p>
+          <div class="nested-router-view">
+            <router-view></router-view>
+          </div>
+        </div>
+      `
+    };
+    
+    // 子组件
+    const UserProfile = {
+      template: `
+        <div>
+          <h3>User Profile</h3>
+          <p>用户个人资料页面</p>
+        </div>
+      `
+    };
+    
+    const UserPosts = {
+      template: `
+        <div>
+          <h3>User Posts</h3>
+          <p>用户发布的文章列表</p>
+        </div>
+      `
+    };
+    
+    const About = {
+      template: `
+        <div>
+          <h2>About Page</h2>
+          <p>关于页面内容</p>
+        </div>
+      `
+    };
+    
+    const Home = {
+      template: `
+        <div>
+          <h2>Home Page</h2>
+          <p>主页内容</p>
+        </div>
+      `
+    };
+
+    // 路由配置
+    const routes = [
+      { 
+        path: '/', 
+        component: Home 
+      },
+      {
+        path: '/about',
+        redirect: '/about-info',  // 普通重定向，不需要 component
+      },
+      {
+        path: '/about-info',
+        component: About
+      },
+      {
+        // 这是一个带有 children 和 redirect 的嵌套路由
+        // 根据说明，它需要 component 属性来渲染嵌套路由内容
+        path: '/user',
+        component: User,  // 必须有 component，因为需要渲染以显示嵌套路由
+        redirect: '/user/profile',
+        children: [
+          {
+            path: 'profile',
+            component: UserProfile
+          },
+          {
+            path: 'posts',
+            component: UserPosts
+          }
+        ]
+      }
+    ];
+
+    const router = createRouter({
+      history: createWebHashHistory(),
+      routes
+    });
+
+    const app = createApp({});
+    app.use(router);
+    app.mount('#app');
+    
+    // 添加一些说明文本
+    const explanationDiv = document.createElement('div');
+    explanationDiv.innerHTML = `
+      <div class="explanation">
+        <h3>路由配置说明</h3>
+        <pre>
+// 带有 children 和 redirect 的嵌套路由
+{
+  path: '/user',
+  component: User,  // 必须有 component 属性
+  redirect: '/user/profile',
+  children: [
+    {
+      path: 'profile',
+      component: UserProfile
+    },
+    {
+      path: 'posts',
+      component: UserPosts
+    }
+  ]
+}
+
+// 普通重定向路由（不需要 component）
+{
+  path: '/about',
+  redirect: '/about-info'
+}
+        </pre>
+        <p><strong>关键点:</strong> 当一个路由记录有 children 和 redirect 属性时，它也应该有 component 属性。这是因为父路由需要被渲染以显示嵌套路由的内容，而不仅仅是重定向。</p>
+      </div>
+    `;
+    document.querySelector('.example-container').appendChild(explanationDiv);
+  </script>
+</body>
+</html>

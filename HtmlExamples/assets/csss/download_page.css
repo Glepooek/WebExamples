@@ -78,7 +78,7 @@ body {
 
 .downContent .title img {
   width: 18px;
-  object-fit: cover;
+  object-fit: contain;
   margin-right: 6px;
 }
 

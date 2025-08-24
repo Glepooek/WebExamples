@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Router Empty Alias Explanation</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+  <style>
+    .example-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    
+    nav {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+    }
+    
+    nav a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #007bff;
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
+    
+    nav a.router-link-active {
+      background-color: #007bff;
+      color: white;
+    }
+    
+    .component-container {
+      border: 2px solid #007bff;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #e9f4ff;
+      margin: 20px 0;
+    }
+    
+    .explanation {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 20px 0;
+    }
+    
+    .code-block {
+      background-color: #f8f9fa;
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      margin: 15px 0;
+    }
+    
+    .important-note {
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 15px 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    table, th, td {
+      border: 1px solid #dee2e6;
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #f8f9fa;
+    }
+    
+    .nested-router-view {
+      border: 2px dashed #28a745;
+      padding: 15px;
+      margin: 10px 0;
+      background-color: #d4edda;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="example-container">
+      <h1>Vue Router 空字符串别名详解</h1>
+      
+      <nav>
+        <router-link to="/users/123/profile">原始路径: /users/123/profile</router-link>
+        <router-link to="/users/123">别名路径: /users/123</router-link>
+        <router-link to="/123">别名路径: /123</router-link>
+      </nav>
+      
+      <router-view></router-view>
+      
+      <div class="explanation">
+        <h2>空字符串别名 '' 的工作原理</h2>
+        <p>在嵌套路由中，当我们将别名设置为空字符串 '' 时，它表示的是<strong>父路由路径本身</strong>。</p>
+        
+        <div class="code-block">
+          {
+            path: '/users/:id',           // 父路由路径
+            component: UsersByIdLayout,
+            children: [
+              { 
+                path: 'profile',          // 子路由路径
+                component: UserDetails, 
+                alias: ['', '/:id']       // 别名: 空字符串和绝对路径
+              }
+            ]
+          }
+        </div>
+        
+        <p>在这个配置中：</p>
+        <ul>
+          <li><code>/users/123/profile</code> 是完整的路径（父路由 + 子路由）</li>
+          <li><code>/users/123</code> 是父路由路径，同时也是子路由的空字符串别名</li>
+          <li><code>/123</code> 是子路由的绝对路径别名</li>
+        </ul>
+      </div>
+      
+      <div class="important-note">
+        <h3>关键要点</h3>
+        <p>空字符串别名 '' 并不意味着根路径 '/'，而是指<strong>父路由的路径</strong>。</p>
+        <p>在我们的例子中，父路由是 <code>/users/:id</code>，所以当访问 <code>/users/123</code> 时，会匹配到子路由的空字符串别名。</p>
+      </div>
+      
+      <div class="explanation">
+        <h2>路径匹配对照表</h2>
+        <table>
+          <tr>
+            <th>访问路径</th>
+            <th>匹配的路由</th>
+            <th>说明</th>
+          </tr>
+          <tr>
+            <td>/users/123/profile</td>
+            <td>原始路径</td>
+            <td>完整路径，直接匹配</td>
+          </tr>
+          <tr>
+            <td>/users/123</td>
+            <td>空字符串别名 ''</td>
+            <td>匹配父路由路径，渲染相同的 UserDetails 组件</td>
+          </tr>
+          <tr>
+            <td>/123</td>
+            <td>绝对路径别名 '/:id'</td>
+            <td>通过绝对路径别名匹配，渲染相同的 UserDetails 组件</td>
+          </tr>
+        </table>
+      </div>
+      
+      <div class="explanation">
+        <h2>为什么不需要加 /users？</h2>
+        <p>因为 Vue Router 的嵌套路由机制：</p>
+        <ol>
+          <li>当访问 <code>/users/123</code> 时，首先匹配父路由 <code>/users/:id</code></li>
+          <li>然后在父路由的子路由中寻找匹配项</li>
+          <li>空字符串别名 '' 表示"父路由路径本身"应该匹配这个子路由</li>
+          <li>因此 <code>/users/123</code> 会匹配到这个子路由，而不需要在别名中重复指定父路径</li>
+        </ol>
+        
+        <p>这是嵌套路由的一个重要特性：子路由的路径是相对于父路由的，别名也是如此。</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    const { createRouter, createWebHashHistory } = VueRouter;
+    
+    // 组件定义
+    const UsersByIdLayout = {
+      template: `
+        <div class="component-container">
+          <h2>用户详情布局组件 (UsersByIdLayout)</h2>
+          <p>当前路由路径: {{ $route.path }}</p>
+          <p>用户ID: {{ $route.params.id }}</p>
+          <div class="nested-router-view">
+            <router-view></router-view>
+          </div>
+        </div>
+      `
+    };
+    
+    const UserDetails = {
+      template: `
+        <div>
+          <h3>用户详情组件 (UserDetails)</h3>
+          <p>当前路由路径: {{ $route.path }}</p>
+          <p>用户ID: {{ $route.params.id }}</p>
+          <div class="explanation">
+            <h4>此组件可以通过以下路径访问：</h4>
+            <ul>
+              <li><strong>/users/:id/profile</strong> - 原始路径</li>
+              <li><strong>/users/:id</strong> - 通过空字符串别名 ''</li>
+              <li><strong>/:id</strong> - 通过绝对路径别名 '/:id'</li>
+            </ul>
+          </div>
+        </div>
+      `
+    };
+
+    // 路由配置
+    const routes = [
+      {
+        path: '/users/:id',
+        component: UsersByIdLayout,
+        children: [
+          // 详细解释空字符串别名的工作原理
+          { 
+            path: 'profile', 
+            component: UserDetails, 
+            alias: ['', '/:id']  // 空字符串别名和绝对路径别名
+          }
+        ]
+      }
+    ];
+
+    const router = createRouter({
+      history: createWebHashHistory(),
+      routes
+    });
+
+    const app = createApp({});
+    app.use(router);
+    app.mount('#app');
+  </script>
+</body>
+</html>
