@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Router Active Links Example</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+  <style>
+    .example-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    
+    nav {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+    }
+    
+    nav a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #007bff;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    
+    /* router-link-active 类的样式 */
+    nav a.router-link-active {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+    }
+    
+    /* router-link-exact-active 类的样式 */
+    nav a.router-link-exact-active {
+      background-color: #28a745;
+      border: 2px solid #155724;
+    }
+    
+    .component-container {
+      border: 2px solid #007bff;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #e9f4ff;
+      margin: 20px 0;
+    }
+    
+    .explanation {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 20px 0;
+    }
+    
+    .code-block {
+      background-color: #f8f9fa;
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      margin: 15px 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    table, th, td {
+      border: 1px solid #dee2e6;
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #f8f9fa;
+    }
+    
+    .legend {
+      display: flex;
+      margin: 20px 0;
+    }
+    
+    .legend-item {
+      margin-right: 20px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      color: white;
+    }
+    
+    .active-match {
+      background-color: #007bff;
+    }
+    
+    .exact-match {
+      background-color: #28a745;
+      border: 2px solid #155724;
+    }
+    
+    .both-match {
+      background-color: #007bff;
+      border: 2px solid #155724;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="example-container">
+      <h1>Vue Router Active Links 示例</h1>
+      
+      <div class="legend">
+        <div class="legend-item active-match">router-link-active (匹配)</div>
+        <div class="legend-item exact-match">router-link-exact-active (精确匹配)</div>
+        <div class="legend-item both-match">同时具有两个类</div>
+      </div>
+      
+      <nav>
+        <router-link to="/">首页</router-link>
+        <router-link to="/user/erina">用户: erina</router-link>
+        <router-link to="/user/erina/role/admin">角色: admin</router-link>
+        <router-link to="/user/tom">用户: tom</router-link>
+        <router-link to="/user/tom/role/editor">角色: editor</router-link>
+        <router-link to="/about">关于</router-link>
+      </nav>
+      
+      <div class="explanation">
+        <h2>router-link-active 和 router-link-exact-active 的区别</h2>
+        
+        <h3>router-link-active (匹配)</h3>
+        <p>当 RouterLink 满足以下条件时会被添加这个类：</p>
+        <ul>
+          <li>它与当前路径匹配相同的路由记录（即配置的路由）</li>
+          <li>它的 params 与当前路径的 params 相同</li>
+          <li>如果使用了嵌套路由，任何指向祖先路由的链接也会被认为是匹配当前路由的，只要相关的 params 匹配</li>
+        </ul>
+        
+        <h3>router-link-exact-active (精确匹配)</h3>
+        <p>精确匹配不包括祖先路由。只有当链接完全匹配当前路由时才会添加这个类：</p>
+        <ul>
+          <li>路径必须完全匹配</li>
+          <li>不包括指向祖先路由的链接</li>
+        </ul>
+      </div>
+      
+      <div class="explanation">
+        <h2>示例说明</h2>
+        
+        <table>
+          <tr>
+            <th>当前路径</th>
+            <th>首页链接类</th>
+            <th>用户链接类</th>
+            <th>角色链接类</th>
+          </tr>
+          <tr>
+            <td><code>/</code></td>
+            <td><code>router-link-exact-active router-link-active</code></td>
+            <td><code></code></td>
+            <td><code></code></td>
+          </tr>
+          <tr>
+            <td><code>/user/erina</code></td>
+            <td><code></code></td>
+            <td><code>router-link-exact-active router-link-active</code></td>
+            <td><code></code></td>
+          </tr>
+          <tr>
+            <td><code>/user/erina/role/admin</code></td>
+            <td><code></code></td>
+            <td><code>router-link-active</code></td>
+            <td><code>router-link-exact-active router-link-active</code></td>
+          </tr>
+        </table>
+        
+        <p><strong>关键区别：</strong>当访问 <code>/user/erina/role/admin</code> 时：</p>
+        <ul>
+          <li><code>/user/erina</code> 链接只具有 <code>router-link-active</code> 类，因为它匹配祖先路由</li>
+          <li><code>/user/erina/role/admin</code> 链接同时具有 <code>router-link-active</code> 和 <code>router-link-exact-active</code> 类，因为它精确匹配当前路由</li>
+        </ul>
+      </div>
+      
+      <router-view></router-view>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    const { createRouter, createWebHashHistory } = VueRouter;
+    
+    // 首页组件
+    const Home = {
+      template: `
+        <div class="component-container">
+          <h2>首页</h2>
+          <p>当前路径: {{ $route.path }}</p>
+        </div>
+      `
+    };
+    
+    // 用户组件
+    const User = {
+      template: `
+        <div class="component-container">
+          <h2>用户: {{ $route.params.username }}</h2>
+          <p>当前路径: {{ $route.path }}</p>
+          <div style="border: 1px dashed #999; padding: 10px; margin-top: 10px;">
+            <h3>嵌套路由区域:</h3>
+            <router-view></router-view>
+          </div>
+        </div>
+      `
+    };
+    
+    // 角色组件
+    const Role = {
+      template: `
+        <div>
+          <h3>角色: {{ $route.params.roleId }}</h3>
+          <p>当前路径: {{ $route.path }}</p>
+        </div>
+      `
+    };
+    
+    // 关于组件
+    const About = {
+      template: `
+        <div class="component-container">
+          <h2>关于我们</h2>
+          <p>当前路径: {{ $route.path }}</p>
+        </div>
+      `
+    };
+
+    // 路由配置
+    const routes = [
+      {
+        path: '/',
+        component: Home
+      },
+      {
+        path: '/about',
+        component: About
+      },
+      {
+        path: '/user/:username',
+        component: User,
+        children: [
+          {
+            path: 'role/:roleId',
+            component: Role,
+          }
+        ]
+      }
+    ];
+
+    const router = createRouter({
+      history: createWebHashHistory(),
+      routes
+    });
+
+    const app = createApp({});
+    app.use(router);
+    app.mount('#app');
+  </script>
+</body>
+</html>
