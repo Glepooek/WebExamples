@@ -1,119 +1,117 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>样式绑定</title>
+    <!--导入映射表-->
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+          "es-toolkit": "https://esm.sh/es-toolkit@%5E1",
+          "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
+        }
+      }
+    </script>
+  </head>
 
-<head>
-	<meta charset="utf-8">
-	<title>样式绑定</title>
-	<!--导入映射表-->
-	<script type="importmap">
-	{
-		 "imports": {
-			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
-			"es-toolkit": "https://esm.sh/es-toolkit@%5E1",
-			"axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
-		}
-	}
-	</script>
-</head>
+  <body>
+    <div id="app">
+      <p :style="{color:activeColor, fontSize:fontSize}">{{message}}</p>
+    </div>
 
-<body>
-	<div id="app">
-		<p :style="{color:activeColor, fontSize:fontSize}">{{message}}</p>
-	</div>
+    <div id="app2">
+      <p :style="styleObj">{{message}}</p>
+    </div>
 
-	<div id="app2">
-		<p :style="styleObj">{{message}}</p>
-	</div>
+    <div id="app3">
+      <p :style="styleObj">{{ message }}</p>
+    </div>
 
-	<div id="app3">
-		<p :style="styleObj"> {{ message }}</p>
-	</div>
+    <div id="app4">
+      <p :style="styleObj()">{{ message }}</p>
+    </div>
 
-	<div id="app4">
-		<p :style="styleObj()"> {{ message }}</p>
-	</div>
+    <div id="app5">
+      <p :style="[fontStyle, colorStyle]">{{message}}</p>
+    </div>
 
-	<div id="app5">
-		<p :style="[fontStyle, colorStyle]">{{message}}</p>
-	</div>
+    <script type="module">
+      import { createApp } from 'vue'
 
-	<script type="module">
-		import { createApp } from 'vue'
+      createApp({
+        el: '#app',
+        data() {
+          return {
+            message: '绑定到对象，内联字面量',
+            activeColor: 'red',
+            fontSize: '18px',
+          }
+        },
+      }).mount('#app')
 
-		createApp({
-			el: '#app',
-			data() {
-				return {
-					message: '绑定到对象，内联字面量',
-					activeColor: 'red',
-					fontSize: '18px'
-				}
-			}
-		}).mount("#app")
+      var vm2 = createApp({
+        el: '#app2',
+        data() {
+          return {
+            message: '绑定到对象上',
+            styleObj: {
+              color: 'blue',
+              fontSize: '25px',
+            },
+          }
+        },
+      }).mount('#app2')
 
-		var vm2 = createApp({
-			el: '#app2',
-			data() {
-				return {
-					message: '绑定到对象上',
-					styleObj: {
-						color: 'blue',
-						fontSize: '25px'
-					}
-				}
-			}
-		}).mount("#app2")
+      var app3 = createApp({
+        el: '#app3',
+        data() {
+          return {
+            message: '绑定到计算属性上',
+          }
+        },
+        computed: {
+          styleObj() {
+            return {
+              color: 'green',
+              fontSize: '23px',
+            }
+          },
+        },
+      }).mount('#app3')
 
-		var app3 = createApp({
-			el: "#app3",
-			data() {
-				return {
-					message: "绑定到计算属性上"
-				}
-			},
-			computed: {
-				styleObj() {
-					return {
-						color: 'green',
-						fontSize: '23px'
-					}
-				}
-			}
-		}).mount("#app3")
+      var app4 = createApp({
+        el: '#app4',
+        data() {
+          return {
+            message: '绑定到方法上',
+          }
+        },
+        methods: {
+          styleObj: function () {
+            return {
+              color: 'green',
+              fontSize: '23px',
+            }
+          },
+        },
+      }).mount('#app4')
 
-		var app4 = createApp({
-			el: "#app4",
-			data() {
-				return {
-					message: "绑定到方法上"
-				}
-			},
-			methods: {
-				styleObj: function () {
-					return {
-						color: 'green',
-						fontSize: '23px'
-					}
-				}
-			}
-		}).mount("#app4")
-
-		var vm5 = createApp({
-			el: '#app5',
-			data() {
-				return {
-					message: '绑定到数组上',
-					fontStyle: {
-						'font-weight': 600,
-						fontSize: '30px'
-					},
-					colorStyle: {
-						color: 'yellow'
-					}
-				}
-			}
-		}).mount("#app5")
-	</script>
-</body>
-
+      var vm5 = createApp({
+        el: '#app5',
+        data() {
+          return {
+            message: '绑定到数组上',
+            fontStyle: {
+              'font-weight': 600,
+              fontSize: '30px',
+            },
+            colorStyle: {
+              color: 'yellow',
+            },
+          }
+        },
+      }).mount('#app5')
+    </script>
+  </body>
 </html>

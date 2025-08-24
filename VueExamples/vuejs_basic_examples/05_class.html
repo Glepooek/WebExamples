@@ -1,108 +1,102 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>类绑定</title>
+    <!--导入映射表-->
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+          "es-toolkit": "https://esm.sh/es-toolkit@%5E1",
+          "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
+        }
+      }
+    </script>
 
-<head>
-	<meta charset="utf-8">
-	<title>类绑定</title>
-	<!--导入映射表-->
-	<script type="importmap">
-	{
-		 "imports": {
-			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
-			"es-toolkit": "https://esm.sh/es-toolkit@%5E1",
-			"axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
-		}
-	}
-	</script>
+    <style type="text/css">
+      h1.intro {
+        color: rgb(0, 255, 55);
+      }
 
-	<style type="text/css">
-		h1.intro {
-			color: rgb(0, 255, 55);
-		}
+      p.static {
+        color: green;
+      }
 
-		p.static {
-			color: green;
-		}
+      p.active {
+        font-weight: 600;
+      }
 
-		p.active {
-			font-weight: 600;
-		}
+      p.text-danger {
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
 
-		p.text-danger {
-			text-decoration: line-through;
-		}
-	</style>
-</head>
+  <body>
+    <div id="app">
+      <h1 class="intro">Header 1</h1>
+      <p>A paragraph.</p>
 
-<body>
-	<div id="app">
-		<h1 class="intro">Header 1</h1>
-		<p>A paragraph.</p>
+      <!--绑定到对象，内联字面量-->
+      <p class="static" v-bind:class="{active:isActive, 'text-danger':hasError}">
+        <span>内联字面量</span> Note that this is an important paragraph.
+      </p>
 
-		<!--绑定到对象，内联字面量-->
-		<p class="static" v-bind:class="{active:isActive, 'text-danger':hasError}">
-			<span>内联字面量</span> Note that this is an important paragraph.
-		</p>
-
-		<!--绑定到对象-->
-		<!-- <p class="static" v-bind:class="classObj">
+      <!--绑定到对象-->
+      <!-- <p class="static" v-bind:class="classObj">
 			<span>绑定到对象</span> Note that this is an important paragraph.
 		</p> -->
 
-		<!--绑定到计算属性-->
-		<p class="static" v-bind:class="computedClassObj">
-			<span>绑定到计算属性</span> Note that this is an important paragraph.
-		</p>
+      <!--绑定到计算属性-->
+      <p class="static" v-bind:class="computedClassObj">
+        <span>绑定到计算属性</span> Note that this is an important paragraph.
+      </p>
 
-		<!--绑定到属性：三目运算-->
-		<p class="static" v-bind:class="isActive ? 'active' :'text-danger' ">
-			<span>绑定到属性：三目运算</span> Note that this is an important paragraph.
-		</p>
-	</div>
-	<div id="app2">
-		<span>绑定到数组</span>
-		<p class="static" v-bind:class="['active','text-danger']">
-			Note that this is an important paragraph.
-		</p>
-		<p class="static" v-bind:class="[isActive, hasError]">
-			Note that this is an important paragraph.
-		</p>
-	</div>
+      <!--绑定到属性：三目运算-->
+      <p class="static" v-bind:class="isActive ? 'active' :'text-danger' ">
+        <span>绑定到属性：三目运算</span> Note that this is an important paragraph.
+      </p>
+    </div>
+    <div id="app2">
+      <span>绑定到数组</span>
+      <p class="static" v-bind:class="['active','text-danger']">Note that this is an important paragraph.</p>
+      <p class="static" v-bind:class="[isActive, hasError]">Note that this is an important paragraph.</p>
+    </div>
 
-	<script type="module">
-		import { createApp } from 'vue'
+    <script type="module">
+      import { createApp } from 'vue'
 
-		createApp({
-			el: '#app',
-			data() {
-				return {
-					isActive: true,
-					hasError: true,
-					error: {
-						type: "fatal"
-					}
-				}
-			},
-			computed: {
-				computedClassObj: function () {
-					return {
-						active: this.isActive && !this.error,
-						'text-danger': this.error && this.error.type === 'fatal'
-					}
-				}
-			}
-		}).mount("#app")
+      createApp({
+        el: '#app',
+        data() {
+          return {
+            isActive: true,
+            hasError: true,
+            error: {
+              type: 'fatal',
+            },
+          }
+        },
+        computed: {
+          computedClassObj: function () {
+            return {
+              active: this.isActive && !this.error,
+              'text-danger': this.error && this.error.type === 'fatal',
+            }
+          },
+        },
+      }).mount('#app')
 
-		createApp({
-			el: '#app2',
-			data() {
-				return {
-					isActive: 'active',
-					hasError: 'text-danger'
-				}
-			}
-		}).mount("#app2")
-	</script>
-</body>
-
+      createApp({
+        el: '#app2',
+        data() {
+          return {
+            isActive: 'active',
+            hasError: 'text-danger',
+          }
+        },
+      }).mount('#app2')
+    </script>
+  </body>
 </html>
