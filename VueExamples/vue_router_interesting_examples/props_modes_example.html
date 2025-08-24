@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Router Props Modes Example</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+  <style>
+    .example-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    
+    nav {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+    }
+    
+    nav a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #007bff;
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
+    
+    nav a.router-link-active {
+      background-color: #007bff;
+      color: white;
+    }
+    
+    .component-container {
+      border: 2px solid #007bff;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #e9f4ff;
+      margin: 20px 0;
+    }
+    
+    .explanation {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 20px 0;
+    }
+    
+    .code-block {
+      background-color: #f8f9fa;
+      padding: 15px;
+      overflow-x: auto;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      margin: 15px 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    table, th, td {
+      border: 1px solid #dee2e6;
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #f8f9fa;
+    }
+    
+    .mode-section {
+      margin: 30px 0;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="example-container">
+      <h1>Vue Router Props 模式详解</h1>
+      
+      <nav>
+        <router-link to="/user/123">动态路由参数</router-link>
+        <router-link to="/promotion">对象模式</router-link>
+        <router-link to="/search?q=vuejs&category=tutorial">函数模式</router-link>
+        <router-link to="/static">静态参数</router-link>
+        <router-link to="/slot-example">RouterView插槽</router-link>
+      </nav>
+      
+      <!-- 使用RouterView插槽传递参数 -->
+      <router-view v-slot="{ Component }">
+        <component
+          :is="Component"
+          global-message="通过RouterView插槽传递的全局消息"
+          current-timestamp="2023-01-01"
+        />
+      </router-view>
+      
+      <div class="explanation">
+        <h2>Vue Router Props 模式对比</h2>
+        
+        <table>
+          <tr>
+            <th>模式</th>
+            <th>配置方式</th>
+            <th>适用场景</th>
+            <th>组件接收方式</th>
+          </tr>
+          <tr>
+            <td>布尔模式</td>
+            <td><code>props: true</code></td>
+            <td>将路由参数作为props传递</td>
+            <td>通过 <code>defineProps</code> 接收路由参数</td>
+          </tr>
+          <tr>
+            <td>对象模式</td>
+            <td><code>props: { key: value }</code></td>
+            <td>传递静态数据</td>
+            <td>通过 <code>defineProps</code> 接收静态数据</td>
+          </tr>
+          <tr>
+            <td>函数模式</td>
+            <td><code>props: route => ({ key: value })</code></td>
+            <td>动态计算props值</td>
+            <td>通过 <code>defineProps</code> 接收计算后的数据</td>
+          </tr>
+          <tr>
+            <td>RouterView插槽</td>
+            <td><code>&lt;component :is="Component" prop="value" /&gt;</code></td>
+            <td>向所有路由组件传递通用参数</td>
+            <td>通过 <code>defineProps</code> 接收插槽传递的参数</td>
+          </tr>
+        </table>
+      </div>
+      
+      <div class="mode-section">
+        <h2>1. 对象模式 (Object Mode)</h2>
+        <p>当 <code>props</code> 是一个对象时，它将原样设置为组件 props。当 props 是静态的时候很有用。</p>
+        
+        <div class="code-block">
+          // 路由配置<br>
+          const routes = [<br>
+          &nbsp;&nbsp;{<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;path: '/promotion',<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;component: Promotion,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;props: { newsletterPopup: false, title: '促销信息' }<br>
+          &nbsp;&nbsp;}<br>
+          ]<br><br>
+          
+          // Promotion.vue 组件<br>
+          &lt;script setup&gt;<br>
+          const props = defineProps({<br>
+          &nbsp;&nbsp;newsletterPopup: {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;type: Boolean,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;required: true<br>
+          &nbsp;&nbsp;},<br>
+          &nbsp;&nbsp;title: {<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;type: String,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;default: '默认标题'<br>
+          &nbsp;&nbsp;}<br>
+          })<br>
+          &lt;/script&gt;
+        </div>
+      </div>
+      
+      <div class="mode-section">
+        <h2>2. 函数模式 (Function Mode)</h2>
+        <p>可以创建一个返回 props 的函数。这允许你将参数转换为其他类型，将静态值与基于路由的值相结合等等。</p>
+        
+        <div class="code-block">
+          // 路由配置<br>
+          const routes = [<br>
+          &nbsp;&nbsp;{<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;path: '/search',<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;component: SearchUser,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;props: route => ({ <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;query: route.query.q,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;category: route.query.category,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;timestamp: Date.now() <br>
+          &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+          &nbsp;&nbsp;}<br>
+          ]<br><br>
+          
+          // SearchUser.vue 组件<br>
+          &lt;script setup&gt;<br>
+          const props = defineProps({<br>
+          &nbsp;&nbsp;query: String,<br>
+          &nbsp;&nbsp;category: String,<br>
+          &nbsp;&nbsp;timestamp: Number<br>
+          })<br>
+          &lt;/script&gt;
+        </div>
+      </div>
+      
+      <div class="mode-section">
+        <h2>3. 通过 RouterView 插槽传递参数</h2>
+        <p>你还可以通过 &lt;RouterView&gt; 插槽传递任意参数给所有路由组件。</p>
+        
+        <div class="code-block">
+          // App.vue 模板<br>
+          &lt;router-view v-slot="{ Component }"&gt;<br>
+          &nbsp;&nbsp;&lt;component<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;:is="Component"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;global-message="通过RouterView插槽传递的全局消息"<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;current-timestamp="2023-01-01"<br>
+          &nbsp;&nbsp;/&gt;<br>
+          &lt;/router-view&gt;<br><br>
+          
+          // 任何路由组件<br>
+          &lt;script setup&gt;<br>
+          const props = defineProps({<br>
+          &nbsp;&nbsp;// 路由特定的props（通过其他模式传递）<br>
+          &nbsp;&nbsp;// ...<br>
+          &nbsp;&nbsp;<br>
+          &nbsp;&nbsp;globalMessage: String,<br>
+          &nbsp;&nbsp;currentTimestamp: String<br>
+          })<br>
+          &lt;/script&gt;
+        </div>
+        
+        <div class="warning">
+          <strong>注意：</strong>通过 &lt;RouterView&gt; 插槽传递参数时，所有视图组件都会接收到这些参数。
+          这意味着所有组件都需要声明这些 props，否则会收到 Vue 的警告。
+          通常这并不是一个好主意，因为这意味着所有的视图组件都声明了相同的 props，但这未必需要。
+          所以请尽可能使用上述的其他选项。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+    const { createRouter, createWebHashHistory } = VueRouter;
+    
+    // User 组件 - 布尔模式示例
+    const User = {
+      template: `
+        <div class="component-container">
+          <h2>用户组件 (布尔模式)</h2>
+          <p>用户ID: {{ id }}</p>
+          <p>全局消息: {{ globalMessage }}</p>
+          <p>时间戳: {{ currentTimestamp }}</p>
+          <p>当前路由路径: {{ $route.path }}</p>
+        </div>
+      `,
+      props: ['id', 'globalMessage', 'currentTimestamp'],
+      setup(props) {
+        // 在这里可以使用 props.id 访问传入的参数
+        console.log('User component props:', props);
+        return {};
+      }
+    };
+    
+    // Promotion 组件 - 对象模式示例
+    const Promotion = {
+      template: `
+        <div class="component-container">
+          <h2>促销组件 (对象模式)</h2>
+          <p>标题: {{ title }}</p>
+          <p>是否显示弹窗: {{ newsletterPopup ? '是' : '否' }}</p>
+          <p>全局消息: {{ globalMessage }}</p>
+          <p>时间戳: {{ currentTimestamp }}</p>
+          <p>当前路由路径: {{ $route.path }}</p>
+        </div>
+      `,
+      props: {
+        newsletterPopup: {
+          type: Boolean,
+          required: true
+        },
+        title: {
+          type: String,
+          default: '默认标题'
+        },
+        globalMessage: String,
+        currentTimestamp: String
+      },
+      setup(props) {
+        console.log('Promotion component props:', props);
+        return {};
+      }
+    };
+    
+    // SearchUser 组件 - 函数模式示例
+    const SearchUser = {
+      template: `
+        <div class="component-container">
+          <h2>搜索组件 (函数模式)</h2>
+          <p>搜索关键词: {{ query || '无' }}</p>
+          <p>分类: {{ category || '无' }}</p>
+          <p>时间戳: {{ timestamp }}</p>
+          <p>全局消息: {{ globalMessage }}</p>
+          <p>当前路由路径: {{ $route.path }}</p>
+          <p>完整查询参数: {{ JSON.stringify($route.query) }}</p>
+        </div>
+      `,
+      props: {
+        query: String,
+        category: String,
+        timestamp: Number,
+        globalMessage: String,
+        currentTimestamp: String
+      },
+      setup(props) {
+        console.log('SearchUser component props:', props);
+        return {};
+      }
+    };
+    
+    // Static 组件 - 混合模式示例
+    const Static = {
+      template: `
+        <div class="component-container">
+          <h2>静态参数组件</h2>
+          <p>静态消息: {{ message }}</p>
+          <p>数字值: {{ numberValue }}</p>
+          <p>布尔值: {{ booleanValue ? '真' : '假' }}</p>
+          <p>全局消息: {{ globalMessage }}</p>
+          <p>时间戳: {{ currentTimestamp }}</p>
+        </div>
+      `,
+      props: {
+        message: String,
+        numberValue: Number,
+        booleanValue: Boolean,
+        globalMessage: String,
+        currentTimestamp: String
+      },
+      setup(props) {
+        console.log('Static component props:', props);
+        return {};
+      }
+    };
+    
+    // SlotExample 组件 - 展示RouterView插槽参数传递
+    const SlotExample = {
+      template: `
+        <div class="component-container">
+          <h2>RouterView插槽示例</h2>
+          <p>这个组件通过 &lt;RouterView&gt; 插槽接收参数</p>
+          <p>全局消息: {{ globalMessage }}</p>
+          <p>时间戳: {{ currentTimestamp }}</p>
+          <p>当前路由路径: {{ $route.path }}</p>
+        </div>
+      `,
+      props: ['globalMessage', 'currentTimestamp'],
+      setup(props) {
+        console.log('SlotExample component props:', props);
+        return {};
+      }
+    };
+
+    // 路由配置
+    const routes = [
+      {
+        path: '/user/:id',
+        component: User,
+        props: true  // 布尔模式
+      },
+      {
+        path: '/promotion',
+        component: Promotion,
+        props: { 
+          newsletterPopup: false, 
+          title: '春季大促' 
+        }  // 对象模式
+      },
+      {
+        path: '/search',
+        component: SearchUser,
+        props: route => ({ 
+          query: route.query.q,
+          category: route.query.category,
+          timestamp: Date.now()
+        })  // 函数模式
+      },
+      {
+        path: '/static',
+        component: Static,
+        props: { 
+          message: '这是一个静态消息',
+          numberValue: 42,
+          booleanValue: true
+        }  // 对象模式 - 静态参数
+      },
+      {
+        path: '/slot-example',
+        component: SlotExample
+      }
+    ];
+
+    const router = createRouter({
+      history: createWebHashHistory(),
+      routes
+    });
+
+    const app = createApp({});
+    app.use(router);
+    app.mount('#app');
+  </script>
+</body>
+</html>
