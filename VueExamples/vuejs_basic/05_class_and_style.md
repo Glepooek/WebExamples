@@ -4,89 +4,107 @@ Vue专门为`class`和`style`的`v-bind`用法提供了特殊的功能增强。�
 
 ## 绑定HTML class
 ### 绑定对象
-* 可以给`:class`传递一个对象来动态切换`class`。class是否生效取决于数据属性的真假值
-* 可以在对象中定义多个字段来操作多个class
-* `:class`指令可以和一般的class属性共存
+* 可以给`:class`传递一个对象来动态切换`class`。
+* 可以在对象中定义多个字段来操作多个class。
+* `:class`指令可以和一般的class属性共存。
 
 #### 内联字面量
+绑定对象写成内联字面量。
+
 ```html
-<p class="static" v-bind:class="{active:isActive, 'text-danger':hasError}">
+<!-- active 是否存在取决于数据属性 isActive 的真假值。-->
+<p class="static" :class="{active:isActive, 'text-danger':hasError}">
     <span>内联字面量</span> Note that this is an important paragraph.
 </p>
 ```
 
-```js
-data(){
-    return {
-        isActive: true,
-        hasError: false
-    }
-}
+```vue
+<script setup>
+  import { ref } from 'vue'
+
+  const isActive = ref(true)
+  const hasError = ref(false)
+</script>
 ```
 
 #### 对象
+绑定对象直接写成对象。
+
 ```html
-<p class="static" v-bind:class="classObj">
+<p class="static" :class="classObj">
     <span>绑定对象</span> Note that this is an important paragraph.
 </p>
 ```
 
-```js
-data(){
-    return {
-        classObj: {
-            active: true,
-            'text-danger': false
-        }
-    }
-}
+```vue
+<script setup>
+  import { reactive } from 'vue'
+  const classObj = reactive({
+    active: true,
+    'text-danger': false
+  })
+</script>
 ```
 
 #### 计算属性
+绑定到返回对象的计算属性。
+
 ```html
-<p class="static" v-bind:class="classObject">
+<p class="static" :class="classObject">
     <span>绑定对象</span> Note that this is an important paragraph.
 </p>
 ```
 
-```js
-data() {
-  return {
-    isActive: true,
-    error: null
-  }
-},
-computed: {
-  classObject() {
-    return {
-      active: this.isActive && !this.error,
-      'text-danger': this.error && this.error.type === 'fatal'
-    }
-  }
-}
+```vue
+<script setup>
+  import { computed, ref } from 'vue'
+
+  const isActive = ref(true)
+  const error = ref(null)
+
+  const classObject = computed(() => {
+    active: this.isActive && !this.error,
+    'text-danger': this.error && this.error.type === 'fatal'
+  })
+</script>
 ```
+
 ### 绑定数组
-```js
-data() {
-  return {
-    activeClass: 'active',
-    errorClass: 'text-danger'
-  }
-}
-```
+可以给`:class`绑定一个数组来渲染多个CSS class：
 
 ```html
 <div :class="[activeClass, errorClass]"></div>
+<!-- 2. 数组语法。有条件的渲染某个class -->
 <div :class="[isActive ? activeClass : '', errorClass]"></div>
+
+<!-- 3. 数组与对象混合 -->
+<div :class="[{ active: isActive }, errorClass]"></div>
+
+<!-- 4. 使用计算属性名。ES6引入了计算属性名语法，允许我们使用方括号[]包裹表达式来动态生成属性名。 -->
+<div :class="[{ [activeClass]: isActive }, errorClass]"></div>
 ```
+
+```vue
+<script setup>
+  import { ref } from 'vue'
+
+  const activeClass = ref('active')
+  const errorClass = ref('text-danger')
+  const isActive = ref(false)
+</script>
+```
+
+### 在组件上使用
+
 
 ## 绑定内联样式
 ### 绑定对象
-`:style`支持绑定JS对象值，对应的是HTML元素的`style`属性。
+`:style`支持绑定JS对象值，对应的是HTML元素的`style`属性。`:style`指令也可以和常规的style属性共存。
 
-* 内联字面量
-* 对象
-* 计算属性
+* 绑定到内联字面量
+* 绑定到对象
+* 绑定到返回样式对象的计算属性
+* 绑定到返回样式对象的方法
 
 
 ### 绑定数组
@@ -97,9 +115,16 @@ data() {
 ```
 
 ### 自动前缀
-在`:style`中使用了需要浏览器特殊前缀的CSS属性时，Vue会自动为他们加上相应的前缀。
+在`:style`中使用了需要`浏览器特殊前缀`的CSS属性时，Vue会自动为他们加上相应的前缀。
+
+* `-webkit-`
+* `-ms-`
+* `-moz-`
+* `-o-`
 
 ### 样式多值
+可以对一个样式属性提供多个 (不同前缀的) 值，如：
+
 ```html
 <div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }"></div>
 ```

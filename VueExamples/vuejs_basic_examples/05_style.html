@@ -40,7 +40,6 @@
       import { createApp } from 'vue'
 
       createApp({
-        el: '#app',
         data() {
           return {
             message: '绑定到对象，内联字面量',
@@ -51,7 +50,6 @@
       }).mount('#app')
 
       var vm2 = createApp({
-        el: '#app2',
         data() {
           return {
             message: '绑定到对象上',
@@ -64,7 +62,6 @@
       }).mount('#app2')
 
       var app3 = createApp({
-        el: '#app3',
         data() {
           return {
             message: '绑定到计算属性上',
@@ -81,7 +78,6 @@
       }).mount('#app3')
 
       var app4 = createApp({
-        el: '#app4',
         data() {
           return {
             message: '绑定到方法上',
@@ -98,7 +94,6 @@
       }).mount('#app4')
 
       var vm5 = createApp({
-        el: '#app5',
         data() {
           return {
             message: '绑定到数组上',
