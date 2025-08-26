@@ -95,7 +95,68 @@ Vue专门为`class`和`style`的`v-bind`用法提供了特殊的功能增强。�
 ```
 
 ### 在组件上使用
+对于只有一个根元素的组件，当你使用了`class`属性时，这些`class`会被添加到根元素上并与该元素上已有的`class`合并。举例来说，如果你声明了一个组件名叫 MyComponent，模板如下：
 
+```vue
+<template>
+  <!-- 子组件模板 -->
+  <p class="foo bar">Hi!</p>
+</template>
+```
+
+在使用时添加一些class：
+
+```vue
+<template>
+<!-- 在使用组件时 -->
+<MyComponent class="baz boo" />
+</template>
+```
+
+渲染出的HTML为：
+
+```vue
+<template>
+  <p class="foo bar baz boo">Hi!</p>
+</template>
+```
+
+Class 的绑定也是同样的：
+
+```vue
+<template>
+  <MyComponent :class="{ active: isActive }" />
+</template>
+```
+
+当isActive为真时，被渲染的 HTML 会是：
+
+```vue
+<template>
+  <p class="foo bar active">Hi!</p>
+</template>
+```
+
+如果你的组件有多个根元素，你将需要指定哪个根元素来接收这个 class。你可以通过组件的`$attrs`属性来指定接收的元素：
+
+```vue
+<template>
+  <!-- MyComponent 模板使用 $attrs 时 -->
+  <p :class="$attrs.class">Hi!</p>
+  <span>This is a child component</span>
+</template>
+```
+
+```vue
+<MyComponent class="baz" />
+```
+
+这将被渲染为：
+
+```html
+<p class="baz">Hi!</p>
+<span>This is a child component</span>
+```
 
 ## 绑定内联样式
 ### 绑定对象

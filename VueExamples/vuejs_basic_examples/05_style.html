@@ -37,50 +37,59 @@
     </div>
 
     <script type="module">
-      import { createApp } from 'vue'
+      import { createApp, ref, reactive, computed } from 'vue'
 
       createApp({
-        data() {
+        setup() {
+          const message = '绑定到对象，内联字面量'
+          const activeColor = 'red'
+          const fontSize = '18px'
+
           return {
-            message: '绑定到对象，内联字面量',
-            activeColor: 'red',
-            fontSize: '18px',
+            message,
+            activeColor,
+            fontSize,
           }
         },
       }).mount('#app')
 
       var vm2 = createApp({
-        data() {
+        setup() {
+          const message = '绑定到对象上'
+          const styleObj = reactive({
+            color: 'blue',
+            fontSize: '25px',
+          })
+
           return {
-            message: '绑定到对象上',
-            styleObj: {
-              color: 'blue',
-              fontSize: '25px',
-            },
+            message,
+            styleObj,
           }
         },
       }).mount('#app2')
 
       var app3 = createApp({
-        data() {
-          return {
-            message: '绑定到计算属性上',
-          }
-        },
-        computed: {
-          styleObj() {
+        setup() {
+          const message = '绑定到计算属性上'
+          const styleObj = computed(() => {
             return {
               color: 'green',
               fontSize: '23px',
             }
-          },
+          })
+
+          return {
+            message,
+            styleObj,
+          }
         },
       }).mount('#app3')
 
       var app4 = createApp({
-        data() {
+        setup() {
+          const message = '绑定到方法上'
           return {
-            message: '绑定到方法上',
+            message,
           }
         },
         methods: {
@@ -94,16 +103,20 @@
       }).mount('#app4')
 
       var vm5 = createApp({
-        data() {
+        setup() {
+          const message = '绑定到数组上'
+          const fontStyle = {
+            'font-weight': 600,
+            fontSize: '30px',
+          }
+          const colorStyle = {
+            color: 'purple',
+          }
+
           return {
-            message: '绑定到数组上',
-            fontStyle: {
-              'font-weight': 600,
-              fontSize: '30px',
-            },
-            colorStyle: {
-              color: 'yellow',
-            },
+            message,
+            fontStyle,
+            colorStyle,
           }
         },
       }).mount('#app5')

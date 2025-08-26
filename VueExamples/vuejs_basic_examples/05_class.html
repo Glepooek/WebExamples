@@ -35,40 +35,43 @@
 
   <body>
     <div id="app">
-      <h1 class="intro">Header 1</h1>
-      <p>A paragraph.</p>
+      <h1 class="intro">绑定HTML class</h1>
+      <p>
+        绑定到对象
+        <span style="color: red">Change属性</span>
+      </p>
 
       <!--绑定到对象，内联字面量-->
-      <p class="static" v-bind:class="{active:isActive, 'text-danger':hasError}">
+      <p class="static" :class="{active:isActive, 'text-danger':hasError}">
         <span>内联字面量</span> Note that this is an important paragraph.
       </p>
 
       <!--绑定到对象-->
-      <!-- <p class="static" v-bind:class="classObj">
-			<span>绑定到对象</span> Note that this is an important paragraph.
-		</p> -->
+      <!-- <p class="static" :class="classObj">
+        <span>绑定到对象</span> Note that this is an important paragraph.
+      </p> -->
 
       <!--绑定到计算属性-->
-      <p class="static" v-bind:class="computedClassObj">
+      <p class="static" :class="computedClassObj">
         <span>绑定到计算属性</span> Note that this is an important paragraph.
       </p>
 
       <!--绑定到属性：三目运算-->
-      <p class="static" v-bind:class="isActive ? 'active' :'text-danger' ">
+      <p class="static" :class="isActive ? 'active' :'text-danger' ">
         <span>绑定到属性：三目运算</span> Note that this is an important paragraph.
       </p>
     </div>
     <div id="app2">
       <span>绑定到数组</span>
-      <p class="static" v-bind:class="['active','text-danger']">Note that this is an important paragraph.</p>
-      <p class="static" v-bind:class="[isActive, hasError]">Note that this is an important paragraph.</p>
+      <p class="static" :class="['active','text-danger']">Note that this is an important paragraph.</p>
+      <p class="static" :class="[active, error]">Note that this is an important paragraph.</p>
+      <p class="static" :class="[{ ['active']: isActive }, 'text-danger']">Note that this is an important paragraph.</p>
     </div>
 
     <script type="module">
       import { createApp } from 'vue'
 
       createApp({
-        el: '#app',
         data() {
           return {
             isActive: true,
@@ -89,11 +92,11 @@
       }).mount('#app')
 
       createApp({
-        el: '#app2',
         data() {
           return {
-            isActive: 'active',
-            hasError: 'text-danger',
+            isActive: false,
+            active: 'active',
+            error: 'text-danger',
           }
         },
       }).mount('#app2')
