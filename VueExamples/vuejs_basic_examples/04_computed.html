@@ -1,153 +1,190 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>计算属性和监听器</title>
+    <!--导入映射表-->
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+          "es-toolkit": "https://esm.sh/es-toolkit@%5E1",
+          "axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
+        }
+      }
+    </script>
+    <style>
+      span,
+      button {
+        display: block;
+      }
+    </style>
+  </head>
 
-<head>
-	<meta charset="utf-8">
-	<title>计算属性和监听器</title>
-	<!--导入映射表-->
-	<script type="importmap">
-	{
-		 "imports": {
-			"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
-			"es-toolkit": "https://esm.sh/es-toolkit@%5E1",
-			"axios": "https://unpkg.com/axios@1.10.0/dist/esm/axios.min.js"
-		}
-	}
-	</script>
-</head>
+  <body>
+    <div id="app4">
+      <p>Has published books:</p>
+      <span>插值：{{author.books.length > 0 ? 'Yes' : 'No'}}</span>
+      <!--插值中如果有复杂的计算表达式，建议写成计算属性-->
+      <span>计算属性: {{ publishedBooksMessage }}</s>
+      <!--方法。在 Vue 中，应该避免在模板方法中修改响应式数据，因为这会导致不可预测的渲染行为。--->
+      <!-- <span>方法：{{calculateBooksMessage()}}</span> -->
+      <button type="button" @click="calculateBooksMessage">calculate Books Message</button>
+    </div>
 
-<body>
-	<div id="app4">
-		<p title="插值">{{message}}</p>
-		<!--插值中如果有复杂的计算表达式，建议写成计算属性-->
-		<p title="计算属性">{{reverseMessage}}</p>
-		<!--方法--->
-		<!-- <p>{{reverseMessageMethod()}}</p> -->
-		<button type="button" @click="reverseMessageMethod">change message</button>
-	</div>
+    <!--计算属性的setter-->
+    <div id="app5">
+      <p>{{firstName}}</p>
+      <p>{{lastName}}</p>
+      <p>{{fullName}}</p>
+      <!-- 双向绑定 -->
+      <input v-model="fullName" placeholder="Edit full name" />
+    </div>
 
-	<!--计算属性的setter-->
-	<div id="app5">
-		<p>{{firstName}}</p>
-		<p>{{lastName}}</p>
-		<p>{{fullName}}</p>
-	</div>
+    <!--监听器-->
+    <div id="app6">
+      <p>
+        ask a yes/no question:
+        <input v-model="question" />
+      </p>
+      <p>{{answer}}</p>
+      <img :src="answerImage" />
+    </div>
 
-	<!--监听器-->
-	<div id="app6">
-		<p>ask a yes/no question:
-			<input v-model="question" />
-		</p>
-		<p>
-			{{answer}}
-		</p>
-		<img :src="answerImage">
-	</div>
+    <script type="module">
+      import { createApp, reactive, ref, computed, watch } from 'vue'
+      import { debounce } from 'es-toolkit'
+      import axios from 'axios'
 
+      createApp({
+        setup() {
+          const author = reactive({
+            name: 'John Doe',
+            books: ['Vue 2 - Advanced Guide', 'Vue 3 - Basic Guide', 'Vue 4 - The Mystery'],
+          })
+          return {
+            author,
+          }
+        },
+        methods: {
+          calculateBooksMessage() {
+            // this.author.books.pop()
+            return this.author.books.length > 0 ? 'Yes' : 'No'
+          },
+        },
+        // 计算属性是基于它们的响应式依赖进行缓存的。
+        // 只在相关响应式依赖发生改变时它们才会重新求值。
+        computed: {
+          publishedBooksMessage() {
+            console.log(this.author.books)
+            return this.author.books.length > 0 ? 'Yes' : 'No'
+          },
+        },
+      }).mount('#app4')
 
-	<script type="module">
-		import { createApp } from 'vue'
-		import { debounce } from 'es-toolkit'
+      var app5 = createApp({
+        setup() {
+          const firstName = ref('John')
+          const lastName = ref('Doe')
 
-		var app4 = createApp({
-			el: '#app4',
-			data() {
-				return {
-					message: 'Hello Vue.js'
-				}
-			},
-			methods: {
-				reverseMessageMethod() {
-					//return this.message.split('').reverse().join('')
-					this.message = "changed"
-					return this.message
-				}
-			},
-			// 计算属性是基于它们的响应式依赖进行缓存的。
-			// 只在相关响应式依赖发生改变时它们才会重新求值。
-			computed: {
-				reverseMessage() {
-					return this.message.split('').reverse().join('')
-				}
-			}
-		}).mount("#app4")
+          // fullName 计算属性展示了 setter 的使用
+          // 通常计算属性应该是只读的，但有时我们需要通过一个"虚拟"属性来设置多个基础属性
+          // 这种情况下 setter 是有用的，但应该谨慎使用
+          const fullName = computed({
+            // getter - 用于获取组合后的全名
+            get() {
+              console.log('Getting fullName:', firstName.value + ' ' + lastName.value)
+              return firstName.value + ' ' + lastName.value
+            },
+            // setter - 用于通过全名设置 firstName 和 lastName
+            // 注意：这应该只在需要双向绑定时使用，比如 v-model
+            set(newValue) {
+              // 检查输入值是否有效
+              if (newValue && newValue.length > 0) {
+                const parts = newValue.split(' ')
+                // 根据分割结果更新 firstName 和 lastName
+                if (parts.length >= 2) {
+                  firstName.value = parts[0]
+                  lastName.value = parts.slice(1).join(' ') // 将除第一部分外的所有部分重新组合
+                } else if (parts.length === 1) {
+                  firstName.value = parts[0]
+                  lastName.value = ''
+                }
+              }
+            },
+          })
 
-		var app5 = createApp({
-			el: '#app5',
-			data() {
-				return {
-					firstName: 'an',
-					lastName: 'yu'
-				}
-			},
-			computed: {
-				fullName: {
-					// getter
-					get: function () {
-						return this.firstName + ' ' + this.lastName
-					},
-					// setter
-					set: function (newValue) {
-						if (newValue.length > 0) {
-							// 解构赋值
-							[this.firstName, this.lastName] = newValue.split(' ')
-						}
-					}
-				}
-			}
-		}).mount("#app5")
+          // 更好的替代方案：使用方法而不是计算属性的 setter
+          // 这种方式更清晰，避免了计算属性的副作用
+          const updateFullName = (newFullName) => {
+            if (newFullName && newFullName.length > 0) {
+              const parts = newFullName.split(' ')
+              if (parts.length >= 2) {
+                firstName.value = parts[0]
+                lastName.value = parts.slice(1).join(' ')
+              } else if (parts.length === 1) {
+                firstName.value = parts[0]
+                lastName.value = ''
+              }
+            }
+          }
 
-		app5.fullName = 'lff 123'
+          return {
+            firstName,
+            lastName,
+            fullName,
+            updateFullName // 提供方法作为更好的替代方案
+          }
+        },
+      })
 
-		var app6 = createApp({
-			el: '#app6',
-			data() {
-				return {
-					question: '',
-					answer: 'I can not give you an answer until you ask a question!',
-					answerImage: ''
-				}
-			},
-			watch: {
-				question: function (newQuestion, oldQuestion) {
-					this.answer = 'Waiting for you to stop typing...'
-					this.debouncedGetAnswer()
-				}
-			},
-			created: function () {
-				this.debouncedGetAnswer = debounce(this.getAnswer, 500)
-			},
-			methods: {
-				getAnswer: function () {
-					if (this.question.indexOf('?') === -1) {
-						this.answer = 'Question usually contains an question mark. ;-)'
-						return
-					}
-					this.answer = 'Thinking....'
-					/**
-					 * .then(function(response) { ... }) 会改变 this 的指向，
-					 * 是因为普通函数（function 关键字声明的函数）在 JavaScript 中的 this 指向，取决于它的调用方式。
-					 * 在 .then(function(response) { ... }) 这种回调中，函数是作为回调被调用的，不属于任何对象，
-					 * 因此 this 默认指向 undefined（严格模式下）或 window（非严格模式下），而不是你期望的 Vue 实例。
-					 * 如果你想让 this 保持为外部作用域（如 Vue 实例），应使用箭头函数：
-					 * 箭头函数不会创建自己的 this，它会捕获外部作用域的 this，所以能正确访问 Vue 实例的数据和方法。
-					 * **/
-					axios.get('https://yesno.wtf/api')
-						.then(response => {
-							if(response === null || response.data === null) {
-								this.answer = 'Error! Could not get the data.'
-								return
-							}
-							this.answer = response.data.answer
-							this.answerImage = response.data.image
-						})
-						.catch(error => {
-							this.answer = 'Error! Could not reach the API. ' + error
-						})
-				}
-			}
-		}).mount("#app6")
-	</script>
-</body>
+      app5.mount('#app5')
 
+      createApp({
+        setup() {
+          const question = ref('')
+          const answer = ref('I can not give you an answer until you ask a question!')
+          const answerImage = ref('')
+
+          // 使用debounce包装getAnswer函数
+          const debouncedGetAnswer = debounce(getAnswer, 500)
+
+          // 监听question的变化
+          watch(question, (newQuestion, oldQuestion) => {
+            answer.value = 'Waiting for you to stop typing...'
+            debouncedGetAnswer()
+          })
+
+          // 获取答案的函数
+          function getAnswer() {
+            if (question.value.indexOf('?') === -1) {
+              answer.value = 'Question usually contains an question mark. ;-)'
+              return
+            }
+            answer.value = 'Thinking....'
+
+            axios
+              .get('https://yesno.wtf/api')
+              .then(response => {
+                if (response === null || response.data === null) {
+                  answer.value = 'Error! Could not get the data.'
+                  return
+                }
+                answer.value = response.data.answer
+                answerImage.value = response.data.image
+              })
+              .catch(error => {
+                answer.value = 'Error! Could not reach the API. ' + error
+              })
+          }
+
+          return {
+            question,
+            answer,
+            answerImage
+          }
+        },
+      }).mount('#app6')
+    </script>
+  </body>
 </html>
