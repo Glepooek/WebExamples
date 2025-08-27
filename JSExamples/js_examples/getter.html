@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript Getter Example</title>
+  </head>
+  <body>
+    <h1>JavaScript Getter Example</h1>
+    <script>
+      const person = {
+        firstName: 'John',
+        lastName: 'Doe',
+        get fullName() {
+          return `${this.firstName} ${this.lastName}`
+        },
+      }
+      document.write(person.fullName)
+    </script>
+  </body>
+</html>
