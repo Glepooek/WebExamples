@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript Getter Example</title>
+  </head>
+  <body>
+    <h1>JavaScript Getter Example</h1>
+    <script>
+      const obj = {
+        log: ['a', 'b', 'c'],
+        get latest() {
+          if (this.log.length === 0) {
+            return undefined
+          }
+          return this.log[this.log.length - 1]
+        },
+      }
+
+      Object.defineProperty(obj, 'oldest', {
+        get() {
+          if (this.log.length === 0) {
+            return undefined
+          }
+          return this.log[0]
+        },
+      })
+
+      console.log(obj.latest)
+      console.log(obj.oldest)
+
+      class Example {
+        get hello() {
+          return 'how are you?'
+        }
+      }
+
+      const example = new Example()
+
+      console.log(Object.getOwnPropertyDescriptor(example, 'hello')) // undefined
+      console.log(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(example), 'hello'))
+
+      Object.defineProperty(example, 'greeting', {
+        get() {
+          return 'hi'
+        },
+      })
+
+      console.log(Object.getOwnPropertyDescriptor(example, 'greeting'))
+      console.log(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(example), 'greeting')) // undefined
+    </script>
+  </body>
+</html>
