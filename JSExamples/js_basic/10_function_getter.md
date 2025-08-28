@@ -17,7 +17,6 @@ const obj = {
         return this.log[this.log.length - 1]
     },
 }
-
 ```
 
 ### 参数

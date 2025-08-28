@@ -22,7 +22,7 @@
 <h1 v-show="ok">Hello!</h1>
 ```
 
-不同之处在于`v-show`会在DOM渲染中保留该元素；v-show仅切换了该元素上名为 display 的 CSS 属性。
+不同之处在于`v-show`会在DOM渲染中保留该元素；v-show仅切换了该元素上名为`display`的CSS属性。
 v-show不支持在<template>元素上使用，也不能和v-else搭配使用。
 
 ## v-if vs. v-show​
