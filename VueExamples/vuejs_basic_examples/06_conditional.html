@@ -22,8 +22,8 @@
       <div v-else-if="type === 'C'">C</div>
       <div v-else>
         Not A\B\C
-        <p>{{message}}</p>
-        <p>{{message1}}</p>
+        <p>{{vifMessage}}</p>
+        <p>{{vshowMessage}}</p>
       </div>
       <div>
         <button @click="changeType">change type</button>
@@ -43,8 +43,8 @@
       createApp({
         setup() {
           const type = ref('C')
-          const message = ref('v-if，控制元素的创建和删除，有很大的切换开销；')
-          const message1 = ref('v-show，控制元素的显示和隐藏，有很大的渲染开销；')
+          const vifMessage = ref('v-if，控制元素的创建和删除，有很大的切换开销；')
+          const vshowMessage = ref('v-show，控制元素的显示和隐藏，有很大的渲染开销；')
           const array = ['A', 'B', 'C', 'D']
 
           const changeType = () => {
@@ -54,8 +54,8 @@
 
           return {
             type,
-            message,
-            message1,
+            vifMessage,
+            vshowMessage,
             changeType,
           }
         },
