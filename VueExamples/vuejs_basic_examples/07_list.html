@@ -42,37 +42,24 @@
       </ul>
     </div>
 
-    <!--通过计算属性显示过滤后的结果-->
-    <div id="app4">
-      <ul>
-        <li v-for="number in evenNumbers">{{number}}</li>
-      </ul>
-    </div>
-
-    <!--通过JS方法显示过滤后的结果-->
-    <div id="app5">
-      <ul>
-        <li v-for="number in even(numbers)">{{number}}</li>
-      </ul>
-
-      <!--v-for中也接受值范围-->
-      <span v-for="n in 10">{{ n }} </span>
-
-      <ul>
-        <!--利用带有 v-for 的 <template> 来循环渲染一段包含多个元素的内容-->
-        <template v-for="number in even(numbers)">
-          <li>{{number}}</li>
-        </template>
-      </ul>
-    </div>
-
     <!--vue2: v-for和v-if在同一元素上使用时，v-for的优先级高于v-if-->
     <!--vue3: v-for和v-if在同一元素上使用时，v-if的优先级高于v-for-->
-    <div id="app6">
+    <div id="app4">
       <ul>
-        <template v-for="todo in todos">
+        <template v-for="todo in todos" :key="todo.message">
           <li v-if="!todo.isComplete">{{todo.message}}</li>
         </template>
+      </ul>
+    </div>
+
+    <div id="app5">
+      <ul>
+        <li v-for="(set, index) in sets" :key="index">
+          <span>Set {{ index + 1 }}:</span>
+          <ul>
+            <li v-for="item in even(set)" :key="item">{{ item }}</li>
+          </ul>
+        </li>
       </ul>
     </div>
 
@@ -139,44 +126,38 @@
       }).mount('#app3')
 
       var vm4 = createApp({
-        data() {
-          return {
-            numbers: [1, 2, 3, 4, 5, 6],
-          }
-        },
-        computed: {
-          evenNumbers() {
-            return this.numbers.filter(number => number % 2 === 0)
-          },
-        },
-      }).mount('#app4')
+        setup() {
+          const todos = ref([
+            { message: 1, isComplete: false },
+            { message: 6, isComplete: true },
+            { message: 10, isComplete: false },
+            { message: 19, isComplete: true },
+            { message: 1100, isComplete: true },
+          ])
 
-      var vm5 = createApp({
-        data() {
           return {
-            numbers: [1, 2, 3, 4, 5, 6],
-          }
-        },
-        methods: {
-          even(numbers) {
-            return numbers.filter(number => number % 2 === 0)
-          },
-        },
-      }).mount('#app5')
-
-      var vm6 = createApp({
-        data() {
-          return {
-            todos: [
-              { message: 1, isComplete: false },
-              { message: 6, isComplete: true },
-              { message: 10, isComplete: false },
-              { message: 19, isComplete: true },
-              { message: 1100, isComplete: true },
-            ],
+            todos,
           }
         },
       }).mount('#app6')
+
+      createApp({
+        setup() {
+          const sets = reactive([
+            [1, 2, 3, 4, 5],
+            [6, 7, 8, 9, 10],
+          ])
+
+          let even = numbers => {
+            return numbers.filter(item => item % 2 === 0)
+          }
+
+          return {
+            sets,
+            even,
+          }
+        },
+      }).mount('#app5')
 
       let person = {
         name: 'John',
