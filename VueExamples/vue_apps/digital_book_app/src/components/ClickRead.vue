@@ -1,39 +1,38 @@
 <template>
-    <div class="container" :style="containerStyle" @click="onPlayAudio">
-    </div>
+  <div class="container" :style="containerStyle" @click="onPlayAudio"></div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { getFilePath } from '@/apis/digitalBookApi'
+  import { computed } from "vue"
+  import { getFilePath } from "@/apis/digitalBookApi"
 
-const props = defineProps({
+  const props = defineProps({
     clickReadModel: { type: Object, required: true },
-    moduleName: { type: String, required: true }
-})
+    moduleName: { type: String, required: true },
+  })
 
-const containerStyle = computed(() => {
+  const containerStyle = computed(() => {
     return {
-        position: 'absolute',
-        left: props.clickReadModel.x + 'px',
-        top: props.clickReadModel.y + 'px',
-        width: props.clickReadModel.width + 'px',
-        height: props.clickReadModel.height + 'px'
+      position: "absolute",
+      left: props.clickReadModel.x + "px",
+      top: props.clickReadModel.y + "px",
+      width: props.clickReadModel.width + "px",
+      height: props.clickReadModel.height + "px",
     }
-})
+  })
 
-/**
- * 播放音频
- */
-const onPlayAudio = () => {
+  /**
+   * 播放音频
+   */
+  const onPlayAudio = () => {
     const audioUrl = getFilePath(props.clickReadModel.file, props.moduleName)
     const audio = new Audio(audioUrl)
     audio.play()
-}
+  }
 </script>
 
 <style scoped>
-.container {
+  .container {
     /* 默认样式可以根据需要添加 */
     position: absolute;
     background: yellow;
@@ -42,11 +41,11 @@ const onPlayAudio = () => {
     border-style: solid;
     border-width: 1px;
     z-index: 3;
-}
+  }
 
-.container:hover {
+  .container:hover {
     background: rgba(41, 100, 255, 0.2);
     border-color: rgba(41, 100, 255, 0.2);
     cursor: pointer;
-}
+  }
 </style>
