@@ -5,15 +5,15 @@
 </template>
 
 <script setup>
-defineProps(['id', 'title'])
-const emit = defineEmits(['enlargeText'])
+  defineProps(["id", "title"])
+  const emit = defineEmits(["enlargeText"])
 
-const enlargeText = () => {
-  emit('enlargeText')
-}
+  const enlargeText = () => {
+    emit("enlargeText")
+  }
 
-defineExpose({
-  emit,
-  enlargeText,
-})
+  defineExpose({
+    emit,
+    enlargeText,
+  })
 </script>
