@@ -14,27 +14,26 @@
 </template>
 
 <script setup>
-import { ref, onMounted, useTemplateRef } from 'vue'
-import BlogPost from '@/components/BlogPost.vue'
-import AlertBox from '@/components/AlertBox.vue'
+  import { ref, onMounted, useTemplateRef } from "vue"
+  import BlogPost from "@/components/BlogPost.vue"
+  import AlertBox from "@/components/AlertBox.vue"
 
-const posts = ref([
-  { id: '1', title: 'First Post' },
-  { id: '2', title: 'Second Post' },
-  { id: '3', title: 'Third Post' },
-])
+  const posts = ref([
+    { id: "1", title: "First Post" },
+    { id: "2", title: "Second Post" },
+    { id: "3", title: "Third Post" },
+  ])
 
-const postFontSize = ref(16)
+  const postFontSize = ref(16)
+  const blogPostsRef = useTemplateRef("blogPosts")
 
-const blogPostsRef = useTemplateRef('blogPosts')
-
-onMounted(() => {
-  console.log(blogPostsRef.value[0].emit)
-})
+  onMounted(() => {
+    console.log(blogPostsRef.value[0].emit)
+  })
 </script>
 
 <style>
-.active {
-  color: red;
-}
+  .active {
+    color: red;
+  }
 </style>

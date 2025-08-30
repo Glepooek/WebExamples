@@ -1,6 +1,6 @@
 ```html
-<input 
-    :value="text" 
+<input
+    :value="text"
     @input="event=> text = event.target.value">
 ```
 
@@ -117,10 +117,10 @@ data() {
 ### 复选框
 
 ```html
-<input 
-    type="checkbox" 
-    v-model="checked" 
-    :true-value="dynamicTrueValue" 
+<input
+    type="checkbox"
+    v-model="checked"
+    :true-value="dynamicTrueValue"
     :false-value="dynamicFalseValue" />
 ```
 

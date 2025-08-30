@@ -14,6 +14,7 @@
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/blog">Blog</RouterLink>
         <RouterLink to="/todo">Todo</RouterLink>
       </nav>
     </div>
