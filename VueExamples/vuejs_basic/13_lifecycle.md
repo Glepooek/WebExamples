@@ -1,6 +1,6 @@
 ## 注册周期钩子
 
-Vue 生命周期钩子函数：
+Vue生命周期钩子函数：
 
 - onMounted()
 - onUpdated()
