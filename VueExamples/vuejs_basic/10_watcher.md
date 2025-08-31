@@ -1,8 +1,8 @@
 ## 基本示例
 
 计算属性允许我们声明性的计算衍生值。
-在选项卡式 API 中，可以使用`watch选项`在每次响应式属性发生变化时触发一个函数。
-在组合式 API 中，可以使用`watch函数`在每次响应式状态发生变化时触发回调函数。
+在选项卡式API中，可以使用`watch选项`在每次响应式属性发生变化时触发一个函数。
+在组合式API中，可以使用`watch函数`在每次响应式状态发生变化时触发回调函数。
 
 ```html
 <p>
@@ -56,7 +56,11 @@
 
 ## 侦听数据源的类型
 
-`watch`函数的第一个参数是监听的数据源，可以是一个 ref（包括计算属性），一个响应式对象、一个 getter 函数或多个数据源组成的数组。
+`watch`函数的第一个参数是监听的数据源，可以是：
+* 一个`ref`（包括计算属性）
+* 一个响应式对象
+* 一个`getter`函数
+* 多个数据源组成的数组。
 
 ```js
 const question = ref("")
@@ -112,15 +116,33 @@ watch(obj, (newValue, oldValue) => {
 obj.count++
 ```
 
-相比之下，一个返回响应式对象的 getter 函数，只有在返回不同的对象时，才会触发回调：
+相比之下，一个返回响应式对象的`getter`函数，只有在返回不同的对象时，才会触发回调：
 
 ```js
+// 假设state.someObject是一个响应式对象
+const state = reactive({
+  someObject: {
+    name: 'Vue',
+    version: 3
+  }
+})
+
 watch(
   () => state.someObject,
   () => {
     // 仅当 state.someObject 被替换时触发
   }
 )
+
+// 情况1：修改someObject的属性
+state.someObject.name = 'Vue 3' // 不会触发watch回调
+state.someObject.version = 4    // 不会触发watch回调
+
+// 情况2：替换整个someObject对象（会触发watch回调）
+state.someObject = {
+  name: 'React',
+  version: 18
+}
 ```
 
 你也可以给上面这个例子显式地加上`deep`选项，强制转成深层侦听器：
@@ -136,12 +158,14 @@ watch(
 )
 ```
 
+在Vue3.5+中，`deep`选项还可以是一个数字，表示遍历的最大深度。·
+
 ## 即时回调的侦听器
 
 `watch()`默认是懒执行的，仅当数据源发生变化时，才执行回调函数。可以通过传入`immediate:true`选项来强制侦听器的回调立即执行。
 
 ```js
-watch(source,(newValue, oldValue))=>{
+watch(source,(newValue, oldValue) =>{
     // 立即执行，且当 `source` 改变时再次执行
     }, {
         immediate:true
@@ -153,7 +177,7 @@ watch(source,(newValue, oldValue))=>{
 每当侦听源发生变化时，侦听器的回调就会立即执行。若想回调只在源变化时触发一次，请使用`once: true`选项。
 
 ```js
-watch(source,(newValue, oldValue))=>{
+watch(source,(newValue, oldValue) =>{
     // 当 `source` 改变时只执行一次
     }, {
         once:true

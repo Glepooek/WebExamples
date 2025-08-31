@@ -59,20 +59,23 @@
             }
           }
 
-          watch(question, (newQuestion, oldQuestion) => {
+          watch(question, async (newQuestion, oldQuestion) => {
             if (newQuestion.includes('?') || newQuestion.includes('？')) {
-              getAnswer()
+              await getAnswer()
             }
           })
 
-          // watch(() => someobj.count, (newQuestion, oldQuestion) => {
-          //     console.log(newQuestion, oldQuestion);
-          // })
+          // watch(
+          //   () => someobj.count,
+          //   (newQuestion, oldQuestion) => {
+          //     console.log(newQuestion, oldQuestion)
+          //   }
+          // )
 
           // watch(someobj, (newValue, oldValue) => {
-          //     // newValue和oldValue是同一对象
-          //     // 在所有嵌套属性变更时，都会触发监听器
-          //     console.log(newValue, oldValue);
+          //   // newValue和oldValue是同一对象
+          //   // 在所有嵌套属性变更时，都会触发监听器
+          //   console.log(newValue === oldValue)
           // })
 
           watch(
