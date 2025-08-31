@@ -28,16 +28,16 @@
     </div>
 
     <script type="module">
-      import { createApp, ref, useTemplateRef, onMounted } from "vue"
+      import { createApp, ref, useTemplateRef, onMounted } from 'vue'
 
       const app = createApp({
         setup() {
-          const btnRef = useTemplateRef("myButton")
+          const btnRef = useTemplateRef('myButton')
 
           onMounted(() => {
             console.log(btnRef.value.value)
             btnRef.value.onclick = () => {
-              console.log("clicked")
+              console.log('clicked')
             }
           })
 
@@ -51,7 +51,7 @@
         },
       })
 
-      app.mount("#app")
+      app.mount('#app')
     </script>
   </body>
 </html>

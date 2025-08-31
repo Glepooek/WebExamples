@@ -1,10 +1,17 @@
 ```html
+<!--value值的改变不会触发input事件-->
 <input
     :value="text"
     @input="event=> text = event.target.value">
 ```
 
-如上代码，手动连接值绑定和更改事件监听器可能会很麻烦，`v-model`指令简化了这一步骤，它会根据所使用的元素自动使用对应的DOM属性和事件组合。可用于不同类型的输入，如input、textarea、select。
+如上代码，手动连接值绑定和更改事件监听器可能会很麻烦，`v-model`指令简化了这一步骤:
+
+```html
+<input v-model="text">
+```
+
+`v-model`可用于不同类型的输入，如input、textarea、select元素。它会根据所使用的元素自动使用对应的DOM属性和事件组合。
 
 * 文本类型的`<input>`和`<textarea>`元素会绑定到`value`属性，并侦听`input`事件。
 * `<input type="checkbox">`和`<input> type="radio"`会绑定到`checked`属性，并侦听`change`事件
@@ -23,6 +30,14 @@
 ```
 
 在textarea中不支持插值表达式。
+
+```html
+<!-- 错误 -->
+<textarea>{{ text }}</textarea>
+
+<!-- 正确 -->
+<textarea v-model="text"></textarea>
+```
 
 ### 复选框
 
@@ -63,6 +78,7 @@
 ### 选择器（下拉框）
 
 #### 单选
+
 ```html
 <div> Selected:{{ selected }} />
 <select v-model="selected">
@@ -97,7 +113,6 @@
 ```
 
 ```js
-
 data() {
     return {
         selected: 'A',
@@ -112,7 +127,7 @@ data() {
 
 ## 值绑定
 对于单选按钮，复选框和选择器选项，`v-model`绑定的值通常是静态的字符串 (或者对复选框是布尔值)。
-可以通过使用`v-bind`将该值绑定到当前组件实例上的动态数据。此外，使用`v-bind`还可以将选项值绑定为非字符串的数据类型。
+可以通过使用`v-bind`将该值绑定到当前组件实例上的动`态数据`。此外，使用`v-bind`还可以将选项值绑定为`非字符串的数据类型`。
 
 ### 复选框
 
@@ -142,7 +157,7 @@ data() {
 
 ## 修饰符
 ### `.lazy​`
-可以添加lazy修饰符来改为在每次change事件后更新数据：
+默认情况下，`v-model`会在每次`input`事件后更新数据。可以添加`.lazy`修饰符来改为在每次change事件后更新数据：
 
 ```html
 <!-- 在 "change" 事件后同步更新而不是 "input" -->
@@ -159,19 +174,11 @@ data() {
 `number`修饰符会在输入框有`type="number"`时自动启用。
 
 ### `.trim​`
-如果想要默认自动去除用户输入内容中两端的空格，可以在`v-model`后添加`.trim`修饰符：
+在`v-model`后添加`.trim`修饰符，可以自动去除用户输入内容中两端的空格：
 
 ```html
 <input v-model.trim="msg" />
 ```
 
-## 组件上的 v-model​
-
-
-
-
-
-
-
-
-
+## 组件上的v-model​
+自定义组件也支持`v-model`。

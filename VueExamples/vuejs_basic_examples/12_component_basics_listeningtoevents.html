@@ -53,18 +53,18 @@
     </div>
 
     <script type="module">
-      import { createApp, ref } from "vue"
+      import { createApp, ref } from 'vue'
       // 第一个应用 - 使用组合式API
       const vm = createApp({
         setup() {
           const posts = ref([
             {
-              title: "hello vue.js",
-              author: "anyu",
+              title: 'hello vue.js',
+              author: 'anyu',
             },
             {
-              title: "hello vue.js",
-              author: "anyu",
+              title: 'hello vue.js',
+              author: 'anyu',
             },
           ])
 
@@ -77,8 +77,8 @@
         },
       })
 
-      vm.component("blog-post", {
-        props: ["post"],
+      vm.component('blog-post', {
+        props: ['post'],
         template: `
           <div>
             <h3>{{post.title}}</h3>
@@ -89,19 +89,19 @@
         `,
       })
 
-      vm.mount("#blog-posts-enents-1")
+      vm.mount('#blog-posts-enents-1')
 
       // 第二个应用 - 使用组合式API
       const vm2 = createApp({
         setup() {
           const posts2 = ref([
             {
-              title: "hello vue.js",
-              author: "anyu",
+              title: 'hello vue.js',
+              author: 'anyu',
             },
             {
-              title: "hello vue.js",
-              author: "anyu",
+              title: 'hello vue.js',
+              author: 'anyu',
             },
           ])
 
@@ -119,8 +119,8 @@
         },
       })
 
-      vm2.component("blog-post", {
-        props: ["post"],
+      vm2.component('blog-post', {
+        props: ['post'],
         template: `
           <div>
             <h3>{{post.title}}</h3>
@@ -130,12 +130,12 @@
           </div>
         `,
       })
-      vm2.mount("#blog-posts-enents-2")
+      vm2.mount('#blog-posts-enents-2')
 
       // 第三个应用 - 使用组合式API
       const vm3 = createApp({
         setup() {
-          const text = ref("")
+          const text = ref('')
 
           return {
             text,
@@ -143,20 +143,20 @@
         },
       })
 
-      vm3.component("custom-input", {
-        props: ["modelValue"],
-        emits: ["update:modelValue"],
+      vm3.component('custom-input', {
+        props: ['modelValue'],
+        emits: ['update:modelValue'],
         template: `
           <input
             :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)" >
         `,
       })
-      vm3.mount("#blog-posts-enents-3")
+      vm3.mount('#blog-posts-enents-3')
 
       // 第四个应用 - 使用组合式API
       const vm4 = createApp({})
-      vm4.component("alert-box", {
+      vm4.component('alert-box', {
         template: `
           <div class="demo-alert-box">
             <strong>Error</strong>
@@ -165,7 +165,7 @@
           </div>
         `,
       })
-      vm4.mount("#component-demo4")
+      vm4.mount('#component-demo4')
     </script>
   </body>
 </html>
