@@ -33,34 +33,34 @@
     </div>
 
     <script type="module">
-      import { createApp, ref, watch, reactive } from "vue"
-      import axios from "axios"
+      import { createApp, ref, watch, reactive } from 'vue'
+      import axios from 'axios'
 
       const app = createApp({
         setup() {
-          const question = ref("")
-          const answer = ref("Questions usually contain a question mark. ;-)")
-          const imgUrl = ref("")
+          const question = ref('')
+          const answer = ref('Questions usually contain a question mark. ;-)')
+          const imgUrl = ref('')
           const loading = ref(false)
 
           const someobj = reactive({ count: 0 })
 
           async function getAnswer() {
             loading.value = true
-            answer.value = "Thinking..."
+            answer.value = 'Thinking...'
             try {
-              const res = await axios.get("https://yesno.wtf/api")
+              const res = await axios.get('https://yesno.wtf/api')
               answer.value = res.data.answer
               imgUrl.value = res.data.image
             } catch (error) {
-              answer.value = "Error, could not load answer. " + error
+              answer.value = 'Error, could not load answer. ' + error
             } finally {
               loading.value = false
             }
           }
 
           watch(question, (newQuestion, oldQuestion) => {
-            if (newQuestion.includes("?") || newQuestion.includes("？")) {
+            if (newQuestion.includes('?') || newQuestion.includes('？')) {
               getAnswer()
             }
           })
@@ -98,7 +98,7 @@
         },
       })
 
-      app.mount("#app")
+      app.mount('#app')
     </script>
   </body>
 </html>

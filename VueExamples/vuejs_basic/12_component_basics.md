@@ -152,7 +152,7 @@ export default {
 
 ## 通过插槽来分配内容
 
-Vue 自定义的`<slot>`元素允许我们向组件传递内容。
+Vue自定义的`<slot>`元素允许我们向组件传递内容。
 
 ```vue
 <template>
@@ -244,7 +244,7 @@ Vue 自定义的`<slot>`元素允许我们向组件传递内容。
 </style>
 ```
 
-## DOM 内模版解析注意事项
+## DOM内模版解析注意事项
 
 请注意下面讨论只适用于直接在 DOM 中编写模板的情况。如果你使用来自以下来源的字符串模板，就不需要顾虑这些限制了：
 
@@ -261,8 +261,7 @@ HTML 标签和属性名称是不分大小写的，所以浏览器会把任何大
 const BlogPost = {
 props: ['postTitle'],
 emits: ['updatePost'],
-template: `    <h3>{{ postTitle }}</h3>
- `
+template: `<h3>{{ postTitle }}</h3> `
 }
 
 <!-- HTML中的kebab-case -->
@@ -277,9 +276,9 @@ template: `    <h3>{{ postTitle }}</h3>
 <MyComponent />
 ```
 
-这是因为 Vue 的模板解析器支持任意标签使用`/>`作为标签关闭的标志。
+这是因为Vue的模板解析器支持任意标签使用`/>`作为标签关闭的标志。
 
-然而在 DOM 内模板中，必须显式地写出关闭标签：
+然而在DOM内模板中，必须显式地写出关闭标签：
 
 ```html
 <my-component></my-component>
