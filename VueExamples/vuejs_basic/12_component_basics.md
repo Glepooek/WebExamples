@@ -1,9 +1,11 @@
-组件允许将 UI 划分为独立的、可重用的部分，并且可以对每个部分进行单独的逻辑处理。
+组件允许将UI划分为独立的、可重用的部分，并且可以对每个部分进行单独的逻辑处理。
 ![组件基础](assets/components_basic.png)
+
+Vue实现了自己的组件模型，使我们可以在每个组件的内部实现自定义内容与逻辑。
 
 ## 定义一个组件
 
-当使用构建步骤时，一般会将 Vue 组件定义在一个单独的`.vue`文件中，这被叫做`单文件组件`，简称 SFC。
+当使用构建步骤时，一般会将Vue组件定义在一个单独的`.vue`文件中，这被叫做`单文件组件`，简称 SFC。
 
 ```vue
 <template>
@@ -15,7 +17,7 @@
 </script>
 ```
 
-当不使用构建步骤时，一个 Vue 组件以一个包含` Vue 特定选项`的 js 对象来定义。
+当不使用构建步骤时，一个Vue组件以一个包含`Vue特定选项`的js对象来定义。
 
 ```js
 import { ref } from "vue"
@@ -33,12 +35,12 @@ export default {
 }
 ```
 
-- 模板是一个内联的 JS 字符串，也可以使用 ID 选择器来指向一个元素 (通常是原生的 <template> 元素)，Vue 将会使用其内容作为模板来源。
-- 定义了一个组件，并在一个`.js`文件里默认导出了它自己，但你也可以通过具名导出在一个文件中导出多个组件。
+- 上例中模板是一个内联的JS字符串，也可以使用`ID选择器`来指向一个元素(通常是原生的`<template>`元素)，Vue将会使用其内容作为模板来源。
+- 上例中定义了一个组件，并在一个`.js`文件里默认导出了它自己，但你也可以通过具名导出在一个文件中导出多个组件。
 
 ## 使用组件
 
-在父组件中导入子组件。如导入计数器组件：
+在父组件中导入子组件。如导入计数器组件（ButtonCounter以默认导出的形式被暴露给外部）：
 
 ```vue
 <template>
@@ -51,13 +53,14 @@ export default {
 </script>
 ```
 
+- 通过`<script setup>`导入的组件在模板中直接可用。
 - 组件可以被重用任意多次，每一个是一个新实例；
-- 在单文件组件中，推荐为子组件使用 PascalCase 的标签名。可以使用`/>`关闭一个标签。
-- 在 DOM 中直接使用，需要使用 kebab-case 形式并显式地关闭这些组件的标签，如<button-counter></button-counter>
+- 在单文件组件中，推荐为子组件使用`PascalCase`的标签名。也可以使用`/>`关闭一个标签。
+- 如果在DOM中直接使用，需要使用`kebab-case`形式并显式地关闭这些组件的标签，如<button-counter></button-counter>
 
 ## 传递属性
 
-一个组件可以有任意多的 props，默认情况下，所有 prop 都接受任意类型的值。
+一个组件可以有任意多的props，默认情况下，所有prop都接受任意类型的值。
 
 ```vue
 <template>
@@ -68,7 +71,7 @@ export default {
   defineProps(["id", "title"])
 </script>
 
-// ts类型写法
+<!-- ts类型写法 -->
 <script setup>
   const props = defineProps({
     id: { type: String, required: true },
@@ -76,7 +79,7 @@ export default {
   })
 </script>
 
-// 其他写法
+<!-- 如果没有使用<script setup>，props必须以props选项的方式声明，props对象会作为setup()函数的第一个参数被传入： -->
 <script>
   import { computed } from "vue"
 
@@ -254,7 +257,7 @@ Vue自定义的`<slot>`元素允许我们向组件传递内容。
 
 ### 大小写区分 ​
 
-HTML 标签和属性名称是不分大小写的，所以浏览器会把任何大写的字符解释为小写。这意味着当你使用 DOM 内的模板时，无论是 PascalCase 形式的组件名称、camelCase 形式的 prop 名称还是 v-on 的事件名称，都需要转换为相应等价的 kebab-case (短横线连字符) 形式：
+HTML标签和属性名称是不分大小写的，所以浏览器会把任何大写的字符解释为小写。这意味着当你使用 DOM内的模板时，无论是PascalCase形式的组件名称、camelCase形式的prop名称还是v-on的事件名称，都需要转换为相应等价的kebab-case(短横线连字符) 形式：
 
 ```js
 // JavaScript 中的 camelCase
