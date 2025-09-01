@@ -151,71 +151,68 @@
   }
 
   // book.pages数组下标索引
-  watch(
-    () => currentIndex.value,
-    newIndex => {
-      if (!bookInfo.pages) return
+  watch(currentIndex, newIndex => {
+    if (!bookInfo.pages) return
 
-      if (newIndex < 0) {
-        newIndex = 0
-      }
-
-      if (newIndex >= bookInfo.pages.length) {
-        newIndex = bookInfo.pages.length - 1
-      }
-
-      // 双页
-      isTopCover.value = newIndex === 0
-      isBottomCover.value = newIndex === bookInfo.pages.length - 1
-
-      // 判断index左右
-      // - 0
-      // 1 2
-      // 3 4
-      let left = 0
-      let right = 0
-      if (newIndex === 0 || newIndex % 2 === 0) {
-        // 右
-        left = newIndex - 1
-        right = newIndex
-      } else {
-        // 左
-        left = newIndex
-        right = newIndex + 1
-      }
-
-      // 清空页码显示
-      pageIndexStr.value = ""
-
-      // 首页不显示左
-      if (!isTopCover.value && left >= 0) {
-        const leftPageIndex = bookInfo.pages[left]
-        pageIndexStr.value = leftPageIndex.pageName
-        getDigitalBookPage(leftPageIndex).then(page => {
-          leftPage.value = {
-            pageModel: page.pageModel || {},
-            imgBase64: page.imgBase64 || "",
-            moduleName: leftPageIndex.moduleName || "",
-          }
-        })
-      }
-
-      // 底页不显示右
-      if (!isBottomCover.value && right < bookInfo.pages.length) {
-        const rightPageIndex = bookInfo.pages[right]
-        pageIndexStr.value = !pageIndexStr.value
-          ? rightPageIndex.pageName
-          : `${pageIndexStr.value}-${rightPageIndex.pageName}`
-        getDigitalBookPage(rightPageIndex).then(page => {
-          rightPage.value = {
-            pageModel: page.pageModel || {},
-            imgBase64: page.imgBase64 || "",
-            moduleName: rightPageIndex.moduleName || "",
-          }
-        })
-      }
+    if (newIndex < 0) {
+      newIndex = 0
     }
-  )
+
+    if (newIndex >= bookInfo.pages.length) {
+      newIndex = bookInfo.pages.length - 1
+    }
+
+    // 双页
+    isTopCover.value = newIndex === 0
+    isBottomCover.value = newIndex === bookInfo.pages.length - 1
+
+    // 判断index左右
+    // - 0
+    // 1 2
+    // 3 4
+    let left = 0
+    let right = 0
+    if (newIndex === 0 || newIndex % 2 === 0) {
+      // 右
+      left = newIndex - 1
+      right = newIndex
+    } else {
+      // 左
+      left = newIndex
+      right = newIndex + 1
+    }
+
+    // 清空页码显示
+    pageIndexStr.value = ""
+
+    // 首页不显示左
+    if (!isTopCover.value && left >= 0) {
+      const leftPageIndex = bookInfo.pages[left]
+      pageIndexStr.value = leftPageIndex.pageName
+      getDigitalBookPage(leftPageIndex).then(page => {
+        leftPage.value = {
+          pageModel: page.pageModel || {},
+          imgBase64: page.imgBase64 || "",
+          moduleName: leftPageIndex.moduleName || "",
+        }
+      })
+    }
+
+    // 底页不显示右
+    if (!isBottomCover.value && right < bookInfo.pages.length) {
+      const rightPageIndex = bookInfo.pages[right]
+      pageIndexStr.value = !pageIndexStr.value
+        ? rightPageIndex.pageName
+        : `${pageIndexStr.value}-${rightPageIndex.pageName}`
+      getDigitalBookPage(rightPageIndex).then(page => {
+        rightPage.value = {
+          pageModel: page.pageModel || {},
+          imgBase64: page.imgBase64 || "",
+          moduleName: rightPageIndex.moduleName || "",
+        }
+      })
+    }
+  })
 
   onMounted(async () => {
     init(`${import.meta.env.VITE_APP_API_EBOOK_BASE_URL}${fileName}/`, fileName, secretKey)
