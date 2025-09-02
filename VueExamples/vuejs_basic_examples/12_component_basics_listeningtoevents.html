@@ -18,7 +18,7 @@
   <body>
     <!--父组件监听子组件事件-->
     <!--子组件通过事件向父组件传递值，父组件在监听事件时通过$event取得值-->
-    <!--在Vue 3中，当你使用组合式API时，根元素不能直接使用Vue指令（如:style），
+    <!--在Vue3中，当你使用组合式API时，根元素不能直接使用Vue指令（如:style），
 	因为根元素是Vue应用挂载的目标容器。-->
     <div id="blog-posts-enents-1">
       <div :style="{ fontSize: postFontSize + 'em' }">
@@ -49,7 +49,7 @@
 
     <!--通过插槽分发内容-->
     <div id="component-demo4">
-      <alert-box>Something bad happened.</alert-box>
+      <alert-box>Something good happened.</alert-box>
     </div>
 
     <script type="module">

@@ -4,16 +4,31 @@
   <button @click="enlargeText">Enlarge text</button>
 </template>
 
-<script setup>
-  defineProps(["id", "title"])
-  const emit = defineEmits(["enlargeText"])
+<script>
+  // defineProps(["id", "title"])
+  // const emit = defineEmits(["enlargeText"])
 
-  const enlargeText = () => {
-    emit("enlargeText")
+  // const enlargeText = () => {
+  //   emit("enlargeText")
+  // }
+
+  // defineExpose({
+  //   emit,
+  //   enlargeText,
+  // })
+
+  // 不使用<script setup>
+  export default {
+    props: ["id", "title"],
+    emits: ["enlargeText"],
+    setup(props, { emit }) {
+      const enlargeText = () => {
+        emit("enlargeText")
+      }
+
+      return {
+        enlargeText,
+      }
+    },
   }
-
-  defineExpose({
-    emit,
-    enlargeText,
-  })
 </script>

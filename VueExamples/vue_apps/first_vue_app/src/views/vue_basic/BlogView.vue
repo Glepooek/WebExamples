@@ -9,7 +9,7 @@
       ref="blogPosts"
       class="active"
     />
-    <AlertBox> Something bad happened.</AlertBox>
+    <AlertBox> Something good happened.</AlertBox>
   </div>
 </template>
 

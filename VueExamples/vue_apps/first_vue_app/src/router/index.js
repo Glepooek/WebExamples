@@ -24,6 +24,11 @@ const router = createRouter({
       name: "todo",
       component: () => import("../views/vue_basic/TodoItemListView.vue"),
     },
+    {
+      path: "/user",
+      name: "user",
+      component: () => import("../views/vue_basic/UserInfo.vue"),
+    },
   ],
 })
 
