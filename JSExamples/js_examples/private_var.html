@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript Private Variables</title>
+    <script
+      async=""
+      src="https://sf1-scmcdn-tos.pstatp.com/goofy/log-sdk/collect/collect-autotrack-rangers.js"
+    ></script>
+    <script>
+      ;(function (win, export_obj) {
+        win['TeaAnalyticsObject'] = export_obj
+        if (!win[export_obj]) {
+          function _collect() {
+            _collect.q.push(arguments)
+          }
+          _collect.q = _collect.q || []
+          win[export_obj] = _collect
+        }
+        win[export_obj].l = +new Date()
+      })(window, 'collectEvent')
+
+      window.collectEvent('init', {
+        app_id: 10000056,
+        channel_domain: 'https://hive.data.fltrp.com',
+        log: true, // 开启调试日志
+        autotrack: false, // 开启全埋点采集，默认关闭，需要热力图及圈选功能可开启
+      })
+      // 此处可添加设置uuid、设置公共属性等代码
+      window.collectEvent('start')
+      window.collectEvent('website_banner', {})
+      ;(function (doc, win) {
+        var docEl = doc.documentElement,
+          resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+          recalc = function () {
+            var clientWidth = docEl.clientWidth
+            var clientHeight = docEl.clientHeight
+            if (!clientWidth) return
+            docEl.style.fontSize = 10 * (clientWidth / 1080) + 'px'
+          }
+        if (!doc.addEventListener) return
+        win.addEventListener(resizeEvt, recalc, false)
+        doc.addEventListener('DOMContentLoaded', recalc, false)
+      })(document, window)
+    </script>
+  </head>
+  <body>
+    <button onclick="k12Download('k12_download')">下载</button>
+    <script>
+      //   function createCounter() {
+      //     let count = 0
+      //     return {
+      //       increment: function () {
+      //         count++
+      //       },
+      //       getCount: function () {
+      //         return count
+      //       },
+      //     }
+      //   }
+
+      //   const counter = createCounter()
+      //   counter.increment()
+      //   console.log(counter.getCount())
+      //   console.log(counter.count)
+
+      //   const counter = (function () {
+      //     let count = 0
+      //     return {
+      //       increment: function () {
+      //         count++
+      //       },
+      //       getCount: function () {
+      //         return count
+      //       },
+      //     }
+      //   })()
+
+      //   counter.increment()
+      //   console.log(counter.getCount())
+      //   console.log(counter.count)
+
+      function k12Download(name) {
+        window.collectEvent('website_banner_click', {
+          click_name: name,
+        })
+      }
+    </script>
+  </body>
+</html>
