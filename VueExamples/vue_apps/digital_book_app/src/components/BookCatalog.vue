@@ -29,7 +29,11 @@
 <script setup>
   import { ref, computed } from "vue"
   const props = defineProps({
-    catalogList: { type: Array, default: () => [] },
+    catalogList: {
+      type: Array,
+      required: true,
+      default: () => [],
+    },
   })
 
   const emit = defineEmits(["pageNumberEnter", "catalogItemClick"])

@@ -101,5 +101,3 @@ export default {
 在单文件组件和内联字符串模板中，我们都推荐这样做。但是，`PascalCase`的标签名在DOM内模板中是不可用的。
 
 为了方便，Vue支持将模板中使用`kebab-case`的标签解析为使用`PascalCase`注册的组件。这意味着一个以MyComponent为名注册的组件，在模板 (或由Vue渲染的HTML元素) 中可以通过`<MyComponent>`或 `<my-component>`引用。这让我们能够使用同样的JS组件注册代码来配合不同来源的模板。
-
-

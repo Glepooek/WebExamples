@@ -17,19 +17,20 @@
 
   <body>
     <div id="app">
-      <blog-post post-title="My journey with Vue" likes="23"></blog-post>
+      <blog-post title="My journey with Vue" likes="23"></blog-post>
     </div>
 
-    <script>
-      Vue.component("blog-post", {
-        props: ["postTitle", "likes"],
-        template: "<h2>{{postTitle}}-{{likes}}</h2>",
-      })
+    <script type="module">
+      import { createApp, ref } from 'vue'
 
-      var vm = new Vue({
-        el: "#app",
-        data: {},
-      })
+      createApp({
+        components: {
+          'blog-post': {
+            props: ['title', 'likes'],
+            template: '<h2>{{title}}-{{likes}}</h2>',
+          },
+        },
+      }).mount('#app')
 
       /**
 			 * 1、大小写
@@ -42,7 +43,7 @@
 					template: '<h3>{{ postTitle }}</h3>'
 				})
 
-				<!-- 在 HTML 中是 kebab-case 的 -->
+				在 HTML 中是 kebab-case 的：
 				<blog-post post-title="hello!"></blog-post>
 			 *
 			 * 2、类型
@@ -56,11 +57,6 @@
 				  callback: Function,
 				  contactsPromise: Promise // or any other constructor
 				}
-			 *
-			 *
-			 *
-			 *
-			 *
 			 *
 			 **/
     </script>
