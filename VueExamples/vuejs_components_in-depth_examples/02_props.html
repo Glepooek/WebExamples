@@ -17,48 +17,154 @@
 
   <body>
     <div id="app">
-      <blog-post title="My journey with Vue" likes="23"></blog-post>
+      <div :style="{ fontSize: fontSize + 'px' }">Blog Posts</div>
+      <blog-post
+        v-for="post in posts"
+        :key="post.title"
+        :title="post.title"
+        :likes="post.likes"
+        @enlarge-text="(size)=>{fontSize += size}"
+      ></blog-post>
+    </div>
+
+    <div style="height: 1px; border: 1px solid #d11616; margin: 10px 0"></div>
+
+    <div id="app2">
+      <div :style="{ fontSize: fontSize + 'px' }">Blog Posts with Options API</div>
+      <blog-post-options
+        v-for="post in posts"
+        :key="post.title"
+        :title="post.title"
+        :likes="post.likes"
+        @enlarge-text="(size)=>{fontSize += size}"
+      ></blog-post-options>
+    </div>
+
+    <div style="height: 1px; border: 1px solid #d11616; margin: 10px 0"></div>
+
+    <div id="app3">
+      <div :style="{ fontSize: fontSize + 'px' }">Blog Posts with Options API</div>
+      <blog-post-options
+        v-for="post in posts"
+        :key="post.title"
+        :title="post.title"
+        :likes="post.likes"
+        @enlarge-text="enlargeText($event)"
+      ></blog-post-options>
     </div>
 
     <script type="module">
       import { createApp, ref } from 'vue'
 
       createApp({
+        setup() {
+          const posts = ref([
+            {
+              title: 'My journey with Vue',
+              likes: 23,
+              count: 1,
+            },
+            {
+              title: 'Learning Vue Composition API',
+              likes: 15,
+              count: 1,
+            },
+          ])
+
+          const fontSize = ref(16)
+
+          return {
+            posts,
+            fontSize,
+          }
+        },
+
         components: {
           'blog-post': {
             props: ['title', 'likes'],
-            template: '<h2>{{title}}-{{likes}}</h2>',
+            emits: ['enlarge-text'],
+            template: `<h3>{{title}}-{{likes}}</h3>
+                  <button @click="$emit('enlarge-text', 1)">enlarge text</button>`,
           },
         },
       }).mount('#app')
 
-      /**
-			 * 1、大小写
-			 * 尽量使用kebab-case 命名。
-			 * 在js中使用驼峰命名法，在DOM中需要使用等价的kebab-case 名，为避免麻烦，尽量使用kebab-case命名。
-			 *
-			 * Vue.component('blog-post', {
-					// 在 JavaScript 中是 camelCase 的
-					props: ['postTitle'],
-					template: '<h3>{{ postTitle }}</h3>'
-				})
+      // 选项卡式API 实现blog-post组件
+      createApp({
+        setup() {
+          const posts = ref([
+            {
+              title: 'My journey with Vue',
+              likes: 23,
+              count: 1,
+            },
+            {
+              title: 'Learning Vue Composition API',
+              likes: 15,
+              count: 1,
+            },
+          ])
 
-				在 HTML 中是 kebab-case 的：
-				<blog-post post-title="hello!"></blog-post>
-			 *
-			 * 2、类型
-			 * 为每个prop指定名称和类型
-			 * props: {
-				  title: String,
-				  likes: Number,
-				  isPublished: Boolean,
-				  commentIds: Array,
-				  author: Object,
-				  callback: Function,
-				  contactsPromise: Promise // or any other constructor
-				}
-			 *
-			 **/
+          const fontSize = ref(16)
+
+          return {
+            posts,
+            fontSize,
+          }
+        },
+
+        components: {
+          'blog-post-options': {
+            props: ['title', 'likes'],
+            emits: ['enlarge-text'],
+            data() {
+              return {
+                count: 0,
+              }
+            },
+            methods: {
+              emitEnlargeText() {
+                this.$emit('enlarge-text', 1)
+              },
+            },
+            template: `<h3>{{title}}-{{likes}}</h3>
+                  <button @click="emitEnlargeText">enlarge text</button>`,
+          },
+        },
+      }).mount('#app2')
+
+      createApp({
+        data() {
+          return {
+            posts: [
+              {
+                title: 'My journey with Vue',
+                likes: 23,
+                count: 1,
+              },
+              {
+                title: 'Learning Vue Composition API',
+                likes: 15,
+                count: 1,
+              },
+            ],
+            fontSize: 16,
+          }
+        },
+        methods: {
+          enlargeText(size) {
+            this.fontSize += size
+          },
+        },
+        components: {
+          'blog-post-options': {
+            props: ['title', 'likes'],
+            emits: ['enlarge-text'],
+            template: `<h3>{{title}}-{{likes}}</h3>
+                  <button @click="$emit('enlarge-text', 1)">enlarge text</button>`,
+          },
+        },
+      }).mount('#app3')
     </script>
   </body>
 </html>
