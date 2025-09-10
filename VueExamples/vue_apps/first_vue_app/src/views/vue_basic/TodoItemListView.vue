@@ -2,7 +2,8 @@
   <main>
     <form v-on:submit.prevent="addNewTodo">
       <label for="new-todo">Add a todo</label>
-      <input v-model="newTodoText" id="new-todo" placeholder="E.g. Feed the cat" />
+      <!-- <input v-model="newTodoText" id="new-todo" placeholder="E.g. Feed the cat" /> -->
+      <CustomInput v-model="newTodoText" id="new-todo" placeholder="E.g. Feed the cat" />
       <button>Add</button>
     </form>
     <ul>
@@ -19,6 +20,7 @@
 <script setup>
   import { ref } from "vue"
   import TodoItem from "@/components/TodoItem.vue"
+  import CustomInput from "@/components/CustomInput.vue"
 
   const newTodoText = ref("")
   const todos = ref([

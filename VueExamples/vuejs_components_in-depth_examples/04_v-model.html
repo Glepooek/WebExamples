@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>v-model</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .custom-input-container {
+        margin: 10px 0;
+      }
+      input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      p {
+        font-size: 18px;
+        margin: 10px 0;
+      }
+      .value-display {
+        background-color: #f5f5f5;
+        padding: 10px;
+        border-radius: 4px;
+        min-height: 20px;
+        color: red;
+      }
+    </style>
+    <!--导入映射表-->
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Vue 3 v-model Example</h1>
+      <custom-input v-model="inputValue"></custom-input>
+      <p>Input Value: <span class="value-display">{{ inputValue }}</span></p>
+      <button @click="clearInput">Clear Input</button>
+    </div>
+
+    <script type="module">
+      import { createApp, ref } from 'vue'
+
+      const CustomInput = {
+        template: `
+          <div class="custom-input-container">
+            <input
+              :value="modelValue"
+              @input="$emit('update:modelValue', $event.target.value)"
+              placeholder="Type something..."
+            />
+          </div>
+        `,
+        props: {
+          modelValue: String,
+        },
+      }
+
+      createApp({
+        components: {
+          CustomInput,
+        },
+        setup() {
+          const inputValue = ref('')
+
+          const clearInput = () => {
+            inputValue.value = ''
+          }
+
+          return {
+            inputValue,
+            clearInput,
+          }
+        },
+      }).mount('#app')
+    </script>
+  </body>
+</html>
