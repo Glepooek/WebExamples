@@ -3,7 +3,7 @@
     <form v-on:submit.prevent="addNewTodo">
       <label for="new-todo">Add a todo</label>
       <!-- <input v-model="newTodoText" id="new-todo" placeholder="E.g. Feed the cat" /> -->
-      <CustomInput v-model="newTodoText" id="new-todo" placeholder="E.g. Feed the cat" />
+      <CustomInput v-model.capitalize="newTodoText" id="new-todo" placeholder="E.g. Feed the cat" />
       <button>Add</button>
     </form>
     <ul>
