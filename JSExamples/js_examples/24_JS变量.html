@@ -43,6 +43,11 @@
         }
         console.log(person1.fullName.call(person2));// 返回 "John Doe"
         console.log(person1.fullName.apply(person2));// 返回 "John Doe"
+
+        // 在于理解每次循环迭代都会创建一个新的块级作用域的变量：
+        for (const key in {a:1, b:"hi"}) {
+            console.log(key);
+        }
     </script>
 </head>
 
