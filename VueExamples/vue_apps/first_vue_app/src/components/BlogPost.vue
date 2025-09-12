@@ -19,6 +19,8 @@
 
   // 不使用<script setup>
   export default {
+    // 禁用属性继承
+    inheritAttrs: false,
     props: ["id", "title"],
     emits: ["enlargeText"],
     setup(props, { emit }) {
