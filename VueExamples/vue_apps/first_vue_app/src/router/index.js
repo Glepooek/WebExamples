@@ -29,6 +29,11 @@ const router = createRouter({
       name: "user",
       component: () => import("../views/vue_basic/UserInfo.vue"),
     },
+    {
+      path: "/inject",
+      name: "inject",
+      component: () => import("../views/vue_basic/InjectView.vue"),
+    },
   ],
 })
 

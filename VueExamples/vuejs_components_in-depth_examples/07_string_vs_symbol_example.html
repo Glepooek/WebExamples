@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>String vs Symbol Injection Keys</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>String vs Symbol Injection Keys Example</h2>
+    <string-key-example></string-key-example>
+    <symbol-key-example></symbol-key-example>
+  </div>
+
+  <script>
+    const { createApp, provide, inject, ref } = Vue;
+    
+    // String key - can cause conflicts
+    const STRING_KEY = 'config';
+    
+    // Symbol keys - always unique
+    const SYMBOL_KEY_1 = Symbol('config');
+    const SYMBOL_KEY_2 = Symbol('config');
+    
+    // Component showing string key conflicts
+    const StringKeyExample = {
+      template: `
+        <div style="border: 2px solid orange; padding: 10px; margin: 10px;">
+          <h3>String Key Example (Potential Conflicts)</h3>
+          <provider-a>
+            <provider-b>
+              <consumer-component></consumer-component>
+            </provider-b>
+          </provider-a>
+        </div>
+      `,
+      components: {
+        ProviderA: {
+          template: '<div><h4>Provider A</h4><slot></slot></div>',
+          setup() {
+            provide(STRING_KEY, 'Config from Provider A');
+          }
+        },
+        ProviderB: {
+          template: '<div><h4>Provider B</h4><slot></slot></div>',
+          setup() {
+            provide(STRING_KEY, 'Config from Provider B'); // This overrides Provider A's value
+          }
+        },
+        ConsumerComponent: {
+          template: '<div><h4>Consumer</h4><p>Received config: {{ config }}</p></div>',
+          setup() {
+            const config = inject(STRING_KEY, 'Default config');
+            return { config };
+          }
+        }
+      }
+    };
+    
+    // Component showing Symbol keys avoiding conflicts
+    const SymbolKeyExample = {
+      template: `
+        <div style="border: 2px solid purple; padding: 10px; margin: 10px;">
+          <h3>Symbol Key Example (No Conflicts)</h3>
+          <symbol-provider-a>
+            <symbol-provider-b>
+              <symbol-consumer-component></symbol-consumer-component>
+            </symbol-provider-b>
+          </symbol-provider-a>
+        </div>
+      `,
+      components: {
+        SymbolProviderA: {
+          template: '<div><h4>Provider A (Symbol 1)</h4><slot></slot></div>',
+          setup() {
+            provide(SYMBOL_KEY_1, 'Config from Provider A');
+          }
+        },
+        SymbolProviderB: {
+          template: '<div><h4>Provider B (Symbol 2)</h4><slot></slot></div>',
+          setup() {
+            provide(SYMBOL_KEY_2, 'Config from Provider B'); // No conflict with Symbol 1
+          }
+        },
+        SymbolConsumerComponent: {
+          template: `
+            <div>
+              <h4>Consumer</h4>
+              <p>Config from Symbol 1: {{ config1 }}</p>
+              <p>Config from Symbol 2: {{ config2 }}</p>
+            </div>
+          `,
+          setup() {
+            const config1 = inject(SYMBOL_KEY_1, 'Default config 1');
+            const config2 = inject(SYMBOL_KEY_2, 'Default config 2');
+            return { config1, config2 };
+          }
+        }
+      }
+    };
+    
+    const app = createApp({});
+    app.component('string-key-example', StringKeyExample);
+    app.component('symbol-key-example', SymbolKeyExample);
+    app.mount('#app');
+  </script>
+</body>
+</html>

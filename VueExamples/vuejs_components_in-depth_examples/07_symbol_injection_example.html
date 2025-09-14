@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symbol Injection Example</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <provider-component>
+      <middle-component>
+        <consumer-component></consumer-component>
+      </middle-component>
+    </provider-component>
+  </div>
+
+  <script>
+    const { createApp, computed, provide, inject } = Vue;
+    
+    // Define injection keys using Symbol
+    const messageKey = Symbol('message');
+    const userKey = Symbol('user');
+    
+    // Provider component
+    const ProviderComponent = {
+      template: `
+        <div style="border: 2px solid blue; padding: 10px; margin: 10px;">
+          <h3>Provider Component</h3>
+          <p>Providing data with Symbol keys</p>
+          <slot></slot>
+        </div>
+      `,
+      setup() {
+        const message = 'Hello from provider!';
+        const user = computed(() => ({
+          name: 'John Doe',
+          email: 'john@example.com'
+        }));
+        
+        // Provide data using Symbol keys
+        provide(messageKey, message);
+        provide(userKey, user);
+        
+        return {};
+      }
+    };
+    
+    // Middle component (just passes data through)
+    const MiddleComponent = {
+      template: `
+        <div style="border: 2px solid green; padding: 10px; margin: 10px;">
+          <h3>Middle Component</h3>
+          <p>This component doesn't use the provided data</p>
+          <slot></slot>
+        </div>
+      `
+    };
+    
+    // Consumer component
+    const ConsumerComponent = {
+      template: `
+        <div style="border: 2px solid red; padding: 10px; margin: 10px;">
+          <h3>Consumer Component</h3>
+          <p>Message: {{ message }}</p>
+          <p>User: {{ user.name }} ({{ user.email }})</p>
+        </div>
+      `,
+      setup() {
+        // Inject data using the same Symbol keys
+        const message = inject(messageKey);
+        const user = inject(userKey);
+        
+        return {
+          message,
+          user
+        };
+      }
+    };
+    
+    const app = createApp({});
+    app.component('provider-component', ProviderComponent);
+    app.component('middle-component', MiddleComponent);
+    app.component('consumer-component', ConsumerComponent);
+    app.mount('#app');
+  </script>
+</body>
+</html>

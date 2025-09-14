@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symbol Injection Best Practices</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <theme-provider>
+      <user-provider>
+        <app-layout>
+          <navigation-component></navigation-component>
+          <content-component></content-component>
+        </app-layout>
+      </user-provider>
+    </theme-provider>
+  </div>
+
+  <script>
+    const { createApp, provide, inject, reactive, computed } = Vue;
+    
+    // Best practice: Define all injection keys in a separate file/section
+    // This would typically be in its own file like 'injectionKeys.js'
+    const injectionKeys = {
+      theme: Symbol('theme'),
+      user: Symbol('user'),
+      permissions: Symbol('permissions')
+    };
+    
+    // Theme provider component
+    const ThemeProvider = {
+      template: `
+        <div style="padding: 10px; margin: 10px; border: 2px solid blue;">
+          <h3>Theme Provider</h3>
+          <slot></slot>
+        </div>
+      `,
+      setup() {
+        // Theme data
+        const theme = reactive({
+          primaryColor: 'blue',
+          secondaryColor: 'green',
+          darkMode: false
+        });
+        
+        // Provide theme with Symbol key
+        provide(injectionKeys.theme, theme);
+        
+        return {};
+      }
+    };
+    
+    // User provider component
+    const UserProvider = {
+      template: `
+        <div style="padding: 10px; margin: 10px; border: 2px solid green;">
+          <h3>User Provider</h3>
+          <slot></slot>
+        </div>
+      `,
+      setup() {
+        // User data
+        const user = reactive({
+          id: 1,
+          name: 'John Doe',
+          role: 'admin'
+        });
+        
+        // Computed permissions based on user role
+        const permissions = computed(() => {
+          return {
+            canEdit: user.role === 'admin' || user.role === 'editor',
+            canDelete: user.role === 'admin',
+            canView: true
+          };
+        });
+        
+        // Provide user and permissions with Symbol keys
+        provide(injectionKeys.user, user);
+        provide(injectionKeys.permissions, permissions);
+        
+        return {};
+      }
+    };
+    
+    // App layout component
+    const AppLayout = {
+      template: `
+        <div style="padding: 10px; margin: 10px; border: 2px solid purple;">
+          <h3>App Layout</h3>
+          <slot></slot>
+        </div>
+      `
+    };
+    
+    // Navigation component that consumes injected data
+    const NavigationComponent = {
+      template: `
+        <div style="padding: 10px; margin: 10px; border: 2px solid orange;">
+          <h3>Navigation Component</h3>
+          <p>Theme primary color: {{ theme.primaryColor }}</p>
+          <p>User: {{ user.name }} ({{ user.role }})</p>
+          <p>Can edit: {{ permissions.canEdit ? 'Yes' : 'No' }}</p>
+          <p>Can delete: {{ permissions.canDelete ? 'Yes' : 'No' }}</p>
+        </div>
+      `,
+      setup() {
+        // Inject data using Symbol keys
+        const theme = inject(injectionKeys.theme);
+        const user = inject(injectionKeys.user);
+        const permissions = inject(injectionKeys.permissions);
+        
+        return {
+          theme,
+          user,
+          permissions
+        };
+      }
+    };
+    
+    // Content component that also consumes injected data
+    const ContentComponent = {
+      template: `
+        <div style="padding: 10px; margin: 10px; border: 2px solid red;">
+          <h3>Content Component</h3>
+          <div :style="{ color: theme.darkMode ? 'white' : 'black', 
+                        backgroundColor: theme.darkMode ? 'gray' : 'white' }">
+            <p>This content adapts to the theme.</p>
+            <p>Only users with edit permissions can see this: 
+              <span v-if="permissions.canEdit">EDITABLE CONTENT</span>
+              <span v-else>READ-ONLY CONTENT</span>
+            </p>
+          </div>
+        </div>
+      `,
+      setup() {
+        // Inject the same data with the same Symbol keys
+        const theme = inject(injectionKeys.theme);
+        const permissions = inject(injectionKeys.permissions);
+        
+        return {
+          theme,
+          permissions
+        };
+      }
+    };
+    
+    const app = createApp({});
+    app.component('theme-provider', ThemeProvider);
+    app.component('user-provider', UserProvider);
+    app.component('app-layout', AppLayout);
+    app.component('navigation-component', NavigationComponent);
+    app.component('content-component', ContentComponent);
+    app.mount('#app');
+  </script>
+</body>
+</html>

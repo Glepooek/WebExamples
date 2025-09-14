@@ -17,6 +17,7 @@
         <RouterLink to="/blog">Blog</RouterLink>
         <RouterLink to="/todo">Todo</RouterLink>
         <RouterLink to="/user">User</RouterLink>
+        <RouterLink to="/inject">Inject</RouterLink>
       </nav>
     </div>
   </header>
