@@ -34,6 +34,11 @@ const router = createRouter({
       name: "inject",
       component: () => import("../views/vue_basic/InjectView.vue"),
     },
+    {
+      path: "/transition",
+      name: "transition",
+      component: () => import("../views/vue_basic/TransitionView.vue"),
+    },
   ],
 })
 

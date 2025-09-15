@@ -64,4 +64,73 @@ export default {
 + `v-leave-to`：离开动画的结束状态。在一个离开动画被触发后的下一帧被添加 (也就是 v-leave-from 被移除的同时)，在过渡或动画完成之后移除。
 
 ### 为过渡效果命名
+可以给`<Transition>`组件一个`name`属性来声明一个过渡效果名。
 
+```vue
+<template>
+    <button @click="show = !show">Toggle</button>
+    <Transition name="fade">
+        <!-- 插槽内容 -->
+    </Transition>
+</template>
+```
+
+对于一个有名字的过渡效果，对它起作用的过渡class会以其`名字`而不是`v`作为前缀。
+
+```vue
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>
+```
+
+### CSS的transition
+`<Transition>`一般都会搭配原生`CSS过渡`一起使用，正如你在上面的例子中所看到的那样。这个 `transition`CSS属性是一个简写形式，使我们可以一次定义一个过渡的各个方面，包括`需要执行动画的属性、持续时间和速度曲线`。
+
+下面是一个更高级的例子，它使用了不同的持续时间和速度曲线来过渡多个属性：
+
+```vue
+<template>
+    <button @click="show = !show">Toggle Slide + Fade</button>
+    <Transition>
+        <p v-if="show">hello world</p>
+    </Transition>
+</template>
+
+<script>
+export default {
+    data() {
+        return {
+            show: true
+        }
+    }
+}
+</script>
+
+<style scoped>
+/*
+  进入和离开动画可以使用不同
+  持续时间和速度曲线。
+*/
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+</style>
+```
