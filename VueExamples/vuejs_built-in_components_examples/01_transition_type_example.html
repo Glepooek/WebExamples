@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="cn-zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue Transition Type Example</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      .container {
+        margin: 20px;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+
+      /* 动画定义 */
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      .bounce-animation {
+        animation: bounce 1s infinite;
+      }
+
+      /* 过渡定义 */
+      .fade-transition {
+        transition: opacity 0.5s ease;
+      }
+
+      .fade-enter-from,
+      .fade-leave-to {
+        opacity: 0;
+      }
+
+      .fade-enter-to,
+      .fade-leave-from {
+        opacity: 1;
+      }
+
+      .box {
+        width: 100px;
+        height: 100px;
+        background-color: #42b983;
+        margin: 20px 0;
+        cursor: pointer;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 5px;
+      }
+
+      .demo-section {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        margin: 20px 0;
+      }
+
+      h3 {
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <h1>Vue Transition Type 属性示例</h1>
+
+        <!-- 默认行为示例 -->
+        <div class="demo-section">
+          <h3>无type属性 - 默认行为</h3>
+          <p>元素同时具有animation和transition，Vue会自动探测类型</p>
+          <button @click="showDefault = !showDefault">切换显示 (默认)</button>
+          <transition name="fade">
+            <div v-if="showDefault" class="box bounce-animation fade-transition"></div>
+          </transition>
+        </div>
+
+        <!-- 指定type为transition -->
+        <div class="demo-section">
+          <h3>type="transition"</h3>
+          <p>明确告诉Vue只关注CSS过渡</p>
+          <button @click="showTransition = !showTransition">切换显示 (transition)</button>
+          <transition name="fade" type="transition">
+            <div v-if="showTransition" class="box bounce-animation fade-transition"></div>
+          </transition>
+        </div>
+
+        <!-- 指定type为animation -->
+        <div class="demo-section">
+          <h3>type="animation"</h3>
+          <p>明确告诉Vue只关注CSS动画</p>
+          <button @click="showAnimation = !showAnimation">切换显示 (animation)</button>
+          <transition name="fade" type="animation">
+            <div v-if="showAnimation" class="box bounce-animation fade-transition"></div>
+          </transition>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const { createApp, ref } = Vue
+
+      createApp({
+        setup() {
+          const showDefault = ref(true)
+          const showTransition = ref(true)
+          const showAnimation = ref(true)
+
+          return {
+            showDefault,
+            showTransition,
+            showAnimation,
+          }
+        },
+      }).mount('#app')
+    </script>
+  </body>
+</html>

@@ -39,6 +39,11 @@ const router = createRouter({
       name: "transition",
       component: () => import("../views/vue_basic/TransitionView.vue"),
     },
+    {
+      path: "/animation",
+      name: "animation",
+      component: () => import("../views/vue_basic/AnimationView.vue"),
+    },
   ],
 })
 

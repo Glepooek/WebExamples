@@ -134,3 +134,102 @@ export default {
 }
 </style>
 ```
+
+### CSS的animation
+原生`CSS动画`和CSS transition的应用方式基本上是相同的，只有一点不同，那就是`*-enter-from`不是在元素插入后立即移除，而是在一个`animationend`事件触发时被移除。
+对于大多数的CSS动画，可以简单地在`*-enter-active`和`*-leave-active` class下声明它们。
+
+```vue
+<template>
+  <main>
+    <button @click="show = !show">Toggle</button>
+    <Transition name="bounce">
+      <p v-if="show" style="text-align: center">Hello here is some bouncy text!</p>
+    </Transition>
+  </main>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        show: false,
+      }
+    },
+  }
+</script>
+
+<style scoped>
+  .bounce-enter-active {
+    animation: bounce-in 0.5s;
+  }
+  .bounce-leave-active {
+    animation: bounce-in 0.5s reverse;
+  }
+
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.25);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+</style>
+```
+
+### 自定义过渡class
+也可以向`<Transition>`组件传递以下props来指定自定义的过渡class：
+
+* `enter-from-class`
+* `enter-active-class`
+* `enter-to-class`
+* `leave-from-class`
+* `leave-active-class`
+* `leave-to-class`
+
+传入的这些class会覆盖相应阶段的默认class名。这个功能在你想要在Vue的动画机制下集成其他的`第三方CSS动画库`时非常有用，比如`Animate.css`：
+
+```vue
+<script>
+export default {
+  data() {
+    return {
+      show: true
+    }
+  }
+}
+</script>
+
+<template>
+	<button @click="show = !show">Toggle</button>
+  <Transition
+    name="custom-classes"
+    enter-active-class="animate__animated animate__tada"
+    leave-active-class="animate__animated animate__bounceOutRight"
+  >
+    <p v-if="show">hello</p>
+  </Transition>
+</template>
+
+<style>
+@import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
+</style>
+```
+
+### 同时使用transition和animation
+Vue需要附加事件监听器，以便知道过渡何时结束。可以是`transitionend`或`animationend`，这取决于你所应用的CSS规则。如果你仅仅使用二者的其中之一，Vue可以自动探测到正确的类型。
+
+然而在某些场景中，你或许想要在同一个元素上同时使用它们两个。举例来说，Vue触发了一个CSS动画，同时鼠标悬停触发另一个CSS过渡。此时你需要显式地传入`type`prop来声明，告诉Vue需要关心哪种类型，传入的值是`animation`或`transition`：
+
+```vue
+<Transition type="animation">...</Transition>
+```
+
+### 深层级过渡与显式过渡时长
+
+
+

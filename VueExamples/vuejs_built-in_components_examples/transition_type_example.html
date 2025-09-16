@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" line="width=device-width, initial-scale=1.0" />
+    <title>Vue Transition Type Example</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+      .container {
+        margin: 20px;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+
+      /* 动画定义 - 持续2秒 */
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-50px);
+        }
+      }
+
+      .bounce-animation {
+        animation: bounce 2s infinite;
+      }
+
+      /* 过渡定义 - 持续5秒 */
+      .fade-transition {
+        transition: opacity 5s ease;
+      }
+
+      .fade-enter-from,
+      .fade-leave-to {
+        opacity: 0;
+      }
+
+      .fade-enter-to,
+      .fade-leave-from {
+        opacity: 1;
+      }
+
+      .box {
+        width: 100px;
+        height: 100px;
+        background-color: #42b983;
+        margin: 20px 0;
+        cursor: pointer;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 5px;
+      }
+
+      .demo-section {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        margin: 20px 0;
+      }
+
+      h3 {
+        margin-top: 0;
+      }
+
+      .status {
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 4px;
+        margin: 10px 0;
+        font-weight: bold;
+      }
+
+      .status.active {
+        background-color: #d4edda;
+        color: #155724;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <h1>Vue Transition Type 属性示例</h1>
+        <p>本示例展示了当元素同时具有CSS动画(2秒)和过渡(5秒)时，type属性如何影响Vue监听的事件类型：</p>
+
+        <!-- 默认行为示例 -->
+        <div class="demo-section">
+          <h3>1. 无type属性 - 默认行为</h3>
+          <p>Vue会自动检测并监听持续时间较短的动画事件(这里是animation)</p>
+          <div :class="{ active: showDefault }" class="status">状态: {{ showDefault ? '显示' : '隐藏' }}</div>
+          <button @click="showDefault = !showDefault">切换显示 (默认)</button>
+          <transition
+            name="fade"
+            @before-enter="logEvent('默认', 'before-enter')"
+            @enter="logEvent('默认', 'enter')"
+            @after-enter="logEvent('默认', 'after-enter')"
+            @before-leave="logEvent('默认', 'before-leave')"
+            @leave="logEvent('默认', 'leave')"
+            @after-leave="logEvent('默认', 'after-leave')"
+          >
+            <div v-if="showDefault" class="box bounce-animation fade-transition"></div>
+          </transition>
+        </div>
+
+        <!-- 指定type为transition -->
+        <div class="demo-section">
+          <h3>2. type="transition"</h3>
+          <p>Vue只监听transitionend事件，忽略animationend事件(过渡持续5秒，动画持续2秒)</p>
+          <div :class="{ active: showTransition }" class="status">状态: {{ showTransition ? '显示' : '隐藏' }}</div>
+          <button @click="showTransition = !showTransition">切换显示 (transition)</button>
+          <transition
+            name="fade"
+            type="transition"
+            @before-enter="logEvent('transition', 'before-enter')"
+            @enter="logEvent('transition', 'enter')"
+            @after-enter="logEvent('transition', 'after-enter')"
+            @before-leave="logEvent('transition', 'before-leave')"
+            @leave="logEvent('transition', 'leave')"
+            @after-leave="logEvent('transition', 'after-leave')"
+          >
+            <div v-if="showTransition" class="box bounce-animation fade-transition"></div>
+          </transition>
+        </div>
+
+        <!-- 指定type为animation -->
+        <div class="demo-section">
+          <h3>3. type="animation"</h3>
+          <p>Vue只监听animationend事件，忽略transitionend事件</p>
+          <div :class="{ active: showAnimation }" class="status">状态: {{ showAnimation ? '显示' : '隐藏' }}</div>
+          <button @click="showAnimation = !showAnimation">切换显示 (animation)</button>
+          <transition
+            name="fade"
+            type="animation"
+            @before-enter="logEvent('animation', 'before-enter')"
+            @enter="logEvent('animation', 'enter')"
+            @after-enter="logEvent('animation', 'after-enter')"
+            @before-leave="logEvent('animation', 'before-leave')"
+            @leave="logEvent('animation', 'leave')"
+            @after-leave="logEvent('animation', 'after-leave')"
+          >
+            <div v-if="showAnimation" class="box bounce-animation fade-transition"></div>
+          </transition>
+        </div>
+
+        <div class="demo-section">
+          <h3>事件日志</h3>
+          <button @click="clearLog">清空日志</button>
+          <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px">
+            <div v-for="(log, index) in eventLog" :key="index">{{ log }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const { createApp, ref } = Vue
+
+      createApp({
+        setup() {
+          const showDefault = ref(true)
+          const showTransition = ref(true)
+          const showAnimation = ref(true)
+          const eventLog = ref([])
+
+          const logEvent = (type, event) => {
+            const timestamp = new Date().toLocaleTimeString()
+            eventLog.value.push(`[${timestamp}] ${type}: ${event}`)
+            // 限制日志数量
+            if (eventLog.value.length > 20) {
+              eventLog.value.shift()
+            }
+          }
+
+          const clearLog = () => {
+            eventLog.value = []
+          }
+
+          return {
+            showDefault,
+            showTransition,
+            showAnimation,
+            eventLog,
+            logEvent,
+            clearLog,
+          }
+        },
+      }).mount('#app')
+    </script>
+  </body>
+</html>

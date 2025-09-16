@@ -1,6 +1,6 @@
 <template>
   <main>
-    <button @click="toggle">Toggle Transition</button>
+    <button @click="toggle">Toggle Slide + Fade</button>
     <transition name="slide-fade">
       <div v-if="show">Hello, World!</div>
     </transition>
@@ -20,7 +20,7 @@
 <style scoped>
   button {
     margin-bottom: 16px;
-    width: 120px;
+    width: 160px;
     height: 32px;
   }
 
@@ -35,7 +35,7 @@
     /* 在transition: all 0.3s ease-out;中：
     all 表示所有可应用过渡效果的CSS属性都会参与过渡动画
     这包括如opacity、transform、color、background-color等可以平滑变化的属性
-    在你的例子中，当元素进入时，任何发生变化的CSS属性都会在0.3秒内以ease-out缓动函数完成过渡 */
+    在例子中，指的是opacity、transform */
   }
 
   .slide-fade-leave-active {

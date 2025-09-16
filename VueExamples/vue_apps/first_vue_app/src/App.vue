@@ -19,6 +19,7 @@
         <RouterLink to="/user">User</RouterLink>
         <RouterLink to="/inject">Inject</RouterLink>
         <RouterLink to="/transition">Transition</RouterLink>
+        <RouterLink to="/animation">Animation</RouterLink>
       </nav>
     </div>
   </header>
