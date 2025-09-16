@@ -230,6 +230,68 @@ Vue需要附加事件监听器，以便知道过渡何时结束。可以是`tran
 ```
 
 ### 深层级过渡与显式过渡时长
+尽管过渡class仅能应用在`<Transition>`的直接子元素上，我们还是可以使用`深层级的CSS选择器`，在深层级的元素上触发过渡效果：
+
+```vue
+<template>
+  <Transition name="nested">
+    <div v-if="show" class="outer">
+      <div class="inner">
+        Hello
+      </div>
+    </div>
+  </Transition>
+</template>
+```
+
+```css
+/* 应用于嵌套元素的规则 */
+.nested-enter-active .inner,
+.nested-leave-active .inner {
+  transition: all 0.3s ease-in-out;
+}
+
+.nested-enter-from .inner,
+.nested-leave-to .inner {
+  transform: translateX(30px);
+  opacity: 0;
+}
+
+/* ... 省略了其他必要的 CSS */
+```
+
+甚至可以在深层元素上添加一个过渡延迟，从而创建一个带渐进延迟的动画序列：
+
+```css
+/* 延迟嵌套元素的进入以获得交错效果 */
+.nested-enter-active .inner {
+  transition-delay: 0.25s;
+}
+```
+
+然而，这会带来一个小问题。默认情况下，<Transition>组件会通过监听过渡根元素上的第一个 transitionend或者animationend事件来尝试自动判断过渡何时结束。而在嵌套的过渡中，期望的行为应该是等待所有内部元素的过渡完成。
+
+在这种情况下，你可以通过向<Transition>组件传入`duration`prop来显式指定过渡的持续时间(以毫秒为单位)。总持续时间应该匹配延迟加上内部元素的过渡持续时间：
+
+```vue
+<Transition :duration="550">...</Transition>
+```
+
+如果有必要的话，也可以用对象的形式传入，分开指定进入和离开所需的时间：
+
+```vue
+<Transition :duration="{ enter: 500, leave: 800 }">...</Transition>
+```
+
+### 性能考量​
+上面例子中展示的动画所用到的CSS属性大多是transform和opacity之类的。用这些属性制作动画非常高效，因为：
+
++ 他们在动画过程中不会影响到 DOM 结构，因此不会每一帧都触发昂贵的 CSS 布局重新计算。
++ 大多数的现代浏览器都可以在执行transform动画时利用GPU进行硬件加速。
+
+相比之下，像 height 或者 margin 这样的属性会触发 CSS 布局变动，因此执行它们的动画效果更昂贵，需要谨慎使用。
+
+## JS钩子
 
 
 
