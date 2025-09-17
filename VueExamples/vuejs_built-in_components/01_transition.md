@@ -429,16 +429,182 @@ Vue需要附加事件监听器，以便知道过渡何时结束。可以是`tran
 ```
 
 ## 元素间过渡
+除了通过`v-if`或`v-show`来切换一个元素，还可以通过`v-if`、`v-else-if`、`v-else`在几个元素间进行切换，只要确保任意时刻只有一个元素被渲染即可。
 
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const docState = ref('saved')
+</script>
+
+<template>
+	<span style="margin-right: 20px">Click to cycle through states:</span>
+  <div class="btn-container">
+		<Transition name="slide-up">
+      <button v-if="docState === 'saved'"
+              @click="docState = 'edited'">Edit</button>
+      <button v-else-if="docState === 'edited'"
+              @click="docState = 'editing'">Save</button>
+      <button v-else-if="docState === 'editing'"
+              @click="docState = 'saved'">Cancel</button>
+    </Transition>
+  </div>
+</template>
+
+<style>
+.btn-container {
+  display: inline-block;
+  position: relative;
+  height: 1em;
+}
+
+button {
+  position: absolute;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.25s ease-out;
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+</style>
+```
 
 ## 过渡模式
+在之前的例子中，进入和离开的元素都是在同时开始动画的，因此我们不得不将它们设为`position: absolute`以避免二者同时存在时出现的布局问题。
 
+然而，很多情况下这可能并不符合需求。我们可能想要先执行离开动画，然后在其完成之后再执行元素的进入动画。手动编排这样的动画是非常复杂的，好在我们可以通过向<Transition>传入一个`mode`prop来实现这个行为：
 
+```vue
+<template>
+  <Transition mode="out-in">
+    <!-- ... -->
+  </Transition>
+</template>
+```
+
+<Transition>也支持mode="in-out"，虽然这并不常用。
 
 ## 组件间过渡
+<Transition>也可用于动态组件之间的切换：
 
+```vue
+<script>
+import CompA from './CompA.vue'
+import CompB from './CompB.vue'
+
+export default {
+  components: { CompA, CompB },
+  data() {
+    return {
+      activeComponent: 'CompA'
+    }
+  }
+}
+</script>
+
+<template>
+	<label>
+    <input type="radio" v-model="activeComponent" value="CompA"> A
+  </label>
+  <label>
+    <input type="radio" v-model="activeComponent" value="CompB"> B
+  </label>
+  <Transition name="fade" mode="out-in">
+    <component :is="activeComponent"></component>
+  </Transition>
+</template>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
+```
 
 ## 动态过渡
+<Transition>的props(比如 name)也可以是动态的！这让我们可以根据状态变化动态地应用不同类型的过渡：
 
+```vue
+<template>
+  <Transition :name="transitionName">
+    <!-- ... -->
+  </Transition>
+</template>
+```
 
-## 使用Key Attribute过渡
+这个特性的用处是可以提前定义好多组CSS过渡或动画的class，然后在它们之间动态切换。
+
+你也可以根据你的组件的当前状态在JavaScript过渡钩子中应用不同的行为。最后，创建动态过渡的终极方式还是创建可复用的过渡组件，并让这些组件根据动态的props来改变过渡的效果。
+
+## 使用Key属性过渡
+有时为了触发过渡，你需要强制重新渲染DOM元素。
+
+以计数器组件为例：
+
+```vue
+<script>
+export default {
+  data() {
+    return {
+      count: 1,
+      interval: null
+    }
+  },
+  mounted() {
+    this.interval = setInterval(() => {
+      this.count++;
+    }, 1000)
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
+  }
+}
+</script>
+
+<template>
+  <div class="wrapper">
+    <Transition>
+      <span :key="count">{{ count }}</span>
+    </Transition>
+  </div>
+</template>
+
+<style scoped>
+span{
+  font-size: 4rem;
+}
+.wrapper{
+  position:relative;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+  position: absolute;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>
+```
+
+如果不使用key属性，则只有文本节点会被更新，因此不会发生过渡。但是，有了key属性，Vue就知道在count改变时`创建`一个新的span元素，因此Transition组件有`两个不同的元素`在它们之间进行过渡。
