@@ -20,6 +20,7 @@
         <RouterLink to="/inject">Inject</RouterLink>
         <RouterLink to="/transition">Transition</RouterLink>
         <RouterLink to="/animation">Animation</RouterLink>
+        <RouterLink to="/nested">NestedTransition</RouterLink>
       </nav>
     </div>
   </header>

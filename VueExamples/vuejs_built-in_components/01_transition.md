@@ -234,30 +234,69 @@ Vue需要附加事件监听器，以便知道过渡何时结束。可以是`tran
 
 ```vue
 <template>
-  <Transition name="nested">
-    <div v-if="show" class="outer">
-      <div class="inner">
-        Hello
+  <main>
+    <button @click="toggle">Toggle</button>
+    <transition name="nested">
+      <div v-if="show" class="outer">
+        <div class="inner">Hello, World!</div>
       </div>
-    </div>
-  </Transition>
+    </transition>
+  </main>
 </template>
-```
 
-```css
-/* 应用于嵌套元素的规则 */
-.nested-enter-active .inner,
-.nested-leave-active .inner {
-  transition: all 0.3s ease-in-out;
-}
+<script setup>
+  import { ref } from "vue"
 
-.nested-enter-from .inner,
-.nested-leave-to .inner {
-  transform: translateX(30px);
-  opacity: 0;
-}
+  const show = ref(true)
 
-/* ... 省略了其他必要的 CSS */
+  function toggle() {
+    show.value = !show.value
+  }
+</script>
+
+<style scoped>
+  .outer,
+  .inner {
+    background: #eee;
+    padding: 30px;
+    min-height: 100px;
+  }
+
+  .inner {
+    background: #ccc;
+    color: #000;
+  }
+
+  .nested-enter-active,
+  .nested-leave-active {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .nested-leave-active {
+    transition-delay: 0.25s;
+  }
+
+  .nested-enter-from,
+  .nested-leave-to {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  .nested-enter-active .inner,
+  .nested-leave-active .inner {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .nested-enter-active .inner {
+    transition-delay: 0.25s;
+  }
+
+  .nested-enter-from .inner,
+  .nested-leave-to .inner {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+</style>
 ```
 
 甚至可以在深层元素上添加一个过渡延迟，从而创建一个带渐进延迟的动画序列：
@@ -269,7 +308,7 @@ Vue需要附加事件监听器，以便知道过渡何时结束。可以是`tran
 }
 ```
 
-然而，这会带来一个小问题。默认情况下，<Transition>组件会通过监听过渡根元素上的第一个 transitionend或者animationend事件来尝试自动判断过渡何时结束。而在嵌套的过渡中，期望的行为应该是等待所有内部元素的过渡完成。
+然而，这会带来一个小问题。默认情况下，<Transition>组件会通过监听过渡根元素上的第一个`transitionend`或者`animationend`事件来尝试自动判断过渡何时结束。而在嵌套的过渡中，期望的行为应该是等待所有内部元素的过渡完成。
 
 在这种情况下，你可以通过向<Transition>组件传入`duration`prop来显式指定过渡的持续时间(以毫秒为单位)。总持续时间应该匹配延迟加上内部元素的过渡持续时间：
 
@@ -286,12 +325,120 @@ Vue需要附加事件监听器，以便知道过渡何时结束。可以是`tran
 ### 性能考量​
 上面例子中展示的动画所用到的CSS属性大多是transform和opacity之类的。用这些属性制作动画非常高效，因为：
 
-+ 他们在动画过程中不会影响到 DOM 结构，因此不会每一帧都触发昂贵的 CSS 布局重新计算。
++ 它们在动画过程中不会影响到DOM结构，因此不会每一帧都触发昂贵的CSS布局重新计算。
 + 大多数的现代浏览器都可以在执行transform动画时利用GPU进行硬件加速。
 
-相比之下，像 height 或者 margin 这样的属性会触发 CSS 布局变动，因此执行它们的动画效果更昂贵，需要谨慎使用。
+相比之下，像height或者margin这样的属性会触发CSS布局变动，因此执行它们的动画效果更昂贵，需要谨慎使用。
 
 ## JS钩子
+可以通过监听`<Transition>`组件事件的方式在过渡过程中挂上钩子函数：
+
+```vue
+<template>
+  <Transition
+    @before-enter="onBeforeEnter"
+    @enter="onEnter"
+    @after-enter="onAfterEnter"
+    @enter-cancelled="onEnterCancelled"
+    @before-leave="onBeforeLeave"
+    @leave="onLeave"
+    @after-leave="onAfterLeave"
+    @leave-cancelled="onLeaveCancelled"
+  >
+    <!-- ... -->
+  </Transition>
+</template>
+
+<script>
+  export default {
+    methods: {
+      onBeforeEnter(el) {},
+      onEnter(el, done) {},
+      onAfterEnter(el) {},
+      onEnterCancelled(el) {},
+
+      onBeforeLeave(el) {},
+      onLeave(el, done) {},
+      onAfterLeave(el) {},
+      onLeaveCancelled(el) {}
+    }
+  }
+</script>
+```
+
+这些钩子可以与CSS过渡或动画结合使用，也可以单独使用。
+
+在使用仅由JavaScript执行的动画时，最好是添加一个`:css="false"`prop。这显式地向Vue表明可以跳过对CSS过渡的自动探测。除了性能稍好一些之外，还可以防止CSS规则意外地干扰过渡效果：
+
+```vue
+<template>
+  <Transition
+    ...
+    :css="false"
+  >
+    ...
+  </Transition>
+</template>
+```
+
+在有了`:css="false"`后，自己就可以全权负责控制什么时候过渡结束了。这种情况下对于`@enter`和`@leave`钩子来说，回调函数`done`就是必须的。否则，钩子将被同步调用，过渡将立即完成。
+
+## 可复用的过渡效果
+得益于Vue的组件系统，`过渡效果是可以被封装复用的`。要创建一个可被复用的过渡，我们需要为<Transition>组件创建一个包装组件，并向内传入插槽内容：
+
+```vue
+<!-- MyTransition.vue -->
+<script>
+// JavaScript 钩子逻辑...
+</script>
+
+<template>
+  <!-- 包装内置的 Transition 组件 -->
+  <Transition
+    name="my-transition"
+    @enter="onEnter"
+    @leave="onLeave">
+    <slot></slot> <!-- 向内传递插槽内容 -->
+  </Transition>
+</template>
+
+<style>
+/*
+  必要的 CSS...
+  注意：避免在这里使用 <style scoped>
+  因为那不会应用到插槽内容上
+*/
+</style>
+```
+
+现在 MyTransition 可以在导入后像内置组件那样使用了：
+
+```vue
+<MyTransition>
+  <div v-if="show">Hello</div>
+</MyTransition>
+```
+
+## 出现时过渡
+如果你想在某个节点初次渲染时应用一个过渡效果，你可以添加`appear`prop：
+
+```vue
+<Transition appear>
+  ...
+</Transition>
+```
+
+## 元素间过渡
+
+
+## 过渡模式
 
 
 
+## 组件间过渡
+
+
+## 动态过渡
+
+
+## 使用Key Attribute过渡

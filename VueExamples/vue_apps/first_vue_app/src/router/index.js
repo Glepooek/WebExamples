@@ -44,6 +44,11 @@ const router = createRouter({
       name: "animation",
       component: () => import("../views/vue_basic/AnimationView.vue"),
     },
+    {
+      path: "/nested",
+      name: "nested",
+      component: () => import("../views/vue_basic/NestedTransitionView.vue"),
+    },
   ],
 })
 
