@@ -21,6 +21,8 @@
         <RouterLink to="/transition">Transition</RouterLink>
         <RouterLink to="/animation">Animation</RouterLink>
         <RouterLink to="/nested">NestedTransition</RouterLink>
+        <RouterLink to="/transition-group">TransitionGroup</RouterLink>
+        <RouterLink to="/gasp-animation">GaspAnimation</RouterLink>
       </nav>
     </div>
   </header>

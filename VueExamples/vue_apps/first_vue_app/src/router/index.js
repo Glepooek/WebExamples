@@ -49,6 +49,16 @@ const router = createRouter({
       name: "nested",
       component: () => import("../views/vue_basic/NestedTransitionView.vue"),
     },
+    {
+      path: "/transition-group",
+      name: "transition-group",
+      component: () => import("../views/vue_basic/TransitionGroupView.vue"),
+    },
+    {
+      path: "/gasp-animation",
+      name: "gasp-animation",
+      component: () => import("../views/vue_basic/GaspAnimationView.vue"),
+    },
   ],
 })
 
