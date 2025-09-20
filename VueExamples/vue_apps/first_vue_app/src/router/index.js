@@ -59,6 +59,11 @@ const router = createRouter({
       name: "gasp-animation",
       component: () => import("../views/vue_basic/GaspAnimationView.vue"),
     },
+    {
+      path: "/reactive-state",
+      name: "reactive-state",
+      component: () => import("../views/vue_basic/UseReactiveState.vue"),
+    },
   ],
 })
 

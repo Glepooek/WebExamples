@@ -1,21 +1,7 @@
 <script setup>
-  import { ref, onMounted, onUnmounted } from "vue"
+  import { useMouse } from "../utils/mouse.js"
 
-  const mouseX = ref(0)
-  const mouseY = ref(0)
-
-  const trackMouse = e => {
-    mouseX.value = e.pageX
-    mouseY.value = e.pageY
-  }
-
-  onMounted(() => {
-    window.addEventListener("mousemove", trackMouse)
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener("mousemove", trackMouse)
-  })
+  const { x: mouseX, y: mouseY } = useMouse()
 </script>
 
 <template>
