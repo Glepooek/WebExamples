@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>innerText 与隐藏元素演示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .demo-container {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+        }
+        .hidden-css {
+            display: none;
+        }
+        .visibility-hidden {
+            visibility: hidden;
+        }
+        .offscreen {
+            position: absolute;
+            left: -9999px;
+        }
+        button {
+            margin: 5px;
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .comparison-box {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .comparison-item {
+            width: 48%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #f0f8ff;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>innerText 与隐藏元素演示</h1>
+    
+    <div id="demo" class="demo-container">
+        <p>这是可见的段落文本</p>
+        <p class="hidden-css">这是通过 display: none 隐藏的文本</p>
+        <p class="visibility-hidden">这是通过 visibility: hidden 隐藏的文本</p>
+        <p class="offscreen">这是通过定位到屏幕外隐藏的文本</p>
+        <p style="color: white; background-color: white;">这是通过颜色隐藏的文本</p>
+        <p>这是另一个可见的段落文本</p>
+    </div>
+
+    <div>
+        <button onclick="getTextContent()">获取 textContent</button>
+        <button onclick="getInnerText()">获取 innerText</button>
+        <button onclick="getInnerHTML()">获取 innerHTML</button>
+        <button onclick="resetDemo()">重置</button>
+    </div>
+
+    <div class="comparison-box">
+        <div class="comparison-item">
+            <h3>textContent 结果:</h3>
+            <div id="textContentResult"></div>
+        </div>
+        <div class="comparison-item">
+            <h3>innerText 结果:</h3>
+            <div id="innerTextResult"></div>
+        </div>
+    </div>
+
+    <div class="demo-container">
+        <h2>隐藏元素的类型说明</h2>
+        <ul>
+            <li><code>display: none</code> - 元素完全不显示，不占据空间</li>
+            <li><code>visibility: hidden</code> - 元素不可见，但仍占据空间</li>
+            <li><code>position: absolute; left: -9999px</code> - 元素定位到屏幕外</li>
+            <li><code>color: white; background-color: white</code> - 元素颜色与背景色相同，视觉上隐藏</li>
+        </ul>
+    </div>
+
+    <script>
+        const demoElement = document.getElementById('demo');
+        const textContentResult = document.getElementById('textContentResult');
+        const innerTextResult = document.getElementById('innerTextResult');
+        
+        function getTextContent() {
+            const text = demoElement.textContent;
+            textContentResult.innerHTML = `<pre>${escapeHtml(text)}</pre>`;
+        }
+        
+        function getInnerText() {
+            const text = demoElement.innerText;
+            innerTextResult.innerHTML = `<pre>${escapeHtml(text)}</pre>`;
+        }
+        
+        function getInnerHTML() {
+            alert('innerHTML 内容:\n' + demoElement.innerHTML);
+        }
+        
+        function resetDemo() {
+            textContentResult.innerHTML = '';
+            innerTextResult.innerHTML = '';
+        }
+        
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+    </script>
+</body>
+</html>

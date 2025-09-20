@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>textContent、innerHTML 和 innerText 区别演示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .demo-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+        }
+        button {
+            margin: 5px;
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .example {
+            margin: 30px 0;
+            padding: 15px;
+            border-left: 4px solid #007cba;
+            background-color: #f0f8ff;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>textContent、innerHTML 和 innerText 区别演示</h1>
+    
+    <div class="example">
+        <h2>原始状态</h2>
+        <div id="demo" class="demo-box">
+            <p>这是原始内容</p>
+            <span>包含<span style="color: red;">HTML标签</span></span>
+            <strong>和一些文本</strong>
+        </div>
+    </div>
+
+    <div>
+        <button onclick="setTextContent()">设置 textContent</button>
+        <button onclick="setInnerHTML()">设置 innerHTML</button>
+        <button onclick="setInnerText()">设置 innerText</button>
+        <button onclick="resetDemo()">重置</button>
+    </div>
+
+    <div class="example">
+        <h2>区别说明</h2>
+        <h3>textContent</h3>
+        <ul>
+            <li>设置时会删除所有子元素</li>
+            <li>将内容作为纯文本处理，不会解析HTML标签</li>
+            <li>例如：<code>element.textContent = "&lt;strong&gt;粗体文本&lt;/strong&gt;"</code> 会显示为纯文本</li>
+        </ul>
+
+        <h3>innerHTML</h3>
+        <ul>
+            <li>设置时会删除所有子元素</li>
+            <li>将内容作为HTML处理，会解析HTML标签</li>
+            <li>例如：<code>element.innerHTML = "&lt;strong&gt;粗体文本&lt;/strong&gt;"</code> 会显示为粗体</li>
+        </ul>
+
+        <h3>innerText</h3>
+        <ul>
+            <li>设置时会删除所有子元素</li>
+            <li>将内容作为文本处理，但会考虑CSS样式</li>
+            <li>例如：隐藏元素的文本不会被获取</li>
+        </ul>
+    </div>
+
+    <script>
+        const originalContent = `
+            <p>这是原始内容</p>
+            <span>包含<span style="color: red;">HTML标签</span></span>
+            <strong>和一些文本</strong>
+        `;
+        
+        function setTextContent() {
+            const demo = document.getElementById('demo');
+            demo.textContent = '这是通过 textContent 设置的内容 <strong>不会解析HTML</strong>';
+        }
+        
+        function setInnerHTML() {
+            const demo = document.getElementById('demo');
+            demo.innerHTML = '这是通过 <strong>innerHTML</strong> 设置的内容 <em>会解析HTML</em>';
+        }
+        
+        function setInnerText() {
+            const demo = document.getElementById('demo');
+            demo.innerText = '这是通过 innerText 设置的内容 <strong>不会解析HTML</strong>';
+        }
+        
+        function resetDemo() {
+            const demo = document.getElementById('demo');
+            demo.innerHTML = originalContent;
+        }
+    </script>
+</body>
+</html>
