@@ -140,27 +140,36 @@
     </div>
 
     <script>
+      // IntersectionObserver API通常用于：图片懒加载、无限滚动加载内容、元素进入/离开视口时触发动画等场景。
       // 创建 Intersection Observer 实例
       const imageObserver = new IntersectionObserver(
         (entries, observer) => {
-          // 遍历所有观察的条目
+          // 遍历所有观察的条目，这里是图片元素
           entries.forEach(entry => {
             // 如果元素进入视口
             if (entry.isIntersecting) {
               // 获取目标图片元素
               const img = entry.target
 
+              // 直接设置img.src的问题：
+              // 1. 用户会看到图片逐步加载的过程，可能产生闪烁
+              // 2. 无法显示加载状态，用户体验不好
+              // 3. 如果图片加载失败，无法优雅处理
+              // 4. 无法在图片加载完成前显示占位符
+
               // 显示加载指示器
               const container = img.parentNode
+              // 用加载指示器替换掉图片元素
               container.innerHTML = '<div class="loading"></div>'
-              container.appendChild(img)
+              // container.appendChild(img)
 
-              // 创建新的图片元素来加载图片
+              // 创建新的图片元素来加载图片（预加载）
               const newImg = new Image()
 
               // 图片加载完成后的处理
               newImg.onload = function () {
-                // 替换为加载完成的图片
+                // 这里设置img.src不会重新加载图片，因为浏览器会从缓存中获取
+                // 这样可以实现平滑的显示效果，避免闪烁
                 img.src = img.dataset.src
                 img.classList.remove('lazy-image')
 
@@ -171,6 +180,8 @@
 
               // 图片加载失败的处理
               newImg.onerror = function () {
+                // 如果直接设置img.src，加载失败时用户只会看到破损的图片图标
+                // 使用这种方式可以显示友好的错误信息
                 container.innerHTML = '<div class="placeholder">图片加载失败</div>'
               }
 
@@ -184,8 +195,9 @@
         },
         {
           // 配置选项
-          rootMargin: '50px 0px', // 提前50px触发加载
-          threshold: 0.01, // 只要有一部分可见就触发
+          //root: null, // 父元素、祖先元素或视口，null表示使用视口作为容器
+          //rootMargin: '50px 0px', // 在root的基础上要扩散或收缩多少。提前50px触发加载
+          threshold: 0.5, // 交叉的阈值，范围0-1，0表示只要有一部分可见就触发
         }
       )
 
@@ -197,10 +209,15 @@
         // 初始状态显示占位符
         const placeholder = document.createElement('div')
         placeholder.className = 'placeholder'
-        placeholder.textContent = '图片待加载'
+        // placeholder.textContent = '图片待加载'
+        // 与 innerHTML 和 innerText 的区别：
+        // innerHTML：设置或获取 HTML 内容，会解析 HTML 标签
+        // textContent：设置或获取纯文本内容，忽略 HTML 标签，是 W3C 标准
+        // innerText：设置或获取文本内容，但会考虑 CSS 样式（例如隐藏元素的文本不会返回）
 
-        // 将占位符插入到图片容器中
+        // 将图片容器中的img替换成占位符
         img.parentNode.replaceChild(placeholder, img)
+        // 将img添加到占位符中
         placeholder.appendChild(img)
 
         imageObserver.observe(img)

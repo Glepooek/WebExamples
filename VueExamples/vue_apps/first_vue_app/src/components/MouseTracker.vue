@@ -1,5 +1,6 @@
 <script setup>
-  import { useMouse } from "../utils/mouse.js"
+  // import { useMouse } from "../utils/mouse.js"
+  import { useMouse } from '@vueuse/core'
 
   const { x: mouseX, y: mouseY } = useMouse()
 </script>

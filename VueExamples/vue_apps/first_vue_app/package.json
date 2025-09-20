@@ -11,6 +11,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vueuse/core": "^13.9.0",
     "element-plus": "^2.11.2",
     "es-toolkit": "^1.39.10",
     "gsap": "^3.13.0",
