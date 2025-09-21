@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>视频播放示例</title>
+  </head>
+  <body>
+    <div class="container">
+      <video controls>
+        <source src="../assets/videos/flower.webm" type="video/webm" />
+      </video>
+      <div style="height: 1000px"></div>
+    </div>
+
+    <script>
+      // 获取视频元素
+      const video = document.querySelector('video')
+
+      const videoObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              // 尝试播放视频，并处理可能的错误
+              const playPromise = entry.target.play()
+              if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                  // 自动播放被阻止，显示错误信息
+                  console.log('Autoplay prevented by browser policy: ', error)
+                  // 可以在这里添加用户提示，告知需要手动点击播放
+                })
+              }
+            } else {
+              entry.target.pause()
+            }
+          })
+        },
+        {
+          threshold: 0.5, // 当视频至少有 50% 可见时触发回调
+        }
+      )
+
+      videoObserver.observe(video)
+    </script>
+  </body>
+</html>

@@ -10,22 +10,24 @@
       >
         {{ tab }}
       </button>
-      <component :is="tabs[currentTab]"></component>
+      <keep-alive>
+        <component :is="tabs[currentTab]"></component>
+      </keep-alive>
     </div>
   </main>
 </template>
 
 <script setup>
-  import { ref } from "vue"
+  import { shallowRef } from "vue"
   import UserPosts from "./UserPosts.vue"
   import UserProfile from "./UserProfile.vue"
 
-  const tabs = ref({
+  const tabs = shallowRef({
     UserProfile,
     UserPosts,
   })
 
-  const currentTab = ref("UserProfile")
+  const currentTab = shallowRef("UserProfile")
 </script>
 
 <style>
