@@ -1,0 +1,108 @@
+## 介绍
+插件(Plugins)是一种能为Vue添加全局功能的工具代码。
+下面是如何安装一个插件的示例：
+
+```js
+import { createApp } from 'vue'
+const app = createApp({})
+
+app.use(myPlugin, {
+  /* 可选的选项 */
+})
+```
+
+一个插件可以是一个拥有`install()方法的对象`，也可以直接是`一个install函数本身`。install函数会接收到安装它的应用实例和传递给app.use()的额外选项作为参数：
+
+```js
+const myPlugin = {
+  install(app, options) {
+    // 配置此应用
+  }
+}
+```
+
+插件没有严格定义的使用范围，但是插件发挥作用的常见场景主要包括以下几种：
+* 通过`app.component()`和`app.directive()`注册一到多个全局组件或自定义指令。
+* 通过`app.provide()`使一个资源可被注入进整个应用。
+* 向`app.config.globalProperties`中添加一些全局实例属性或方法
+* 一个上述三种可能都包含的功能库(例如 vue-router)。
+
+## 编写一个插件​
+为了更好地理解如何构建Vue.js插件，我们可以试着写一个简单的i18n（国际化(Internationalization)的缩写）插件。
+
+让我们从设置插件对象开始。建议在一个单独的文件中创建并导出它，以保证更好地管理逻辑，如下所示：
+
+```js
+// plugins/i18n.js
+export default {
+  install: (app, options) => {
+    // 在这里编写插件代码
+  }
+}
+```
+
+我们希望有一个翻译函数，这个函数接收一个以`.`作为分隔符的key字符串，用来在用户提供的翻译字典中查找对应语言的文本。期望的使用方式如下：
+
+```vue
+<h1>{{ $translate('greetings.hello') }}</h1>
+```
+
+这个函数应当能够在任意模板中被全局调用。这一点可以通过在插件中将它添加到`app.config.globalProperties`上来实现：
+
+```js
+// plugins/i18n.js
+export default {
+  install: (app, options) => {
+    // 注入一个全局可用的 $translate() 方法
+    app.config.globalProperties.$translate = (key) => {
+      // 获取 `options` 对象的深层属性
+      // 使用 `key` 作为索引
+      return key.split('.').reduce((o, i) => {
+        if (o) return o[i]
+      }, options)
+    }
+  }
+}
+```
+
+我们的`$translate`函数会接收一个例如greetings.hello的字符串，在用户提供的翻译字典中查找，并返回翻译得到的值。
+
+用于查找的翻译字典对象则应当在插件被安装时作为app.use()的额外参数被传入：
+
+```js
+import i18nPlugin from './plugins/i18n'
+
+app.use(i18nPlugin, {
+  greetings: {
+    hello: 'Bonjour!'
+  }
+})
+```
+
+这样，我们一开始的表达式$translate('greetings.hello')就会在运行时被替换为Bonjour! 了。
+
+注意：请谨慎使用全局属性，如果在整个应用中使用不同插件注入的太多全局属性，很容易让应用变得难以理解和维护。
+
+## 插件中的Provide / Inject​
+在插件中，可以通过`provide`来为插件用户提供访问某个函数或属性的能力。举例来说，可以将插件接收到的options参数提供给整个应用，让任何组件都能使用这个翻译字典对象。
+
+```js
+// plugins/i18n.js
+export default {
+  install: (app, options) => {
+    app.provide('i18n', options)
+  }
+}
+```
+
+现在，插件用户就可以在他们的组件中以i18n为key注入并访问插件的选项对象了。
+
+```vue
+<script setup>
+import { inject } from 'vue'
+
+const i18n = inject('i18n')
+
+console.log(i18n.greetings.hello)
+</script>
+```

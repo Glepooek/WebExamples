@@ -8,7 +8,6 @@ import { createPinia } from "pinia"
 
 import App from "./App.vue"
 import router from "./router"
-
 import ElementPlus from "element-plus"
 
 // 打印环境变量、设置标题

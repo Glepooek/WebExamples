@@ -25,6 +25,7 @@
         <RouterLink to="/gasp-animation">GaspAnimation</RouterLink>
         <RouterLink to="/reactive-state">ReactiveState</RouterLink>
         <RouterLink to="/modal">Modal</RouterLink>
+        <RouterLink to="/plugin">Plugin</RouterLink>
       </nav>
     </div>
   </header>

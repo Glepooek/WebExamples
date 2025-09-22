@@ -69,6 +69,11 @@ const router = createRouter({
       name: "modal",
       component: () => import("../views/vue_basic/ModalView.vue"),
     },
+    {
+      path: "/plugin",
+      name: "plugin",
+      component: () => import("../views/vue_basic/PluginView.vue"),
+    },
   ],
 })
 
