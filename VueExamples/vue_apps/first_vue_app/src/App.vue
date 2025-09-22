@@ -24,6 +24,7 @@
         <RouterLink to="/transition-group">TransitionGroup</RouterLink>
         <RouterLink to="/gasp-animation">GaspAnimation</RouterLink>
         <RouterLink to="/reactive-state">ReactiveState</RouterLink>
+        <RouterLink to="/modal">Modal</RouterLink>
       </nav>
     </div>
   </header>

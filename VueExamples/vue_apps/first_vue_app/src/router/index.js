@@ -64,6 +64,11 @@ const router = createRouter({
       name: "reactive-state",
       component: () => import("../views/vue_basic/UseReactiveState.vue"),
     },
+    {
+      path: "/modal",
+      name: "modal",
+      component: () => import("../views/vue_basic/ModalView.vue"),
+    },
   ],
 })
 
