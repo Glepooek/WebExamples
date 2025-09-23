@@ -74,6 +74,11 @@ const router = createRouter({
       name: "plugin",
       component: () => import("../views/vue_basic/PluginView.vue"),
     },
+    {
+      path: "/customDirectives",
+      name: "customDirectives",
+      component: () => import("../views/vue_basic/CustomDirectivesView.vue"),
+    },
   ],
 })
 

@@ -26,6 +26,7 @@
         <RouterLink to="/reactive-state">ReactiveState</RouterLink>
         <RouterLink to="/modal">Modal</RouterLink>
         <RouterLink to="/plugin">Plugin</RouterLink>
+        <RouterLink to="/customDirectives">Custom Directives</RouterLink>
       </nav>
     </div>
   </header>
