@@ -1,23 +1,28 @@
 <template>
-  <div class="book-container">
-    <div class="leftPage">
-      <img v-if="!isTopCover" :src="leftPage.imgBase64" alt="" />
-      <ClickRead
-        v-for="item in leftPage.pageModel.clickRead"
-        :key="item.id"
-        :click-read-model="item"
-        :module-name="leftPage.moduleName"
-      />
+  <div ref="bookContainer" class="book-container">
+    <div ref="bookContentRef" class="book-content">
+      <div class="leftPage">
+        <img v-if="!isTopCover" :src="leftPage.imgBase64" alt="" />
+        <ClickRead
+          v-for="item in leftPage.pageModel.clickRead"
+          :key="item.id"
+          :click-read-model="item"
+          :module-name="leftPage.moduleName"
+          :proportion="proportion"
+        />
+      </div>
+      <div class="rightPage">
+        <img v-if="!isBottomCover" :src="rightPage.imgBase64" alt="" />
+        <ClickRead
+          v-for="item in rightPage.pageModel.clickRead"
+          :key="item.id"
+          :click-read-model="item"
+          :module-name="leftPage.moduleName"
+          :proportion="proportion"
+        />
+      </div>
     </div>
-    <div class="rightPage">
-      <img v-if="!isBottomCover" :src="rightPage.imgBase64" alt="" />
-      <ClickRead
-        v-for="item in rightPage.pageModel.clickRead"
-        :key="item.id"
-        :click-read-model="item"
-        :module-name="leftPage.moduleName"
-      />
-    </div>
+
     <div class="rightToolbar"></div>
     <div class="bottomToolbar">
       <div class="left">
@@ -121,6 +126,13 @@
   const isCatalogVisible = ref(false)
   const currentIndex = ref(-1)
 
+  const bookWidth = ref(0)
+  const bookHeight = ref(0)
+
+  const bookContainer = ref(null)
+  const bookContentRef = ref(null)
+  const proportion = ref(1)
+
   // 返回列表页
   const returnBookList = debounce(() => {
     router.push({ name: "bookList" })
@@ -218,8 +230,31 @@
     init(`${import.meta.env.VITE_APP_API_EBOOK_BASE_URL}${fileName}/`, fileName, secretKey)
 
     bookInfo = await getDigitalBook()
+    bookWidth.value = bookInfo.width
+    bookHeight.value = bookInfo.height
+    calculationProportion()
     currentIndex.value = 0
   })
+
+  // 计算缩放比
+  const calculationProportion = () => {
+    console.log("---", bookContainer.value)
+    const boxWidth = bookContainer.value.offsetWidth / 2 // 除2是因为要放两页
+    const boxHeight = bookContainer.value.offsetHeight
+    if (boxWidth / boxHeight > bookWidth.value / bookHeight.value) {
+      proportion.value = boxHeight / bookHeight.value
+      bookContentRef.value.style.width = `${bookWidth.value * 2 * proportion.value}px`
+      bookContentRef.value.style.height = "100%"
+    } else {
+      proportion.value = boxWidth / bookWidth.value
+      bookContentRef.value.style.height = `${bookHeight.value * proportion.value}px`
+      bookContentRef.value.style.width = "100%"
+    }
+    console.log("---", proportion.value)
+  }
+
+  // 监听窗口大小变化事件
+  window.addEventListener("resize", calculationProportion)
 
   // 组件卸载时：
   // 取消未完成的异步请求
@@ -253,6 +288,7 @@
     height: 100%;
     background: linear-gradient(90deg, #4257c4 0%, #4c90e6 100%);
     display: flex;
+    justify-content: center;
   }
 
   .book-container::before {
@@ -263,6 +299,10 @@
     width: 100%;
     height: 30%;
     background: url("../assets/svgs/book_background.svg") center / cover no-repeat;
+  }
+
+  .book-content {
+    display: flex;
   }
 
   .leftPage {

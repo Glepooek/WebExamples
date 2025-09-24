@@ -9,15 +9,16 @@
   const props = defineProps({
     clickReadModel: { type: Object, required: true },
     moduleName: { type: String, required: true },
+    proportion: { type: Number, required: true },
   })
 
   const containerStyle = computed(() => {
     return {
       position: "absolute",
-      left: props.clickReadModel.x + "px",
-      top: props.clickReadModel.y + "px",
-      width: props.clickReadModel.width + "px",
-      height: props.clickReadModel.height + "px",
+      left: props.clickReadModel.x * props.proportion + "px",
+      top: props.clickReadModel.y * props.proportion + "px",
+      width: props.clickReadModel.width * props.proportion + "px",
+      height: props.clickReadModel.height * props.proportion + "px",
     }
   })
 
