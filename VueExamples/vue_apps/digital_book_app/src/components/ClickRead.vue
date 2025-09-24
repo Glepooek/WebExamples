@@ -35,7 +35,6 @@
 <style scoped>
   .container {
     /* 默认样式可以根据需要添加 */
-    position: absolute;
     background: yellow;
     border-color: yellow;
     border-radius: 2px;

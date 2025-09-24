@@ -1,26 +1,24 @@
 <template>
   <div ref="bookContainer" class="book-container">
-    <div ref="bookContentRef" class="book-content">
-      <div class="leftPage">
-        <img v-if="!isTopCover" :src="leftPage.imgBase64" alt="" />
-        <ClickRead
-          v-for="item in leftPage.pageModel.clickRead"
-          :key="item.id"
-          :click-read-model="item"
-          :module-name="leftPage.moduleName"
-          :proportion="proportion"
-        />
-      </div>
-      <div class="rightPage">
-        <img v-if="!isBottomCover" :src="rightPage.imgBase64" alt="" />
-        <ClickRead
-          v-for="item in rightPage.pageModel.clickRead"
-          :key="item.id"
-          :click-read-model="item"
-          :module-name="leftPage.moduleName"
-          :proportion="proportion"
-        />
-      </div>
+    <div ref="leftPageRef" class="leftPage">
+      <img v-if="!isTopCover" :src="leftPage.imgBase64" alt="" />
+      <ClickRead
+        v-for="item in leftPage.pageModel.clickRead"
+        :key="item.id"
+        :click-read-model="item"
+        :module-name="leftPage.moduleName"
+        :proportion="proportion"
+      />
+    </div>
+    <div ref="rightPageRef" class="rightPage">
+      <img v-if="!isBottomCover" :src="rightPage.imgBase64" alt="" />
+      <ClickRead
+        v-for="item in rightPage.pageModel.clickRead"
+        :key="item.id"
+        :click-read-model="item"
+        :module-name="rightPage.moduleName"
+        :proportion="proportion"
+      />
     </div>
 
     <div class="rightToolbar"></div>
@@ -130,7 +128,8 @@
   const bookHeight = ref(0)
 
   const bookContainer = ref(null)
-  const bookContentRef = ref(null)
+  const leftPageRef = ref(null)
+  const rightPageRef = ref(null)
   const proportion = ref(1)
 
   // 返回列表页
@@ -164,7 +163,7 @@
 
   // book.pages数组下标索引
   watch(currentIndex, newIndex => {
-    if (!bookInfo.pages) return
+    if (!bookInfo || !bookInfo.pages) return
 
     if (newIndex < 0) {
       newIndex = 0
@@ -232,29 +231,48 @@
     bookInfo = await getDigitalBook()
     bookWidth.value = bookInfo.width
     bookHeight.value = bookInfo.height
-    calculationProportion()
     currentIndex.value = 0
+    calculationProportion()
   })
 
   // 计算缩放比
   const calculationProportion = () => {
-    console.log("---", bookContainer.value)
-    const boxWidth = bookContainer.value.offsetWidth / 2 // 除2是因为要放两页
-    const boxHeight = bookContainer.value.offsetHeight
+    // Check if the required DOM elements exist before accessing their properties
+    if (!bookContainer.value || !leftPageRef.value || !rightPageRef.value) {
+      return
+    }
+
+    const boxWidth = (bookContainer.value.offsetWidth - 160) / 2 // 除2是因为要放两页
+    const boxHeight = bookContainer.value.offsetHeight - 48
+
+    // Ensure we have valid dimensions
+    if (boxWidth <= 0 || boxHeight <= 0 || bookWidth.value <= 0 || bookHeight.value <= 0) {
+      return
+    }
+
     if (boxWidth / boxHeight > bookWidth.value / bookHeight.value) {
       proportion.value = boxHeight / bookHeight.value
-      bookContentRef.value.style.width = `${bookWidth.value * 2 * proportion.value}px`
-      bookContentRef.value.style.height = "100%"
+      leftPageRef.value.style.width = `${bookWidth.value * proportion.value}px`
+      rightPageRef.value.style.width = `${bookWidth.value * proportion.value}px`
+      leftPageRef.value.style.height = `${bookHeight.value * proportion.value}px`
+      rightPageRef.value.style.height = `${bookHeight.value * proportion.value}px`
+      console.log("---", 1)
     } else {
       proportion.value = boxWidth / bookWidth.value
-      bookContentRef.value.style.height = `${bookHeight.value * proportion.value}px`
-      bookContentRef.value.style.width = "100%"
+      leftPageRef.value.style.height = `${bookHeight.value * proportion.value}px`
+      rightPageRef.value.style.height = `${bookHeight.value * proportion.value}px`
+      leftPageRef.value.style.width = `${bookWidth.value * proportion.value}px`
+      rightPageRef.value.style.width = `${bookWidth.value * proportion.value}px`
+      console.log("---", 2)
     }
     console.log("---", proportion.value)
   }
 
+  // Create debounced version of calculationProportion
+  const debouncedCalculationProportion = debounce(calculationProportion, 100)
+
   // 监听窗口大小变化事件
-  window.addEventListener("resize", calculationProportion)
+  window.addEventListener("resize", debouncedCalculationProportion)
 
   // 组件卸载时：
   // 取消未完成的异步请求
@@ -262,6 +280,9 @@
   // 清理定时器或动画
   // 释放其他资源：如 WebSocket 连接、订阅等。
   onUnmounted(() => {
+    // 移除事件监听器
+    window.removeEventListener("resize", debouncedCalculationProportion)
+
     // 清理响应式数据引用
     bookInfo = null
     leftPage.value = null
@@ -301,16 +322,12 @@
     background: url("../assets/svgs/book_background.svg") center / cover no-repeat;
   }
 
-  .book-content {
-    display: flex;
-  }
-
   .leftPage {
     flex: 1;
     margin: 0 0 48px 80px;
     /* background-color: #d9db36; */
     display: flex;
-    justify-content: right;
+    justify-content: flex-end;
     position: relative;
     overflow: hidden;
   }
@@ -320,7 +337,7 @@
     margin: 0 80px 48px 0;
     /* background-color: #c442ae; */
     display: flex;
-    justify-content: left;
+    justify-content: flex-start;
     position: relative;
     overflow: hidden;
   }
