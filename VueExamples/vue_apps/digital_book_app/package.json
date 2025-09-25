@@ -20,6 +20,7 @@
     "crypto-js": "^4.2.0",
     "element-plus": "^2.11.2",
     "es-toolkit": "^1.39.10",
+    "howler": "^2.2.4",
     "jsencrypt": "^3.5.4",
     "mockjs": "^1.1.0",
     "pinia": "^3.0.3",
