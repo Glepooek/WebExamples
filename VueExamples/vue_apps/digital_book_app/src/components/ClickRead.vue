@@ -1,17 +1,53 @@
 <template>
-  <div ref="containerRef" class="container" :style="containerStyle" @click="onPlayAudio" @mouseover="onMouseOver"></div>
+  <div
+    ref="containerRef"
+    :class="['container', activeCids.includes(clickReadModel.cid) ? 'active' : '']"
+    :style="containerStyle"
+    @click="onPlayAudio"
+    @mouseover="onMouseOver"
+    @mouseout="onMouseOut"
+  ></div>
 </template>
 
 <script setup>
   import { computed, ref, onMounted, watch, nextTick, onBeforeUnmount } from "vue"
   import { getFilePath } from "@/apis/digitalBookApi"
 
+  // 定义属性
   const props = defineProps({
     clickReadModel: { type: Object, required: true },
     moduleName: { type: String, required: true },
     proportion: { type: Number, required: true },
     activeCids: { type: Array, required: true },
   })
+
+  // 定义事件
+  const emits = defineEmits(["onMouseOver", "onMouseOut"])
+
+  /**
+   * 当鼠标移入点读区域时，获取该点读区域所有关联区域的Id, 并触发onMouseOver事件
+   */
+  const onMouseOver = () => {
+    if (!props.clickReadModel || !props.clickReadModel.relatedIds || props.clickReadModel.relatedIds.length === 0) {
+      return
+    }
+
+    let array = []
+    props.clickReadModel.relatedIds.forEach(relatedId => {
+      relatedId.marks.forEach(mark => {
+        array.push(mark.markId)
+      })
+    })
+
+    emits("onMouseOver", array)
+  }
+
+  /**
+   * 当鼠标移出点读区域时，触发onMouseOut事件
+   */
+  const onMouseOut = () => {
+    emits("onMouseOut")
+  }
 
   const containerRef = ref(null)
   const imgOffset = ref({ x: 0, y: 0 })
@@ -60,8 +96,7 @@
   // Also watch for model changes (in case different image replaced)
   watch(
     () => props.clickReadModel,
-    (oldValue, newValue) => {
-      console.log("ClickReadModel changed:", newValue)
+    () => {
       nextTick(calcImgOffset)
     }
   )
@@ -114,7 +149,8 @@
     z-index: 3;
   }
 
-  .container:hover {
+  .container:hover,
+  .container.active {
     background: rgba(41, 100, 255, 0.2);
     border-color: rgba(41, 100, 255, 0.2);
     cursor: pointer;

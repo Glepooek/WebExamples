@@ -8,6 +8,9 @@
         :click-read-model="item"
         :module-name="leftPage.moduleName"
         :proportion="proportion"
+        :active-cids="activeCids"
+        @on-mouse-over="onMouseOverClickRead"
+        @on-mouse-out="onMouseOutClickRead"
       />
     </div>
     <div ref="rightPageRef" class="rightPage">
@@ -18,6 +21,9 @@
         :click-read-model="item"
         :module-name="rightPage.moduleName"
         :proportion="proportion"
+        :active-cids="activeCids"
+        @on-mouse-over="onMouseOverClickRead"
+        @on-mouse-out="onMouseOutClickRead"
       />
     </div>
 
@@ -131,6 +137,7 @@
   const leftPageRef = ref(null)
   const rightPageRef = ref(null)
   const proportion = ref(1)
+  const activeCids = ref([])
 
   // 返回列表页
   const returnBookList = debounce(() => {
@@ -256,14 +263,14 @@
       rightPageRef.value.style.width = `${bookWidth.value * proportion.value}px`
       leftPageRef.value.style.height = `${bookHeight.value * proportion.value}px`
       rightPageRef.value.style.height = `${bookHeight.value * proportion.value}px`
-      console.log("---", 1)
+      // console.log("---", 1)
     } else {
       proportion.value = boxWidth / bookWidth.value
       leftPageRef.value.style.height = `${bookHeight.value * proportion.value}px`
       rightPageRef.value.style.height = `${bookHeight.value * proportion.value}px`
       leftPageRef.value.style.width = `${bookWidth.value * proportion.value}px`
       rightPageRef.value.style.width = `${bookWidth.value * proportion.value}px`
-      console.log("---", 2)
+      // console.log("---", 2)
     }
     console.log("---", proportion.value)
   }
@@ -273,6 +280,17 @@
 
   // 监听窗口大小变化事件
   window.addEventListener("resize", debouncedCalculationProportion)
+
+  const onMouseOverClickRead = relatedIds => {
+    if (!relatedIds || relatedIds.length === 0) {
+      return
+    }
+    activeCids.value = relatedIds
+  }
+
+  const onMouseOutClickRead = () => {
+    activeCids.value = []
+  }
 
   // 组件卸载时：
   // 取消未完成的异步请求
