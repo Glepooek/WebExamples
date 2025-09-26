@@ -11,6 +11,7 @@
         :active-cids="activeCids"
         @on-mouse-over="onMouseOverClickRead"
         @on-mouse-out="onMouseOutClickRead"
+        @on-play-audio="onPlayClickReadAudio"
       />
     </div>
     <div ref="rightPageRef" class="rightPage">
@@ -24,6 +25,7 @@
         :active-cids="activeCids"
         @on-mouse-over="onMouseOverClickRead"
         @on-mouse-out="onMouseOutClickRead"
+        @on-play-audio="onPlayClickReadAudio"
       />
     </div>
 
@@ -108,6 +110,7 @@
   import { watch, onMounted, onUnmounted, ref, unref } from "vue"
   import { useRoute, useRouter } from "vue-router"
   import { init, getDigitalBook, getDigitalBookPage } from "@/apis/digitalBookApi"
+  import AudioPlayer from "@/utils/audioPlayer"
   import { debounce } from "es-toolkit"
   import { CaretLeft, CaretRight } from "@element-plus/icons-vue"
   import { ClickOutside as vClickOutside } from "element-plus"
@@ -141,6 +144,7 @@
 
   // 返回列表页
   const returnBookList = debounce(() => {
+    AudioPlayer.abort()
     router.push({ name: "bookList" })
   }, 300)
 
@@ -171,6 +175,8 @@
   // book.pages数组下标索引
   watch(currentIndex, newIndex => {
     if (!bookInfo || !bookInfo.pages) return
+
+    AudioPlayer.abort()
 
     if (newIndex < 0) {
       newIndex = 0
@@ -290,6 +296,18 @@
 
   const onMouseOutClickRead = () => {
     activeCids.value = []
+  }
+
+  const onPlayClickReadAudio = audioUrl => {
+    if (!audioUrl) {
+      return
+    }
+    AudioPlayer.play({
+      replay: true,
+      properties: {
+        src: audioUrl,
+      },
+    })
   }
 
   // 组件卸载时：

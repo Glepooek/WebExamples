@@ -22,7 +22,7 @@
   })
 
   // 定义事件
-  const emits = defineEmits(["onMouseOver", "onMouseOut"])
+  const emits = defineEmits(["onMouseOver", "onMouseOut", "onPlayAudio"])
 
   /**
    * 当鼠标移入点读区域时，获取该点读区域所有关联区域的Id, 并触发onMouseOver事件
@@ -47,6 +47,14 @@
    */
   const onMouseOut = () => {
     emits("onMouseOut")
+  }
+
+  /**
+   * 当点击点读区域时，触发onPlayAudio事件
+   */
+  const onPlayAudio = () => {
+    const audioUrl = getFilePath(props.clickReadModel.file, props.moduleName)
+    emits("onPlayAudio", audioUrl)
   }
 
   const containerRef = ref(null)
@@ -127,15 +135,6 @@
       height: height + "px",
     }
   })
-
-  /**
-   * 播放音频
-   */
-  const onPlayAudio = () => {
-    const audioUrl = getFilePath(props.clickReadModel.file, props.moduleName)
-    const audio = new Audio(audioUrl)
-    audio.play()
-  }
 </script>
 
 <style scoped>
