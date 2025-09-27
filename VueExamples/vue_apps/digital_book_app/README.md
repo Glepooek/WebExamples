@@ -37,9 +37,9 @@ npm run lint
 ## Modules
 * 登录
 * 数字教材列表
-* 数字教材左右页、页面切换
+* 数字教材页面、页面切换
 * 数字教材底部、右边工具栏
-* 数字教材目录
+* 点读、翻译
 
 ### Infrastructure
 * Local storage

@@ -8,10 +8,25 @@ function md5() {
 
 class AudioPlayer {
   constructor() {
+    /**
+     * 当前正在播放的音频的 ID
+     */
     this.playingId = ""
+    /**
+     * 音频列表
+     */
     this.audioList = []
+    /**
+     * 定时器，用于回调播放进度
+     */
     this.intervalTime = null
+    /**
+     * 播放速度
+     */
     this.rate = 1
+    /**
+     * 音频播放进度
+     */
     this.seekTime = 0
   }
 
@@ -40,7 +55,6 @@ class AudioPlayer {
   }
 
   play(payload) {
-    console.log("---payload", payload)
     clearInterval(this.intervalTime)
     const id = md5()
     const cb = error => {
@@ -50,7 +64,6 @@ class AudioPlayer {
     }
     const howl = new Howl({
       ...payload.properties,
-      src: payload.properties.src,
       format: payload.properties.format || "wav",
       autoplay: false,
       rate: this.rate,
@@ -74,7 +87,7 @@ class AudioPlayer {
         payload.onpause && payload.onpause()
       },
       onplay: () => {
-        this.timeupdate(payload.onTimeupdate)
+        this.timeUpdate(payload.onTimeupdate)
         payload.onplay && payload.onplay()
       },
       onError: err => {
@@ -87,6 +100,7 @@ class AudioPlayer {
       if (currentAudio) {
         // 如果点击的是当前正在播放的音频
         if (currentAudio.properties.src === payload.properties.src) {
+          // 是否允许重播
           if (payload.replay) {
             this.seekTime = 0
             this.endPlaying(this.playingId)
@@ -116,10 +130,22 @@ class AudioPlayer {
       properties: payload.properties,
       howl: howl,
     }
+    // Object.seal(audio)，将audio对象密封，禁止新增或删除其自身属性，但允许修改已有属性的值
     this.startPlaying(Object.seal(audio), payload.onlyOne)
     return id
   }
 
+  /**
+   * 清空音频列表
+   */
+  clearAudioList() {
+    this.audioList = []
+    this.playingId = ""
+  }
+
+  /**
+   * 停止播放所有音频
+   */
   stop() {
     this.audioList.forEach(audio => {
       if (this.playingId === audio.id) {
@@ -128,28 +154,9 @@ class AudioPlayer {
     })
     clearInterval(this.intervalTime)
   }
-  onlyPlay() {
-    this.audioList.forEach(audio => {
-      if (this.playingId === audio.id) {
-        audio.howl.play()
-      }
-    })
-  }
-
-  timeupdate(cb) {
-    this.intervalTime = setInterval(() => {
-      const currentTime = this.getCurrentTime()
-      cb && cb(currentTime)
-    }, 500)
-  }
-
-  clearAudioList() {
-    this.audioList = []
-    this.playingId = ""
-  }
 
   /**
-   * 停止播放所有音频
+   * 终止播放所有音频
    */
   abort() {
     this.audioList.forEach(audio => {
@@ -161,21 +168,42 @@ class AudioPlayer {
     this.clearAudioList()
   }
 
+  /**
+   * 监听播放进度
+   * @param {function} callback 回调函数
+   */
+  timeUpdate(callback) {
+    this.intervalTime = setInterval(() => {
+      const currentTime = this.getCurrentTime()
+      callback && callback(currentTime)
+    }, 500)
+  }
+
+  /**
+   * 获取当前播放进度
+   */
   getCurrentTime() {
     const audio = this.audioList.find(audio => audio.id === this.playingId)
     return audio ? audio.howl.seek() : 0
   }
 
+  /**
+   * 设置播放速度
+   * @param {number} rate 播放速度
+   */
   setRate(rate) {
     const audio = this.audioList.find(audio => audio.id === this.playingId)
     this.rate = rate
     audio && audio.howl.rate(rate)
   }
 
+  /**
+   * 设置播放进度
+   * @param {number} time 播放进度
+   */
   setSeek(time) {
     const audio = this.audioList.find(audio => audio.id === this.playingId)
     if (audio && time) {
-      // 没有播放直接调解进度
       audio.howl.seek(parseInt(time / 1000))
       this.seekTime = 0
     } else {

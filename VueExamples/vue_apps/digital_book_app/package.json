@@ -1,6 +1,6 @@
 {
-  "name": "digital_book_app",
-  "version": "0.0.1",
+  "name": "digital_book",
+  "version": "0.0.3",
   "private": true,
   "type": "module",
   "scripts": {
