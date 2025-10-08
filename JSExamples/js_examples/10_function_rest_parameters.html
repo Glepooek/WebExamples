@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>函数剩余参数</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      //   /**
+      //    * 打印传递的所有数字之和
+      //    */
+      //   function printSum() {
+      //     // arguments是一个伪数组，可以收集到函数的所有参数
+      //     let sum = 0
+      //     for (let i = 0; i < arguments.length; i++) {
+      //       sum += arguments[i]
+      //     }
+      //     console.log(sum)
+      //   }
+
+      //   // 期望的调用方式
+      //   printSum(1, 2, 3)
+      //   printSum(1, 2)
+      //   printSum(1)
+      //   printSum()
+      //   console.log('------')
+
+      //   /**
+      //    * 打印传递的所有数字之和
+      //    */
+      //   function printSum(printType) {
+      //     // arguments是一个伪数组，可以收集到函数的所有参数
+      //     let sum = 0
+      //     for (let i = 1; i < arguments.length; i++) {
+      //       sum += arguments[i]
+      //     }
+      //     console[printType](sum)
+      //   }
+
+      //   // 期望的调用方式
+      //   printSum('log', 1, 2, 3)
+      //   printSum('warn', 1, 2)
+      //   printSum('error', 1)
+      //   printSum('log')
+      //   console.log('------')
+
+      /**
+       * 打印传递的所有数字之和
+       *
+       * @param {string} printType 打印类型
+       * @param {...number} numbers 需要打印的数字
+       * */
+      function printSum(printType, ...numbers) {
+        let sum = 0
+        for (let i = 0; i < numbers.length; i++) {
+          sum += numbers[i]
+        }
+        console[printType](sum)
+      }
+
+      printSum('log', 1, 2, 3)
+      printSum('warn', 1, 2)
+      printSum('error', 1)
+      printSum('log')
+      console.log('------')
+    </script>
+  </body>
+</html>

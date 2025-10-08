@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>展开运算符</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      const nums = [45, 23, 12, 89, 10]
+      // 使用Math.max()计算最大值
+      //   const maxNum = Math.max.apply(null, nums)
+      const maxNum = Math.max(...nums)
+      console.log(maxNum) // 89
+
+      // 浅层克隆数组
+      //   const newNums = []
+      //   for (let i = 0; i < nums.length; i++) {
+      //     newNums[i] = nums[i]
+      //   }
+      //   const newNums = [].concat(nums)
+      //   const newNums = Array.from(nums)
+      //   const newNums = nums.slice(0)
+      const newNums = [...nums]
+      console.log(newNums) // [45, 23, 12, 89, 10]
+
+      const arr = [1, 2, 3]
+      function foo(a, b, c) {
+        console.log(a, b, c)
+      }
+
+      foo(...arr)
+    </script>
+  </body>
+</html>
