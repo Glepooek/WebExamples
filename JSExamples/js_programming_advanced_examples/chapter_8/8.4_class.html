@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p id="demo"></p>
+
+    <script>
+      class Person {
+        constructor(name, year) {
+          this.name = name
+          this.year = year
+        }
+      }
+
+      class Student extends Person {
+        constructor(name, year, major) {
+          super(name, year)
+          this.major = major
+        }
+      }
+
+      const myPerson = new Person('Ford', 2014)
+      const myStudent = new Student('Jane', 2015, 'Computer Science')
+      document.getElementById('demo').innerHTML =
+        myPerson.name + ' ' + myPerson.year + '<br>' + myStudent.name + ' ' + myStudent.year + ' ' + myStudent.major
+    </script>
+  </body>
+</html>
