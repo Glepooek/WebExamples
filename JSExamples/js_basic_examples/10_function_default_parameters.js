@@ -8,7 +8,7 @@ foo(1)
 foo(1, undefined, 7)
 console.log('------')
 
-function bar(a, c, b = 2) {
+function bar(a, c, b = 2, d) {
   console.log(a === arguments[0])
   console.log(b === arguments[1])
   a = 'changed'

@@ -12,7 +12,7 @@ function foo(a, b = 10) {
 
 ### 影响arguments
 函数中的arguments对象会按调用时传入的顺序保存实参。
-arguments中的实参与形参是一一对应的，如果改变形参的值，arguments中的实参也会改变。但在`严格模式`下，改变形参的值不会改变arguments中的实参，这样才是合理的。当使用参数默认值后，`arguments`表现出来的行为跟在严格模式下一样，即arguments对象中的实参将不再对应形参。
+arguments中的实参与形参是一一对应的，如果（在函数内部）改变形参的值，arguments中的实参也会改变。但在`严格模式`下，改变形参的值不会改变arguments中的实参，这样才是合理的。当使用默认值参数后，`arguments`表现出来的行为跟在严格模式下一样，即arguments对象中的实参将不再对应形参。
 
 ```js
 function bar(a, b) {
@@ -48,7 +48,7 @@ bar('a', 'b')
 ```
 
 ### 影响函数的length属性
-函数的length属性表示函数声明的形参的数量，但不包括默认值参数及其之后的参数。
+函数的length属性表示`函数声明的形参的数量`，但不包括默认值参数及其之后的参数。
 
 ```js
 function foo(a, b = 2, c) {}
@@ -87,3 +87,6 @@ function foo(a = getValue(b), b) {
 
 foo(undefined, 2) // error, b处于暂时性死区
 ```
+
+* 参数从左到右初始化：函数参数是按照从左到右的顺序初始化的。
+* TDZ规则：在一个参数的默认值表达式中，不能访问还未初始化的后面的参数。
