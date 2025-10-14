@@ -16,6 +16,8 @@ function createPerson(name, age, job) {
 let person1 = createPerson('Nicholas', 29, 'Software Engineer')
 let person2 = createPerson('Greg', 27, 'Doctor')
 
+console.log(Object.getOwnPropertyDescriptor(person1, 'name'))
+
 person1.sayName()
 
 /*
@@ -70,8 +72,16 @@ Student.prototype.sayName = function () {
 }
 
 let student1 = new Student()
+// student1.name = 'Greg'
 let student2 = new Student()
 student1.sayName()
+
+console.log('-----------------对象迭代1-----------------')
+// for (const key in student1) {
+//   console.log('对象属性：', key, '对象值：', student1[key])
+// }
+
+console.log(Object.keys(student1.__proto__)) // ['name', 'age', 'job', 'sayName']
 
 let obj = {
   name: 'Nicholas',
@@ -96,7 +106,7 @@ for (const key in obj) {
   }
 }
 
-console.log('-----------------对象迭代-----------------')
+console.log('-----------------对象迭代2-----------------')
 
 Object.values(obj).forEach(value => {
   console.log('对象值：', value)
