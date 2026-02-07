@@ -110,7 +110,7 @@ function generateSign(method, url, nonce, timeStamp, body = null) {
   // const start = url.indexOf(urlKey);
   // url = url.substring(start);
 
-  const secret = "cloudprod"
+  const secret = import.meta.env.VITE_APP_SECRET
 
   let str
   if (body !== null) {

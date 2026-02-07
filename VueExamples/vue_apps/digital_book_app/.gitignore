@@ -14,6 +14,10 @@ dist-ssr
 coverage
 *.local
 
+# Environment files with sensitive data
+# .env.local is ignored (covered by *.local above)
+# Only .env.example should be committed
+
 /cypress/videos/
 /cypress/screenshots/
 
