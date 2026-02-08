@@ -8,7 +8,18 @@
       "Bash(npx prettier --version)",
       "Bash(npx prettier --write \"JSExamples/js_basic_examples/*.html\" --config \"VueExamples/vue_apps/digital_book_app/.prettierrc.json\")",
       "Bash(npx prettier --write \"JSExamples/js_basic_examples/*.js\" \"JSExamples/assets/js简介.js\" --config \"VueExamples/vue_apps/digital_book_app/.prettierrc.json\")",
-      "Bash(npx prettier --write \"JSExamples/**/*.{js,html}\" --config \"VueExamples/vue_apps/digital_book_app/.prettierrc.json\")"
+      "Bash(npx prettier --write \"JSExamples/**/*.{js,html}\" --config \"VueExamples/vue_apps/digital_book_app/.prettierrc.json\")",
+      "Bash(pnpm outdated)",
+      "Bash(pnpm audit)",
+      "Bash(pnpm update axios@^1.13.5 vite@^7.3.1)",
+      "Bash(pnpm remove mockjs)",
+      "Bash(pnpm update vite@^7.3.1)",
+      "Bash(pnpm update vue@^3.5.27 pinia@^3.0.4 element-plus@^2.13.2 es-toolkit@^1.44.0 @vitejs/plugin-vue@^6.0.4 eslint-plugin-vue@^10.7.0 prettier@^3.8.1 vite-plugin-vue-devtools@^8.0.6)",
+      "Bash(pnpm update vue@^3.5.27 pinia@^3.0.4 element-plus@^2.13.2 es-toolkit@^1.44.0 @vueuse/core@^13.15.0 gsap@^3.13.1 @vitejs/plugin-vue@^6.0.4 @vitejs/plugin-vue-jsx@^5.2.0 eslint-plugin-vue@^10.7.0 prettier@^3.8.1 vite-plugin-vue-devtools@^8.0.6)",
+      "Bash(pnpm update vue@^3.5.27 pinia@^3.0.4 element-plus@^2.13.2 es-toolkit@^1.44.0 @vueuse/core@^13.15.0 gsap@^3.13.1 @vitejs/plugin-vue@^6.0.4 @vitejs/plugin-vue-jsx@^5.1.4 eslint-plugin-vue@^10.7.0 prettier@^3.8.1 vite-plugin-vue-devtools@^8.0.6)",
+      "Bash(pnpm run lint)",
+      "Bash(pnpm run build:dev)",
+      "Bash(pnpm run build)"
     ]
   }
 }
