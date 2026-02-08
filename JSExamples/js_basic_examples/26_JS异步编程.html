@@ -1,70 +1,108 @@
-<html>
-
-<head>
-    <meta>
-    </meta>
-    <title></title>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript 异步编程示例</title>
     <script>
-        // 启用严格模式，变量必须先定义再使用，避免出错
-        "use strict";
+      // 启用严格模式，变量必须先定义再使用，避免出错
+      'use strict'
 
-        /*
-         * Promise对象
-         * 1.Promise对象是一个构造函数，用来生成Promise实例
-         * 2.Promise对象有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）
-         * 3.Promise对象实例具有then方法，该方法接收两个参数，分别是Promise对象的状态为fulfilled时执行的函数，以及Promise对象的状态为rejected时执行的函数
-         */
-        function print(delay, msg) {
-            return new Promise(function (resolve, reject) {
-                setTimeout(function () {
-                    console.log(msg);
-                    resolve("成功！");
-                }, delay);
-            });
+      /*
+       * Promise对象
+       * 1.Promise对象是一个构造函数，用来生成Promise实例
+       * 2.Promise对象有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）
+       * 3.Promise对象实例具有then方法，该方法接收两个参数，分别是Promise对象的状态为fulfilled时执行的函数，以及Promise对象的状态为rejected时执行的函数
+       */
+
+      /**
+       * 延迟打印消息
+       * @param {number} delay - 延迟时间（毫秒）
+       * @param {string} msg - 要打印的消息
+       * @returns {Promise<string>} 返回成功消息的Promise
+       */
+      function print(delay, msg) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            console.log(msg)
+            resolve('成功！')
+          }, delay)
+        })
+      }
+
+      /**
+       * 异步按顺序打印多条消息
+       * @returns {Promise<void>}
+       */
+      async function printAsync() {
+        let msg = await print(1000, 'first')
+        console.log(msg)
+        msg = await print(4000, 'second')
+        console.log(msg)
+        msg = await print(3000, 'third')
+        console.log(msg)
+      }
+
+      // 使用Promise链式调用（已注释）
+      // print(1000, "first").then((msg) => {
+      //     console.log(msg);
+      //     return print(4000, "second");
+      // }).then((msg) => {
+      //     console.log(msg);
+      //     return print(3000, "third");
+      // });
+
+      // 并行执行（不等待，已注释）
+      // print(1000, "first");
+      // print(4000, "second");
+      // print(3000, "third");
+
+      // 调用异步函数（已注释，取消注释可运行）
+      // printAsync();
+
+      /**
+       * 演示async函数中的错误处理
+       * @returns {Promise<void>}
+       */
+      async function funcAsync() {
+        try {
+          await new Promise((resolve, reject) => {
+            reject('error')
+          })
+        } catch (e) {
+          console.log(e)
         }
+      }
 
-        async function printAaync() {
-            var msg = await print(1000, "first");
-            console.log(msg);
-            msg = await print(4000, "second");
-            console.log(msg);
-            msg = await print(3000, "third");
-            console.log(msg);
-        }
+      // 调用错误处理示例（已注释）
+      // funcAsync(); // 输出: error
 
-        // print(1000, "first").then(function (msg) {
-        //     console.log(msg);
-        //     return print(4000, "second");
-        // }).then(function (msg) {
-        //     console.log(msg);
-        //     return print(3000, "third");
-        // });
-
-        // print(1000, "first");
-        // print(4000, "second");
-        // print(3000, "third");
-
-        //printAaync();
-
-        async function funcAsync() {
-            try {
-                await new Promise((resolve, reject) => {
-                    reject("error");
-                });
-            } catch (e) {
-                console.log(e);
-            }
-        }
-
-        //funcAsync(); // error
-
-        var test = void 0;
-        console.log(test);
+      // void运算符示例：void 0 等价于 undefined
+      const test = void 0
+      console.log(test) // 输出: undefined
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
+    <main>
+      <h1>JavaScript 异步编程学习示例</h1>
 
-</body>
+      <section>
+        <h2>演示内容</h2>
+        <ul>
+          <li>Promise 对象的使用</li>
+          <li>async/await 异步函数</li>
+          <li>Promise 链式调用</li>
+          <li>异步错误处理 (try-catch)</li>
+          <li>void 运算符示例</li>
+        </ul>
+      </section>
 
+      <section>
+        <h2>查看控制台</h2>
+        <p>打开浏览器控制台（F12）查看异步操作的输出结果。</p>
+        <p>取消脚本中的注释可以运行不同的示例代码。</p>
+      </section>
+    </main>
+  </body>
 </html>

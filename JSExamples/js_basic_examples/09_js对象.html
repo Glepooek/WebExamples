@@ -1,43 +1,61 @@
-<html>
-
-<head>
-    <meta>
-    </meta>
-    <title></title>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript 对象示例</title>
     <script>
-        // 启用严格模式，变量必须先定义再使用，避免出错
-        "use strict";
+      // 启用严格模式，变量必须先定义再使用，避免出错
+      'use strict'
 
-        var obj = {
-            firstName: "an",
-            lastName: "liu",
-            age: 20,
-            fullName: function () {
-                return this.firstName + " " + this.lastName;
-            }
-        }
+      const obj = {
+        firstName: 'an',
+        lastName: 'liu',
+        age: 20,
+        // 使用 ES6 方法简写
+        fullName() {
+          // 使用模板字符串代替字符串拼接
+          return `${this.firstName} ${this.lastName}`
+        },
+      }
 
-        // 使用console.time && console.timeEnd 来记录代码的执行耗时：
-        console.time("for in");
+      // 注意：以下 console 语句仅用于教学演示
+      // 在生产环境中应该移除或使用条件判断
 
-        // 遍历对象
-        for (var key in obj) {
-            console.log(key);
-        }
+      // 使用console.time && console.timeEnd 来记录代码的执行耗时
+      console.time('for in')
 
-        // 访问对象属性的两种方式
-        console.log(obj.firstName);
-        console.log(obj["firstName"]);
+      // 遍历对象
+      for (const key in obj) {
+        console.log(key)
+      }
 
-        // 调用对象方法
-        console.log(obj.fullName());
+      // 访问对象属性的两种方式
+      console.log(obj.firstName)
+      console.log(obj['firstName'])
 
-        console.timeEnd("for in");
+      // 调用对象方法
+      console.log(obj.fullName())
+
+      console.timeEnd('for in')
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
+    <main>
+      <h1>JavaScript 对象学习示例</h1>
+      <p>本页面演示了 JavaScript 对象的基本操作。请打开浏览器控制台查看输出结果。</p>
 
-</body>
-
+      <section>
+        <h2>演示内容</h2>
+        <ul>
+          <li>对象的创建和属性定义</li>
+          <li>对象方法的使用</li>
+          <li>使用 for...in 遍历对象属性</li>
+          <li>两种访问对象属性的方式（点语法和方括号语法）</li>
+          <li>使用 console.time 测量代码执行时间</li>
+        </ul>
+      </section>
+    </main>
+  </body>
 </html>

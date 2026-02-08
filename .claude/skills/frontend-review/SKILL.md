@@ -207,9 +207,13 @@ Positive patterns worth maintaining:
 - [ ] Never use `var`
 - [ ] Use arrow functions for anonymous functions
 - [ ] Proper indentation (2 spaces)
-- [ ] Single quotes for strings (unless template literals)
-- [ ] Semicolons at end of statements
+- [ ] Single quotes for strings (configured via Prettier `"singleQuote": true` and ESLint `'quotes': ['error', 'single']`)
+- [ ] No semicolons at end of statements (configured via Prettier `"semi": false` and ESLint `'semi': ['error', 'never']`)
 - [ ] Consistent spacing around operators and keywords
+
+**Project Configuration Notes**:
+- **Quotes**: This project uses **single quotes** following Airbnb/StandardJS conventions. Single quotes are the JavaScript community standard and distinguish JS from JSON.
+- **Semicolons**: This project uses **no semicolons** (StandardJS style) with proper ESLint + Prettier configuration to prevent ASI pitfalls. See `references/javascript-standards.md` for detailed rationale.
 
 #### Modern ES6+ Features
 - [ ] Use template literals for string interpolation

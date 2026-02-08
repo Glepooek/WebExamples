@@ -1,11 +1,37 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="zh-CN">
   <head>
-    <title>JavaScript Getter Example</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Getter 示例</title>
   </head>
   <body>
-    <h1>JavaScript Getter Example</h1>
+    <main>
+      <h1>JavaScript Getter 示例</h1>
+
+      <section>
+        <h2>演示内容</h2>
+        <ul>
+          <li>对象字面量中的 getter</li>
+          <li>使用 Object.defineProperty 定义 getter</li>
+          <li>类中的 getter</li>
+          <li>getter 属性描述符的区别</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>查看控制台</h2>
+        <p>打开浏览器控制台（F12）查看输出结果。</p>
+      </section>
+    </main>
+
     <script>
+      'use strict'
+
+      /**
+       * 演示对象字面量中的 getter
+       * getter 是一个特殊的方法，可以像访问属性一样访问它
+       */
       const obj = {
         log: ['a', 'b', 'c'],
         get latest() {
@@ -16,6 +42,10 @@
         },
       }
 
+      /**
+       * 使用 Object.defineProperty 为对象添加 getter
+       * 这种方式可以在对象创建后动态添加 getter
+       */
       Object.defineProperty(obj, 'oldest', {
         get() {
           if (this.log.length === 0) {
@@ -25,9 +55,13 @@
         },
       })
 
-      console.log(obj.latest)
-      console.log(obj.oldest)
+      console.log('最新的元素:', obj.latest) // 'c'
+      console.log('最旧的元素:', obj.oldest) // 'a'
 
+      /**
+       * 演示类中的 getter
+       * 类中的 getter 定义在原型上，而不是实例上
+       */
       class Example {
         get hello() {
           return 'how are you?'
@@ -36,17 +70,22 @@
 
       const example = new Example()
 
-      console.log(Object.getOwnPropertyDescriptor(example, 'hello')) // undefined
-      console.log(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(example), 'hello'))
+      // getter 定义在类的原型上，不在实例上
+      console.log('实例上的 hello:', Object.getOwnPropertyDescriptor(example, 'hello')) // undefined
+      console.log('原型上的 hello:', Object.getOwnPropertyDescriptor(Object.getPrototypeOf(example), 'hello'))
 
+      /**
+       * 使用 Object.defineProperty 为实例添加 getter
+       * 这种方式添加的 getter 在实例上，而不是原型上
+       */
       Object.defineProperty(example, 'greeting', {
         get() {
           return 'hi'
         },
       })
 
-      console.log(Object.getOwnPropertyDescriptor(example, 'greeting'))
-      console.log(Object.getOwnPropertyDescriptor(Object.getPrototypeOf(example), 'greeting')) // undefined
+      console.log('实例上的 greeting:', Object.getOwnPropertyDescriptor(example, 'greeting'))
+      console.log('原型上的 greeting:', Object.getOwnPropertyDescriptor(Object.getPrototypeOf(example), 'greeting')) // undefined
     </script>
   </body>
 </html>

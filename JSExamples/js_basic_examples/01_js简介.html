@@ -1,23 +1,75 @@
-<html>
-
-<head>
-    <meta>
-    </meta>
-    <title></title>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的第一个 JavaScript 程序</title>
     <script src="../assets/js简介.js"></script>
-</head>
+    <style>
+      .demo-text {
+        color: black;
+      }
 
-<body>
-    <h1>我的第一个 JavaScript 程序</h1>
-    <p id="demo" style="color: black;">这是一个段落</p>
+      .bulb-image {
+        width: 100px;
+        height: 180px;
+        cursor: pointer;
+      }
 
-    <button type="button" onclick="displayDate()">显示日期</button>
-    <button type="button" onclick="alert('Hello World!')">弹窗</button>
-    <button type="button" onclick="changeColor()">改变样式</button>
+      button {
+        margin: 5px;
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
 
-    <p> 点击灯泡就可以打开或关闭这盏灯 </p>
-    <img id="myImage" src="../assets/images/pic_bulboff.gif" onclick="changeImage()" style="width:100px;height:180px" />
+  <body>
+    <main>
+      <h1>我的第一个 JavaScript 程序</h1>
 
-</body>
+      <section>
+        <h2>文本操作示例</h2>
+        <p id="demo" class="demo-text">这是一个段落</p>
 
+        <button type="button" id="dateBtn">显示日期</button>
+        <button type="button" id="alertBtn">弹窗</button>
+        <button type="button" id="colorBtn">改变样式</button>
+      </section>
+
+      <section>
+        <h2>图片交互示例</h2>
+        <p>点击灯泡就可以打开或关闭这盏灯</p>
+        <img id="myImage" src="../assets/images/pic_bulboff.gif" alt="灯泡开关示例" class="bulb-image" />
+      </section>
+    </main>
+
+    <script>
+      // 使用 addEventListener 代替内联事件处理器
+      document.addEventListener('DOMContentLoaded', () => {
+        const dateBtn = document.getElementById('dateBtn')
+        const alertBtn = document.getElementById('alertBtn')
+        const colorBtn = document.getElementById('colorBtn')
+        const myImage = document.getElementById('myImage')
+
+        if (dateBtn) {
+          dateBtn.addEventListener('click', displayDate)
+        }
+
+        if (alertBtn) {
+          alertBtn.addEventListener('click', () => {
+            alert('Hello World!')
+          })
+        }
+
+        if (colorBtn) {
+          colorBtn.addEventListener('click', changeColor)
+        }
+
+        if (myImage) {
+          myImage.addEventListener('click', changeImage)
+        }
+      })
+    </script>
+  </body>
 </html>

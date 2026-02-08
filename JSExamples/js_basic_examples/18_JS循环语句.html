@@ -1,71 +1,73 @@
-<html>
-
-<head>
-    <meta>
-    </meta>
-    <title></title>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript 循环语句示例</title>
     <script>
-        // 启用严格模式，变量必须先定义再使用，避免出错
-        "use strict";
+      // 启用严格模式，变量必须先定义再使用，避免出错
+      'use strict'
 
-        var day = new Date().getDay();
-        switch (day) {
-            case 0:
-                console.log("星期天");
-                break;
-            case 1:
-                console.log("星期一");
-                break;
-            case 2:
-                console.log("星期二");
-                break;
-            case 3:
-                console.log("星期三");
-                break;
-            case 4:
-                console.log("星期四");
-                break;
-            case 5:
-                console.log("星期五");
-                break;
-            case 6:
-                console.log("星期六");
-                break;
+      // Switch 语句示例
+      const day = new Date().getDay()
+      const WEEKDAYS = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
 
-            default:
-                break;
-        }
+      console.log(`今天是${WEEKDAYS[day]}`)
 
-        var array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        let i = 0;
-        // 这个地方array[i]为什么能返回boolean值？
-        // 因为array[i]返回的是一个数字，数字可以转为boolean值，0转为false，其他转为true
-        // undefined或null作为判断条件相当于false
-        //  console.log(array[10]);返回undefined
-        while (array[i]) {
-            console.log(array[i]);
-            i++;
-        }
+      // While 循环示例
+      const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      let i = 0
+      // 这个地方array[i]为什么能返回boolean值？
+      // 因为array[i]返回的是一个数字，数字可以转为boolean值，0转为false，其他转为true
+      // undefined或null作为判断条件相当于false
+      // console.log(array[10]);返回undefined
+      while (array[i]) {
+        console.log(array[i])
+        i++
+      }
 
-        const cars = ["BMW", "Volvo", "Saab", "Ford"];
-        // 标签语句
-        list:
-        {
-            document.write(cars[0] + "<br>");
-            document.write(cars[1] + "<br>");
-            document.write(cars[2] + "<br>");
-            // break语句只能跳出封闭语句的标签。
-            break list;
-            document.write(cars[3] + "<br>");
-            document.write(cars[4] + "<br>");
-            document.write(cars[5] + "<br>");
-        }
+      // 使用 DOMContentLoaded 事件来确保 DOM 加载完成
+      document.addEventListener('DOMContentLoaded', () => {
+        const outputDiv = document.getElementById('output')
+        const cars = ['BMW', 'Volvo', 'Saab', 'Ford']
 
+        // 使用数组方法代替 document.write 和标签语句
+        // 标签语句和 break 示例：只输出前三个元素
+        const limitedCars = cars.slice(0, 3)
+        limitedCars.forEach(car => {
+          const p = document.createElement('p')
+          p.textContent = car
+          outputDiv.appendChild(p)
+        })
+
+        // 在控制台显示完整的数组
+        console.log('所有车辆:', cars)
+      })
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
+    <main>
+      <h1>JavaScript 循环语句学习示例</h1>
 
-</body>
+      <section>
+        <h2>演示内容</h2>
+        <ul>
+          <li>Switch 语句 - 判断星期几</li>
+          <li>While 循环 - 遍历数组</li>
+          <li>标签语句和 Break - 控制循环流程</li>
+        </ul>
+      </section>
 
+      <section>
+        <h2>输出结果</h2>
+        <div id="output"></div>
+      </section>
+
+      <section>
+        <h2>查看控制台</h2>
+        <p>打开浏览器控制台（F12）查看更多输出结果。</p>
+      </section>
+    </main>
+  </body>
 </html>

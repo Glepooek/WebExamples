@@ -1,87 +1,142 @@
-<!DOCTYPE html>
-<html>
-
-<head>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript 取消异步操作示例</title>
     <style>
-        button {
-            margin: 10px;
-            width: 100px;
-            height: 30px;
-        }
+      button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 14px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f0f0f0;
+      }
+
+      button:hover {
+        background-color: #e0e0e0;
+      }
+
+      button:active {
+        background-color: #d0d0d0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
+    <main>
+      <h1>JavaScript 取消异步操作学习示例</h1>
 
-    <div>
-        <button id="btn1" onclick="fetchData()">Fetch Data</button>
-        <button id="btn2" onclick="abortFetch()">Abort Fetch</button>
-    </div>
+      <section>
+        <h2>演示内容</h2>
+        <p>本示例演示如何使用 <code>AbortController</code> 取消 Fetch 请求。</p>
+
+        <div>
+          <button id="btn1" type="button">Fetch Data</button>
+          <button id="btn2" type="button">Abort Fetch</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>查看控制台</h2>
+        <p>打开浏览器控制台（F12）查看请求和取消操作的输出结果。</p>
+      </section>
+    </main>
 
     <script>
-        let controller = new AbortController();
-        let signal = controller.signal;
+      'use strict'
 
-        signal.addEventListener("abort", (s, e) => {
-            console.log("aborted");
-        });
+      let controller = new AbortController()
+      let signal = controller.signal
 
-        function fetchData() {
-            if (signal.aborted) {
-                console.log("Fetch already aborted, resetting controller.");
-                controller = new AbortController(); // Reset the controller if it was aborted
-                signal = controller.signal; // Update the signal reference
-                signal.addEventListener("abort", (s, e) => {
-                    console.log("aborted");
-                });
+      /**
+       * 监听abort事件
+       */
+      signal.addEventListener('abort', () => {
+        console.log('aborted')
+      })
+
+      /**
+       * 发起Fetch请求
+       * 如果之前的controller已经被abort，则创建新的controller
+       */
+      function fetchData() {
+        if (signal.aborted) {
+          console.log('Fetch already aborted, resetting controller.')
+          controller = new AbortController() // 重置controller
+          signal = controller.signal // 更新signal引用
+          signal.addEventListener('abort', () => {
+            console.log('aborted')
+          })
+        }
+
+        fetch(
+          'https://www.unischool.cn/api/gateway/getNewsList?op_path=gateway%2FgetNewsList&needScope=true&page=1&pageSize=4',
+          {
+            signal,
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              scope: 'com.fltrp.szjc.pc.web',
+            },
+          }
+        )
+          .then(response => response.json())
+          .then(data => console.log(data))
+          .catch(error => {
+            if (error.name === 'AbortError') {
+              console.log('Fetch aborted')
+            } else {
+              console.error('Fetch error:', error)
             }
+          })
+      }
 
-            fetch("https://www.unischool.cn/api/gateway/getNewsList?op_path=gateway%2FgetNewsList&needScope=true&page=1&pageSize=4", {
-                signal, 
-                method: 'GET',
-                headers:
-                {
-                    'Content-Type': 'application/json',
-                    'scope': 'com.fltrp.szjc.pc.web'
-                }
-            })
-                .then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => {
-                    if (error.name === 'AbortError') {
-                        console.log('Fetch aborted');
-                    } else {
-                        console.error('Fetch error:', error);
-                    }
-                });
+      /**
+       * 取消当前的Fetch请求
+       */
+      function abortFetch() {
+        controller.abort()
+      }
+
+      // 使用addEventListener代替内联事件处理器
+      document.addEventListener('DOMContentLoaded', () => {
+        const btn1 = document.getElementById('btn1')
+        const btn2 = document.getElementById('btn2')
+
+        if (btn1) {
+          btn1.addEventListener('click', fetchData)
         }
 
-        function abortFetch() {
-            controller.abort();
+        if (btn2) {
+          btn2.addEventListener('click', abortFetch)
         }
+      })
 
-        // fetch("https://jsonplaceholder.typicode.com/posts", { signal })
-        //     .then(response => {
-        //         if (!response.ok) {
-        //             throw new Error('Network response was not ok');
-        //         }
-        //         clearTimeout(timerId); // Clear the timer if fetch is successful
-        //         response.json()
-        //     })
-        //     .then(data => console.log(data))
-        //     .catch(error => {
-        //         if (error.name === 'AbortError') {
-        //             console.log('Fetch aborted');
-        //         } else {
-        //             console.error('Fetch error:', error);
-        //         }
-        //     });
+      // 其他fetch示例（已注释）
+      // fetch("https://jsonplaceholder.typicode.com/posts", { signal })
+      //     .then(response => {
+      //         if (!response.ok) {
+      //             throw new Error('Network response was not ok');
+      //         }
+      //         clearTimeout(timerId); // 如果fetch成功则清除定时器
+      //         return response.json();
+      //     })
+      //     .then(data => console.log(data))
+      //     .catch(error => {
+      //         if (error.name === 'AbortError') {
+      //             console.log('Fetch aborted');
+      //         } else {
+      //             console.error('Fetch error:', error);
+      //         }
+      //     });
 
-        // Abort the fetch request after 1 second
-        // const timerId = setTimeout(() => {
-        //     controller.abort();
-        // }, 10000);
+      // 1秒后取消fetch请求（已注释）
+      // const timerId = setTimeout(() => {
+      //     controller.abort();
+      // }, 10000);
     </script>
-</body>
-
+  </body>
 </html>

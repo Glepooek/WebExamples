@@ -22,8 +22,10 @@ export default defineConfig([
       'no-var': 'warn',
       // 强制使用 === 和 !==，避免使用 == 和 !=
       'eqeqeq': ['error', 'always'],
-      // 禁止多余分号
-      'no-extra-semi': 'warn',
+      // 强制不使用分号（与 Prettier 配置一致）
+      'semi': ['error', 'never'],
+      // 强制使用单引号（与 Prettier 配置一致）
+      'quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
       // 强制函数中使用一致的return 语句
       'consistent-return': 'warn',
       // 强制使用驼峰命名

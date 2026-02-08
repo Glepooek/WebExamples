@@ -1,12 +1,39 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="zh-CN">
   <head>
-    <meta charset="utf-8" />
-    <title>JSON</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript JSON 操作示例</title>
   </head>
 
   <body>
+    <main>
+      <h1>JavaScript JSON 学习示例</h1>
+
+      <section>
+        <h2>演示内容</h2>
+        <ul>
+          <li>JSON.stringify() 基本用法</li>
+          <li>使用 replacer 参数过滤属性</li>
+          <li>使用 space 参数美化输出</li>
+          <li>使用函数处理敏感数据（脱敏）</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>输出结果</h2>
+        <div id="output"></div>
+      </section>
+
+      <section>
+        <h2>查看控制台</h2>
+        <p>打开浏览器控制台（F12）查看 JSON 操作的详细输出。</p>
+      </section>
+    </main>
+
     <script>
+      'use strict'
+
       const obj = {
         name: '张三',
         age: 18,
@@ -19,12 +46,15 @@
         },
       }
 
-      // console.log(JSON.stringify(obj))
-      // 使用 replacer 参数过滤属性
+      // 示例1：使用 replacer 参数过滤属性
+      console.log('示例1 - 过滤属性:')
       console.log(JSON.stringify(obj, ['name', 'age', 'sex']))
-      // 使用 space 参数美化输出
-      // console.log(JSON.stringify(obj, null, 4))
 
+      // 示例2：使用 space 参数美化输出
+      console.log('\n示例2 - 美化输出:')
+      console.log(JSON.stringify(obj, null, 2))
+
+      // 示例3：使用函数处理敏感数据
       const user = {
         name: '张三',
         age: 30,
@@ -34,8 +64,13 @@
         department: '技术部',
       }
 
-      // 使用函数作为 replacer 参数
-      const jsonString = JSON.stringify(user, function (key, value) {
+      /**
+       * 自定义 replacer 函数，用于处理敏感数据
+       * @param {string} key - 属性键名
+       * @param {*} value - 属性值
+       * @returns {*} 处理后的值
+       */
+      const sensitiveDataReplacer = (key, value) => {
         // 隐藏密码字段
         if (key === 'password') {
           return undefined // 返回 undefined 会忽略该属性
@@ -61,11 +96,28 @@
 
         // 返回原始值
         return value
-      })
+      }
 
+      const jsonString = JSON.stringify(user, sensitiveDataReplacer, 2)
+
+      console.log('\n示例3 - 敏感数据处理:')
       console.log(jsonString)
       // 输出: {"name":"张三","age":30,"email":"zh***@example.com","department":"技术部"}
       // 注意 password 和 salary 字段被过滤掉了
+
+      // 显示在页面上
+      document.addEventListener('DOMContentLoaded', () => {
+        const outputDiv = document.getElementById('output')
+        if (outputDiv) {
+          outputDiv.innerHTML = `
+                    <h3>原始对象</h3>
+                    <pre>${JSON.stringify(obj, null, 2)}</pre>
+
+                    <h3>过滤后的用户数据（已脱敏）</h3>
+                    <pre>${jsonString}</pre>
+                `
+        }
+      })
     </script>
   </body>
 </html>

@@ -1,45 +1,74 @@
-<html>
-
-<head>
-    <meta>
-    </meta>
-    <title></title>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript 运算符示例</title>
     <script>
-        // 启用严格模式，变量必须先定义再使用，避免出错
-        //"use strict";
+      // 启用严格模式，变量必须先定义再使用，避免出错
+      'use strict'
 
-        y = 5;
-        x = y / 2;
-        console.log(x);// 2.5
-        console.log(typeof (x));// number
+      const y = 5
+      const x = y / 2
+      console.log(x) // 2.5
+      console.log(typeof x) // number
 
-        function changeText() {
-            var text = '{ "sites" : [' +
-                '{ "name":"Runoob" , "url":"www.runoob.com" },' +
-                '{ "name":"Google" , "url":"www.google.com" },' +
-                '{ "name":"Taobao" , "url":"www.taobao.com" } ]}';
+      function changeText() {
+        // 使用模板字符串代替字符串拼接
+        const text = `{
+                "sites": [
+                    { "name": "Runoob", "url": "www.runoob.com" },
+                    { "name": "Google", "url": "www.google.com" },
+                    { "name": "Taobao", "url": "www.taobao.com" }
+                ]
+            }`
 
-            // 将字符串转换为 JavaScript 对象:
-            var obj = JSON.parse(text);
+        // 将字符串转换为 JavaScript 对象
+        const obj = JSON.parse(text)
 
-            // 使用新的JavaScript对象：
-            document.getElementById("demo").innerHTML = obj.sites[1].name + " " + obj.sites[1].url;
+        // 使用新的JavaScript对象
+        document.getElementById('demo').textContent = `${obj.sites[1].name} ${obj.sites[1].url}`
 
-            console.log(JSON.stringify(obj));
+        console.log(JSON.stringify(obj))
+      }
 
+      const print = msg => {
+        console.log(msg)
+      }
 
+      // 移除内联事件处理器，使用 addEventListener
+      document.addEventListener('DOMContentLoaded', () => {
+        const printBtn = document.getElementById('printBtn')
+        if (printBtn) {
+          printBtn.addEventListener('click', () => print('123'))
         }
 
-        var print = (msg) => {
-            console.log(msg);
+        const changeBtn = document.getElementById('changeBtn')
+        if (changeBtn) {
+          changeBtn.addEventListener('click', changeText)
         }
+      })
     </script>
-</head>
+  </head>
 
-<body>
-    <p id="demo"></p>
+  <body>
+    <main>
+      <h1>JavaScript 运算符学习示例</h1>
 
-    <button type="button" onclick="print('123')">改变文本</button>
-</body>
+      <section>
+        <h2>演示内容</h2>
+        <p>本示例演示了 JavaScript 的运算符、类型检测和 JSON 操作。</p>
 
+        <p id="demo">点击按钮查看 JSON 数据</p>
+
+        <button type="button" id="printBtn">输出消息</button>
+        <button type="button" id="changeBtn">显示 JSON 数据</button>
+      </section>
+
+      <section>
+        <h2>查看控制台</h2>
+        <p>打开浏览器控制台（F12）查看更多输出结果。</p>
+      </section>
+    </main>
+  </body>
 </html>

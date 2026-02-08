@@ -2,6 +2,151 @@
 
 Complete reference based on Airbnb JavaScript Style Guide and ES6+ best practices.
 
+## Code Style Fundamentals
+
+### Semicolons: The Great Debate
+
+JavaScript has **Automatic Semicolon Insertion (ASI)**, which means semicolons are technically optional. However, there are two main approaches in the community:
+
+#### Option 1: Use Semicolons (Recommended by Airbnb, Google)
+
+```javascript
+// ✅ Airbnb Style - Always use semicolons
+const name = 'John';
+const age = 25;
+
+function greet() {
+  return 'Hello';
+}
+```
+
+**Pros:**
+- Prevents ASI edge cases and bugs
+- Makes code intentions explicit
+- Easier to minify and refactor
+- Consistent with other C-style languages
+
+**Common ASI pitfalls avoided:**
+```javascript
+// ❌ Without semicolons - causes bugs
+const a = 1
+const b = 2
+const c = a + b
+[1, 2, 3].forEach(n => console.log(n))
+// Interpreted as: const c = a + b[1, 2, 3].forEach(...)
+
+// ❌ Return statement issue
+return
+{
+  value: 1
+}
+// Returns undefined due to ASI
+
+// ✅ With semicolons - no ambiguity
+const a = 1;
+const b = 2;
+const c = a + b;
+[1, 2, 3].forEach(n => console.log(n));
+```
+
+#### Option 2: No Semicolons (StandardJS, npm style)
+
+```javascript
+// ✅ StandardJS Style - No semicolons
+const name = 'John'
+const age = 25
+
+function greet() {
+  return 'Hello'
+}
+```
+
+**Pros:**
+- Cleaner visual appearance
+- Less typing
+- Works well with modern linters
+
+**Rules to follow if not using semicolons:**
+1. Never start a line with `[`, `(`, `` ` ``, `+`, `-`, `/`
+2. Always use a linter (ESLint with appropriate rules)
+3. Be aware of ASI rules
+
+### Which Style to Choose?
+
+**For this project, we use the "No Semicolons" style (StandardJS approach)**, configured via:
+- **Prettier**: `"semi": false` in `.prettierrc.json`
+- **ESLint**: `'semi': ['error', 'never']` in `eslint.config.js`
+
+**Rules to follow when not using semicolons:**
+1. Never start a line with `[`, `(`, `` ` ``, `+`, `-`, `/`
+2. Always use a linter (ESLint) and formatter (Prettier) to catch issues
+3. Be aware of ASI (Automatic Semicolon Insertion) edge cases
+
+**Why this choice works well:**
+1. Cleaner, more readable code
+2. Modern tooling (ESLint + Prettier) prevents ASI pitfalls automatically
+3. Consistent with many modern JavaScript projects (Vue.js, StandardJS)
+4. Less visual noise, focus on logic
+
+**Note**: If you prefer semicolons, update both Prettier (`"semi": true`) and ESLint (`'semi': ['error', 'always']`) configurations for consistency.
+
+### Indentation and Spacing
+
+```javascript
+// ✅ Good - 2 spaces for indentation (Airbnb standard)
+function example() {
+  const value = 1;
+  if (value > 0) {
+    console.log('positive');
+  }
+}
+
+// ✅ Good - spacing around operators
+const sum = a + b;
+const isValid = x === y;
+
+// ❌ Bad - inconsistent spacing
+const sum=a+b;
+const isValid = x===y;
+
+// ✅ Good - spacing in objects and arrays
+const obj = { name: 'John', age: 25 };
+const arr = [1, 2, 3, 4];
+
+// ❌ Bad - no spacing
+const obj = {name:'John',age:25};
+const arr = [1,2,3,4];
+```
+
+### Quotes
+
+**For this project, we use single quotes** (configured in Prettier and ESLint):
+- **Prettier**: `"singleQuote": true` in `.prettierrc.json`
+- **ESLint**: `'quotes': ['error', 'single']` in `eslint.config.js`
+
+```javascript
+// ✅ Good - single quotes for strings
+const name = 'John'
+const message = 'Hello, world!'
+
+// ✅ Good - template literals for interpolation
+const greeting = `Hello, ${name}!`
+
+// ❌ Bad - double quotes
+const name = "John"
+
+// ✅ Exception - use double quotes to avoid escaping single quotes
+const message = "It's a beautiful day"
+// Or better: use template literals
+const message = `It's a beautiful day`
+```
+
+**Why single quotes?**
+1. **Industry standard**: Airbnb, Google, StandardJS all recommend single quotes
+2. **Consistency**: Distinguishes JavaScript from JSON (which requires double quotes)
+3. **HTML compatibility**: HTML attributes typically use double quotes
+4. **Less typing**: No need to press Shift on English keyboards
+
 ## Variables and Constants
 
 ### Declarations

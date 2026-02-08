@@ -1,22 +1,57 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
+<!doctype html>
+<html lang="zh-CN">
   <head>
-    <meta charset="utf-8" />
-    <title>数组</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript 数组方法示例</title>
   </head>
   <body>
+    <main>
+      <h1>JavaScript 数组方法学习示例</h1>
+
+      <section>
+        <h2>演示内容</h2>
+        <ul>
+          <li><code>Array.prototype.map()</code> - 映射数组元素</li>
+          <li><code>Array.from()</code> - 从类数组或可迭代对象创建数组</li>
+          <li><code>Array.from()</code> 使用 thisArg 参数</li>
+          <li><code>Array.from()</code> 从对象创建数组</li>
+          <li><code>Array.of()</code> - 创建包含指定元素的数组</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>查看控制台</h2>
+        <p>打开浏览器控制台（F12）查看各种数组操作的输出结果。</p>
+      </section>
+    </main>
+
     <script>
+      'use strict'
+
       const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      // 用于对数组中的每个元素执行指定的回调函数，并返回一个新数组。原数组不会被修改。
+
+      /**
+       * Array.prototype.map()
+       * 用于对数组中的每个元素执行指定的回调函数，并返回一个新数组。原数组不会被修改。
+       */
       const arr2 = arr.map(item => item * 2)
-      console.log(arr2)
-      // item => item ** 2。
-      // ** 是幂运算符（exponentiation），item ** 2 表示 item 的平方（item 的 2 次幂）
+      console.log('map 乘以2:', arr2)
+
+      /**
+       * Array.from() 第一个示例
+       * 从数组创建新数组，并对每个元素应用转换函数
+       * ** 是幂运算符（exponentiation），item ** 2 表示 item 的平方（item 的 2 次幂）
+       */
       const arr3 = Array.from(arr, item => item ** 2)
-      console.log(arr3)
-      // 第三个参数 thisArg 用于指定回调函数内部的 this 值。
-      // 在这个例子中，我们传递了一个对象 { start: 3 } 作为 thisArg。
-      // 因此，回调函数内部的 this.start 将引用这个对象的 start 属性。
+      console.log('Array.from 平方:', arr3)
+
+      /**
+       * Array.from() 使用 thisArg 参数
+       * 第三个参数 thisArg 用于指定回调函数内部的 this 值。
+       * 在这个例子中，我们传递了一个对象 { start: 3 } 作为 thisArg。
+       * 因此，回调函数内部的 this.start 将引用这个对象的 start 属性。
+       */
       const arr4 = Array.from(
         arr,
         function (item) {
@@ -24,11 +59,24 @@
         },
         { start: 3 }
       )
-      console.log(arr4)
+      console.log('Array.from 三次方:', arr4)
+
+      /**
+       * Array.from() 从对象创建数组
+       * 可以从类数组对象（如 {length: 5}）创建数组
+       * 回调函数的第二个参数是索引
+       */
       const arr5 = Array.from({ length: 5 }, (v, i) => i + 1)
-      console.log(arr5)
+      console.log('Array.from 从对象:', arr5) // [1, 2, 3, 4, 5]
+
+      /**
+       * Array.of()
+       * 创建一个包含指定元素的数组
+       * 注意：这里传入的是整个 arr 数组作为单个元素
+       */
       const arr6 = Array.of(arr)
-      console.log(arr6 instanceof Array) // true, [[1,2,3,4,5,6,7,8,9,10]]
+      console.log('Array.of 是数组吗?', arr6 instanceof Array) // true
+      console.log('Array.of 结果:', arr6) // [[1,2,3,4,5,6,7,8,9,10]]
     </script>
   </body>
 </html>
