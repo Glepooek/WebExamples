@@ -398,3 +398,8 @@ FodyWeavers.xsd
 *.sln.iml
 
 *.local.json
+
+# Environment variables and MCP configuration
+.env
+.mcp.json
+.claude.json
