@@ -1,10 +1,10 @@
 # GitHub MCP Server for Claude Code - 完整指南
 
-> **文档更新时间**: 2026-02-09
-> **文档版本**: v3.0（包含官方 CLI 配置）
+> **文档更新时间**: 2026-02-09<br>
+> **文档版本**: v3.0（包含官方 CLI 配置）<br>
+> **说明**: 本文档基于官方最新配置方法编写，所有功能已验证可用<br>
+> **官方文档来源**: https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md<br>
 > **重要更新**: npm 包已弃用，已更新为官方推荐的 Claude Code CLI 配置方式
-> **说明**: 本文档基于官方最新配置方法编写，所有功能已验证可用
-> **官方文档来源**: https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md
 
 ---
 
